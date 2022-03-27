@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+
+<!-- headline -->
+<assembly xmlns = "http://maven.apache.org/ASSEMBLY/2.1.0">
+    <id>jar</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <!-- output format -->
+    <formats>
+        <format>jar</format>
+    </formats>
+
+    <!-- file sets -->
+    <fileSets>
+        <fileSet>
+            <outputDirectory>/</outputDirectory>
+            <directory>${project.build.outputDirectory}</directory>
+        </fileSet>
+    </fileSets>
+
+    <!-- dependency sets -->
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <unpack>true</unpack>
+        </dependencySet>
+    </dependencySets>
+</assembly>

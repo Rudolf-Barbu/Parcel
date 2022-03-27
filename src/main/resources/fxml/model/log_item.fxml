@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+
+<!-- imports -->
+<?import javafx.geometry.Insets ?>
+<?import javafx.scene.control.Label ?>
+<?import javafx.scene.text.Font ?>
+<?import org.bsoftware.parcel.domain.model.LogItem ?>
+
+<!-- layout -->
+<fx:root type = "org.bsoftware.parcel.domain.model.LogItem" spacing = "3" xmlns:fx = "http://javafx.com/fxml">
+   <padding>
+      <Insets bottom = "2" left = "5" right = "5" top = "2" />
+   </padding>
+   <Label minWidth = "53" fx:id = "labelTimestamp">
+      <font>
+         <Font name = "System Bold" size = "11" />
+      </font>
+   </Label>
+   <Label wrapText = "true" fx:id = "labelMessage" >
+      <font>
+         <Font name = "System Italic" size = "11" />
+      </font>
+   </Label>
+</fx:root>
