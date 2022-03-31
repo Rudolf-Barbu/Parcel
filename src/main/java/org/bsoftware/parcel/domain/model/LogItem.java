@@ -32,7 +32,7 @@ public final class LogItem extends HBox
     private Label labelMessage;
 
     /**
-     * Constructor which loadings UI representation from corresponding, FXNL file
+     * Constructor which loadings UI representation from corresponding FXNL file
      */
     @SneakyThrows
     public LogItem()

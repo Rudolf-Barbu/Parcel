@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class Proxy
 {
     /**
-     * Ip-address container
+     * IP-address container
      */
     private final String ipAddress;
 

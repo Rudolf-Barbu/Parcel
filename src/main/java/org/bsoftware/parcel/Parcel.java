@@ -77,7 +77,7 @@ public final class Parcel extends Application
      * Setups the application window
      *
      * @param stage - main stage of the application
-     * @throws IOException - if application can't load the FXML file
+     * @throws IOException, if application can't load the FXML file
      */
     @Override
     public void start(final Stage stage) throws IOException
@@ -95,7 +95,7 @@ public final class Parcel extends Application
     /**
      * Unlocks loaded binary, using license key
      *
-     * @throws BinaryFileException - if license key is invalid or expired
+     * @throws BinaryFileException, if license key is invalid or expired
      */
     private static void unlockBinary() throws BinaryFileException
     {

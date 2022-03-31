@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 @SuppressWarnings(value = "DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class OperatingSystemUtility
+public final class OperatingSystemUtility
 {
     /**
      * This static block checks, if operating system is supported

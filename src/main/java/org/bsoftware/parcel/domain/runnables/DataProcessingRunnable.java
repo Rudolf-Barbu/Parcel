@@ -100,7 +100,7 @@ public class DataProcessingRunnable implements Runnable
      * Source validation method
      *
      * @param dataBuffer - list, which contains unprocessed lines
-     * @return - unique set of processed sources
+     * @return unique set of processed sources
      */
     private HashSet<?> processSources(final List<String> dataBuffer)
     {
@@ -130,7 +130,7 @@ public class DataProcessingRunnable implements Runnable
      * Proxy validation method
      *
      * @param dataBuffer - list, which contains unprocessed lines
-     * @return - unique set of processed proxies
+     * @return unique set of processed proxies
      */
     private HashSet<?> processProxies(final List<String> dataBuffer)
     {
