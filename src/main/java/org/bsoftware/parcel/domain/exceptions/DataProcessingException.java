@@ -6,7 +6,7 @@ package org.bsoftware.parcel.domain.exceptions;
  * @author Rudolf Barbu
  * @version 1.0.0
  */
-public final class DataProcessingException extends Exception
+public final class DataProcessingException extends RuntimeException
 {
     /**
      * Call super class with customized exception message

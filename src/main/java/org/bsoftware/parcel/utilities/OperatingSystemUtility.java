@@ -1,6 +1,8 @@
 package org.bsoftware.parcel.utilities;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bsoftware.parcel.domain.exceptions.OperatingSystemNotSupportedException;
 import oshi.SystemInfo;
@@ -12,9 +14,10 @@ import java.util.Arrays;
  * OperatingSystemUtilities class is used for recognition of operating system
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @SuppressWarnings(value = "DanglingJavadoc")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OperatingSystemUtility
 {
     /**

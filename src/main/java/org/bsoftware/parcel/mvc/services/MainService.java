@@ -1,113 +1,92 @@
 package org.bsoftware.parcel.mvc.services;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.apache.tika.Tika;
-import org.bsoftware.parcel.domain.exceptions.DataProcessingException;
+import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import lombok.RequiredArgsConstructor;
+import org.bsoftware.parcel.domain.callbacks.DataProcessingCallback;
+import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
+import org.bsoftware.parcel.domain.runnables.DataProcessingRunnable;
+import org.bsoftware.parcel.utilities.DataContainerUtility;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.EnumMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MainService
+@RequiredArgsConstructor
+public class MainService implements DataProcessingCallback
 {
-    @Getter
-    private static final MainService INSTANCE = new MainService();
+    private static final ExecutorService DATA_PROCESSING_EXECUTORS_SERVICE = Executors.newFixedThreadPool(2);
 
-    private static final String CREDENTIAL_REGULAR_EXPRESSION = "[\\w.-]{5,31}@(mail|inbox|list|bk|internet)\\.ru";
+    private static final EnumMap<DataType, CompletableFuture<Void>> DATA_PROCESSING_COMPLETABLE_FUTURE_MAP = new EnumMap<>(DataType.class);
 
-    private static final String PASSWORD_REGULAR_EXPRESSION = "[^;]{8,40}";
+    private final Label labelSources;
 
-    private static final String IP_ADDRESS_REGULAR_EXPRESSION = "([\\d]{1,3}\\.){3}[\\d]{1,3}";
+    private final Label labelProxies;
 
-    private static final int MAX_LINES_ALLOWED = 524_288;
+    private final LogView logViewLog;
 
-    private static final char DELIMITER = ':';
-
-    private final HashSet<Source> sources = new HashSet<>();
-
-    private final HashSet<Proxy> proxies = new HashSet<>();
-
-    public int processData(final File file, final DataType dataType) throws DataProcessingException
+    @SuppressWarnings(value = "OptionalUsedAsFieldOrParameterType")
+    public void processData(final Optional<File> optionalFile, final DataType dataType, final Button affectedButton)
     {
-        try
+        if (optionalFile.isPresent())
         {
-            final String detectedFileType = new Tika().detect(file);
+            final CompletableFuture<Void> completableFuture = DATA_PROCESSING_COMPLETABLE_FUTURE_MAP.get(dataType);
 
-            if (!detectedFileType.equals("text/plain"))
+            if ((completableFuture == null) || completableFuture.isDone())
             {
-                throw new DataProcessingException(String.format("Only text files allowed, given: %s", detectedFileType));
+                final DataProcessingRunnable dataProcessingRunnable = new DataProcessingRunnable(optionalFile.get(), dataType, this);
+
+                affectedButton.setDisable(true);
+                DATA_PROCESSING_COMPLETABLE_FUTURE_MAP.put(dataType, CompletableFuture.runAsync(dataProcessingRunnable, DATA_PROCESSING_EXECUTORS_SERVICE).whenComplete((action, throwable) ->
+                {
+                    affectedButton.setDisable(false);
+
+                    if (throwable != null)
+                    {
+                        Platform.runLater(() -> logViewLog.error(throwable.getCause().getMessage()));
+                    }
+                }));
             }
-
-            final List<String> dataBuffer = Files.readAllLines(file.toPath()).stream().filter(entry -> (!entry.isEmpty() && ((entry.indexOf(DELIMITER) != -1) && (entry.indexOf(DELIMITER) == entry.lastIndexOf(DELIMITER))))).collect(Collectors.toList());
-            final int totalBufferLines = dataBuffer.size();
-
-            if ((dataBuffer.isEmpty()) || (totalBufferLines > MAX_LINES_ALLOWED))
+            else
             {
-                throw new DataProcessingException(String.format("Number of lines is out of bounds (1 - %d), given: %d", MAX_LINES_ALLOWED, totalBufferLines));
+                logViewLog.warning("Cannot run two same tasks in parallel");
             }
-
-            return (dataType == DataType.SOURCE) ? processSources(dataBuffer) : processProxies(dataBuffer);
         }
-        catch (IOException ioException)
+        else
         {
-            throw new DataProcessingException(String.format("IO exception occurred, clause: %s", ioException.getMessage()));
+            logViewLog.warning("Operation cancelled by user");
         }
     }
 
-    private int processSources(final List<String> dataBuffer)
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void handleProcessedData(final HashSet<?> processedData, final DataType dataType, final long elapsedTimeInMilliseconds)
     {
-        sources.clear();
-
-        dataBuffer.forEach(source ->
+        if (processedData.isEmpty())
         {
-            final String credential = source.substring(0, source.indexOf(DELIMITER));
-            if (!credential.matches(CREDENTIAL_REGULAR_EXPRESSION))
-            {
-                return;
-            }
+            Platform.runLater(() -> logViewLog.warning(String.format("File with %s returned empty set", dataType.getDataTypeNameInPlural())));
+            return;
+        }
 
-            final String password = source.substring(source.indexOf(DELIMITER) + 1);
-            if (!password.matches(PASSWORD_REGULAR_EXPRESSION))
-            {
-                return;
-            }
-
-            sources.add(new Source(credential, password));
-        });
-
-        return sources.size();
-    }
-
-    private int processProxies(final List<String> dataBuffer)
-    {
-        proxies.clear();
-
-        dataBuffer.forEach(proxy ->
+        if (dataType == DataType.SOURCE)
         {
-            final String ipAddress = proxy.substring(0, proxy.indexOf(DELIMITER));
-            if (!ipAddress.matches(IP_ADDRESS_REGULAR_EXPRESSION))
-            {
-                return;
-            }
+            DataContainerUtility.refreshSources((HashSet<Source>) processedData);
+            Platform.runLater(() -> labelSources.setText(String.valueOf(processedData.size())));
+        }
+        else if (dataType == DataType.PROXY)
+        {
+            DataContainerUtility.refreshProxies((HashSet<Proxy>) processedData);
+            Platform.runLater(() -> labelProxies.setText(String.valueOf(processedData.size())));
+        }
 
-            final int port = Integer.parseInt(proxy.substring(proxy.indexOf(DELIMITER) + 1));
-            if ((port < 80) || (port > 65_535))
-            {
-                return;
-            }
-
-            proxies.add(new Proxy(ipAddress, port));
-        });
-
-        return proxies.size();
+        Platform.runLater(() -> logViewLog.fine(String.format("File with %s processed in %d ms", dataType.getDataTypeNameInPlural(), elapsedTimeInMilliseconds)));
     }
 }
