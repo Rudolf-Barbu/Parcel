@@ -3,7 +3,6 @@ package org.bsoftware.parcel.domain.runnables;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
 import org.bsoftware.parcel.domain.callbacks.DataProcessingCallback;
-import org.bsoftware.parcel.domain.exceptions.DataProcessingException;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @RequiredArgsConstructor
 public class DataProcessingRunnable implements Runnable
@@ -77,7 +76,8 @@ public class DataProcessingRunnable implements Runnable
 
             if (!detectedFileType.equals("text/plain"))
             {
-                throw new DataProcessingException(String.format("Only text files allowed, given: %s", detectedFileType));
+                dataProcessingCallback.handleProcessingExceptionMessage(String.format("Only text files allowed, given: %s", detectedFileType));
+                return;
             }
 
             final List<String> dataBuffer = Files.readAllLines(file.toPath()).stream().filter(entry -> (!entry.isEmpty() && ((entry.indexOf(DELIMITER) != -1) && (entry.indexOf(DELIMITER) == entry.lastIndexOf(DELIMITER))))).collect(Collectors.toList());
@@ -85,14 +85,15 @@ public class DataProcessingRunnable implements Runnable
 
             if (totalBufferLines > MAX_LINES_ALLOWED)
             {
-                throw new DataProcessingException(String.format("Maximum number of lines allowed: %d, given: %d", MAX_LINES_ALLOWED, totalBufferLines));
+                dataProcessingCallback.handleProcessingExceptionMessage(String.format("Maximum number of lines allowed: %d, given: %d", MAX_LINES_ALLOWED, totalBufferLines));
+                return;
             }
 
             dataProcessingCallback.handleProcessedData((dataType == DataType.SOURCE) ? processSources(dataBuffer) : processProxies(dataBuffer), dataType, (System.nanoTime() - pointcut) / 1_000_000);
         }
         catch (IOException ioException)
         {
-            throw new DataProcessingException(String.format("IO exception occurred, clause: %s", ioException.getMessage()));
+            dataProcessingCallback.handleProcessingExceptionMessage(String.format("IO exception occurred, clause: %s", ioException.getMessage()));
         }
     }
 

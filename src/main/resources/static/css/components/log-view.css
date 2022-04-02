@@ -6,7 +6,7 @@ LogView.container
     -fx-border-color: #C8C8C8;
 }
 
-/* StyleClass selector for ScrollPanes, that don't want to draw a border */
+/* StyleClass selector for ScrollPane, that don't want to draw a border */
 LogView.container, .tab-pane > * > .scroll-pane
 {
     -fx-background-insets: 0;

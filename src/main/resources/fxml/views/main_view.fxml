@@ -17,7 +17,7 @@
    <padding>
       <Insets bottom = "10" left = "10" right = "10" top = "10" />
    </padding>
-   <VBox prefWidth = "170" spacing = "5">
+   <VBox prefWidth = "180" spacing = "5">
       <VBox>
          <TitledPane collapsible = "false" expanded = "false" mouseTransparent = "true" text = "Load">
             <font>
@@ -76,7 +76,7 @@
          </VBox>
       </VBox>
    </VBox>
-   <VBox prefWidth = "370">
+   <VBox prefWidth = "420">
       <TitledPane collapsible = "false" expanded = "false" mouseTransparent = "true" text = "Log">
          <font>
             <Font name = "System Bold" />

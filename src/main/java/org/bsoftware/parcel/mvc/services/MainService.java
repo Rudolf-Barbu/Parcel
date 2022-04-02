@@ -1,7 +1,6 @@
 package org.bsoftware.parcel.mvc.services;
 
 import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import lombok.RequiredArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataProcessingCallback;
@@ -16,45 +15,20 @@ import java.io.File;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * MainService class is used for UI manipulation and thread creation
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @RequiredArgsConstructor
-@SuppressWarnings(value = "DanglingJavadoc")
 public class MainService implements DataProcessingCallback
 {
     /**
-     * Setting up the EXECUTORS_SERVICE with demon threads, using thread factory
+     * Container for data processing threads
      */
-    static
-    {
-        EXECUTORS_SERVICE = Executors.newFixedThreadPool(20, runnable ->
-        {
-            final Thread thread = Executors.defaultThreadFactory().newThread(runnable);
-
-            thread.setDaemon(true);
-            thread.setPriority(Thread.NORM_PRIORITY);
-
-            return thread;
-        });
-    }
-
-    /**
-     * Realization of thread pool
-     */
-    private static final ExecutorService EXECUTORS_SERVICE;
-
-    /**
-     * Container for completable futures
-     */
-    private static final EnumMap<DataType, CompletableFuture<Void>> DATA_PROCESSING_COMPLETABLE_FUTURE_MAP = new EnumMap<>(DataType.class);
+    private static final EnumMap<DataType, Thread> DATA_PROCESSING_THREAD_MAP = new EnumMap<>(DataType.class);
 
     /**
      * Sources counter
@@ -76,29 +50,25 @@ public class MainService implements DataProcessingCallback
      *
      * @param optionalFile - file to process
      * @param dataType - data type, on which validation depends
-     * @param affectedButton - button which will be disabled, during data processing
      */
     @SuppressWarnings(value = "OptionalUsedAsFieldOrParameterType")
-    public void processData(final Optional<File> optionalFile, final DataType dataType, final Button affectedButton)
+    public void processData(final Optional<File> optionalFile, final DataType dataType)
     {
         if (optionalFile.isPresent())
         {
-            final CompletableFuture<Void> completableFuture = DATA_PROCESSING_COMPLETABLE_FUTURE_MAP.get(dataType);
+            final Thread oldThread = DATA_PROCESSING_THREAD_MAP.get(dataType);
 
-            if ((completableFuture == null) || completableFuture.isDone())
+            if ((oldThread == null) || (oldThread.getState() == Thread.State.TERMINATED))
             {
                 final DataProcessingRunnable dataProcessingRunnable = new DataProcessingRunnable(optionalFile.get(), dataType, this);
+                final Thread newThread = new Thread(dataProcessingRunnable);
 
-                affectedButton.setDisable(true);
-                DATA_PROCESSING_COMPLETABLE_FUTURE_MAP.put(dataType, CompletableFuture.runAsync(dataProcessingRunnable, EXECUTORS_SERVICE).whenComplete((action, throwable) ->
-                {
-                    affectedButton.setDisable(false);
+                newThread.setDaemon(true);
+                newThread.setPriority(Thread.NORM_PRIORITY);
+                newThread.setName(String.format("Thread of %s processing ", dataType.getDataTypeNameInPlural()));
 
-                    if (throwable != null)
-                    {
-                        Platform.runLater(() -> logViewLog.error(throwable.getCause().getMessage()));
-                    }
-                }));
+                DATA_PROCESSING_THREAD_MAP.put(dataType, newThread);
+                newThread.start();
             }
             else
             {
@@ -140,5 +110,16 @@ public class MainService implements DataProcessingCallback
         }
 
         Platform.runLater(() -> logViewLog.fine(String.format("File with %s processed in %d ms", dataType.getDataTypeNameInPlural(), elapsedTimeInMilliseconds)));
+    }
+
+    /**
+     * Prints exception message to LogView
+     *
+     * @param exceptionMessage - message, which is transmitted to service
+     */
+    @Override
+    public void handleProcessingExceptionMessage(final String exceptionMessage)
+    {
+        Platform.runLater(() -> logViewLog.error(exceptionMessage));
     }
 }

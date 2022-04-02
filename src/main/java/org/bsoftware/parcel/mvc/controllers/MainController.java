@@ -1,9 +1,7 @@
 package org.bsoftware.parcel.mvc.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import org.bsoftware.parcel.domain.components.LogView;
@@ -17,7 +15,7 @@ import java.util.Optional;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class MainController
 {
@@ -52,30 +50,22 @@ public class MainController
 
     /**
      * Loads and sends sources to service
-     *
-     * @param mouseEvent - event to determine affected button
      */
     @FXML
-    public void loadSources(final MouseEvent mouseEvent)
+    public void loadSources()
     {
         final Optional<File> optionalFile = Optional.ofNullable(loadData(DataType.SOURCE));
-        final Button affectedButton = ((Button) mouseEvent.getSource());
-
-        mainService.processData(optionalFile, DataType.SOURCE, affectedButton);
+        mainService.processData(optionalFile, DataType.SOURCE);
     }
 
     /**
      * Loads and sends proxies to service
-     *
-     * @param mouseEvent - event to determine affected button
      */
     @FXML
-    public void loadProxies(final MouseEvent mouseEvent)
+    public void loadProxies()
     {
         final Optional<File> optionalFile = Optional.ofNullable(loadData(DataType.PROXY));
-        final Button affectedButton = ((Button) mouseEvent.getSource());
-
-        mainService.processData(optionalFile, DataType.PROXY, affectedButton);
+        mainService.processData(optionalFile, DataType.PROXY);
     }
 
     /**

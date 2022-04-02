@@ -8,7 +8,7 @@ import java.util.HashSet;
  * DataProcessingCallback is an interface that is used for notifying service about actions in DataProcessingRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface DataProcessingCallback
 {
@@ -20,4 +20,11 @@ public interface DataProcessingCallback
      * @param elapsedTimeInMilliseconds - execution time
      */
     void handleProcessedData(final HashSet<?> processedData, final DataType dataType, final long elapsedTimeInMilliseconds);
+
+    /**
+     * Called, if exception occurred
+     *
+     * @param exceptionMessage - message, which is transmitted to service
+     */
+    void handleProcessingExceptionMessage(final String exceptionMessage);
 }
