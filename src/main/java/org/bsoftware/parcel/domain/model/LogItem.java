@@ -13,10 +13,9 @@ import java.util.Objects;
  * LogItem is a class that is used for representing log item in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Getter
-@SuppressWarnings(value = "unused")
 public final class LogItem extends HBox
 {
     /**

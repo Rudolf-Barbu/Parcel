@@ -4,9 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.model.LogItem;
+import org.bsoftware.parcel.domain.model.LogLevel;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,14 +17,14 @@ import java.util.Objects;
  * LogView is a class that is used for representing log section in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 public class LogView extends ScrollPane
 {
     /**
      * Max allowed log items
      */
-    private static final short MAX_LOG_ITEMS = 4_096;
+    private static final short MAX_LOG_ITEMS = 256;
 
     /**
      * Container for log items
@@ -33,43 +33,23 @@ public class LogView extends ScrollPane
     private VBox vBoxLogItemContainer;
 
     /**
-     * Adds new log item, with FINE log level
+     * Adds new log item, with log level
      *
-     * @param message - log message
+     * @param logLevel - color, that represents log level
+     * @param logMessage - particular log message
      */
-    public final void fine(final String message)
+    public void log(final LogLevel logLevel, final String logMessage)
     {
-        addLogItem(message, Color.DARKGREEN);
-    }
+        final LogItem logItem = new LogItem();
 
-    /**
-     *  Adds new log item, with INFO log level
-     *
-     * @param message - log message
-     */
-    public final void info(final String message)
-    {
-        addLogItem(message, Color.DARKGRAY);
-    }
+        logItem.getLabelTimestamp().setText(String.format("[%s]", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME)));
+        logItem.getLabelMessage().setText(logMessage);
+        logItem.getLabelMessage().setTextFill(logLevel.getLogColor());
 
-    /**
-     *  Adds new log item, with WARNING log level
-     *
-     * @param message - log message
-     */
-    public final void warning(final String message)
-    {
-        addLogItem(message, Color.DARKORANGE);
-    }
+        truncateLog();
+        vBoxLogItemContainer.getChildren().add(logItem);
 
-    /**
-     *  Adds new log item, with ERROR log level
-     *
-     * @param message - log message
-     */
-    public final void error(final String message)
-    {
-        addLogItem(message, Color.DARKRED);
+        updateLayoutAndScroll();
     }
 
     /**
@@ -78,27 +58,7 @@ public class LogView extends ScrollPane
     @Override
     public void requestFocus()
     {
-        setFocused(false);
-    }
-
-    /**
-     * Particular implementation of adding new log item to VBox container
-     *
-     * @param message - log message
-     * @param messageTextColor - color, that represents log level
-     */
-    private void addLogItem(final String message, final Color messageTextColor)
-    {
-        final LogItem logItem = new LogItem();
-
-        logItem.getLabelTimestamp().setText(String.format("[%s]", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME)));
-        logItem.getLabelMessage().setText(message);
-        logItem.getLabelMessage().setTextFill(messageTextColor);
-
-        truncateLog();
-        vBoxLogItemContainer.getChildren().add(logItem);
-
-        updateLayoutAndScroll();
+        setFocused(Boolean.FALSE);
     }
 
     /**

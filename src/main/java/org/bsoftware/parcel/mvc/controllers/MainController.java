@@ -4,8 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.mvc.services.MainService;
 
 import java.io.File;
@@ -15,7 +17,7 @@ import java.util.Optional;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class MainController
 {
@@ -69,6 +71,15 @@ public class MainController
     }
 
     /**
+     * Sends command to service, to create and start working threads
+     */
+    @FXML
+    public void start()
+    {
+        mainService.start();
+    }
+
+    /**
      * Shows window, so user can select file
      *
      * @param dataType - type of data, used for determine window's title
@@ -88,10 +99,11 @@ public class MainController
     /**
      * Triggered after all controls are loaded
      */
+    @SneakyThrows
     @FXML
     private void initialize()
     {
         mainService = new MainService(labelSources, labelProxies, logViewLog);
-        logViewLog.info("Application initialized");
+        logViewLog.log(LogLevel.INFO, "Application initialized");
     }
 }

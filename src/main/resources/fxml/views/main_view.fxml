@@ -58,17 +58,17 @@
             <padding>
                <Insets bottom = "5" left = "5" right = "5" top = "5" />
             </padding>
-            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Start" underline = "true">
+            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Start" underline = "true" onMouseClicked = "#start">
                <cursor>
                   <Cursor fx:constant = "HAND" />
                </cursor>
             </Button>
-            <Button disable = "true" focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Stop" underline = "true">
+            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Stop" underline = "true">
                <cursor>
                   <Cursor fx:constant = "HAND" />
                </cursor>
             </Button>
-            <Button disable = "true" focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Clear" underline = "true">
+            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Clear" underline = "true">
                <cursor>
                   <Cursor fx:constant = "HAND" />
                </cursor>

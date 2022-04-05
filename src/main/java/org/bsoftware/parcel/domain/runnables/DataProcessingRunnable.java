@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
 import org.bsoftware.parcel.domain.callbacks.DataProcessingCallback;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 
@@ -12,13 +13,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @RequiredArgsConstructor
 public class DataProcessingRunnable implements Runnable
@@ -36,12 +38,12 @@ public class DataProcessingRunnable implements Runnable
     /**
      * Regular expression for source's credential
      */
-    private static final String CREDENTIAL_REGULAR_EXPRESSION = "[\\w.-]{5,31}@(mail|inbox|list|bk|internet)\\.ru";
+    private static final String CREDENTIAL_REGULAR_EXPRESSION = "[\\w.-]{5,30}@(t-online|magenta)\\.de";
 
     /**
      * Regular expression for source's password
      */
-    private static final String PASSWORD_REGULAR_EXPRESSION = "[^;]{8,40}";
+    private static final String PASSWORD_REGULAR_EXPRESSION = "[^;]{8,16}";
 
     /**
      * Regular expression for proxy's IP address
@@ -76,7 +78,7 @@ public class DataProcessingRunnable implements Runnable
 
             if (!detectedFileType.equals("text/plain"))
             {
-                dataProcessingCallback.handleProcessingExceptionMessage(String.format("Only text files allowed, given: %s", detectedFileType));
+                dataProcessingCallback.handleDataProcessingMessage(LogLevel.ERROR, String.format("Only text files allowed, given: %s", detectedFileType));
                 return;
             }
 
@@ -85,7 +87,7 @@ public class DataProcessingRunnable implements Runnable
 
             if (totalBufferLines > MAX_LINES_ALLOWED)
             {
-                dataProcessingCallback.handleProcessingExceptionMessage(String.format("Maximum number of lines allowed: %d, given: %d", MAX_LINES_ALLOWED, totalBufferLines));
+                dataProcessingCallback.handleDataProcessingMessage(LogLevel.ERROR, String.format("Maximum number of lines allowed: %d, given: %d", MAX_LINES_ALLOWED, totalBufferLines));
                 return;
             }
 
@@ -93,7 +95,7 @@ public class DataProcessingRunnable implements Runnable
         }
         catch (IOException ioException)
         {
-            dataProcessingCallback.handleProcessingExceptionMessage(String.format("IO exception occurred, clause: %s", ioException.getMessage()));
+            dataProcessingCallback.handleDataProcessingMessage(LogLevel.ERROR, String.format("IO exception occurred, clause: %s", ioException.getMessage()));
         }
     }
 
@@ -103,9 +105,9 @@ public class DataProcessingRunnable implements Runnable
      * @param dataBuffer - list, which contains unprocessed lines
      * @return unique set of processed sources
      */
-    private HashSet<?> processSources(final List<String> dataBuffer)
+    private Set<?> processSources(final List<String> dataBuffer)
     {
-        final HashSet<Source> resultSet = new HashSet<>();
+        final Set<Source> resultSet = new HashSet<>();
 
         dataBuffer.forEach(source ->
         {
@@ -133,9 +135,9 @@ public class DataProcessingRunnable implements Runnable
      * @param dataBuffer - list, which contains unprocessed lines
      * @return unique set of processed proxies
      */
-    private HashSet<?> processProxies(final List<String> dataBuffer)
+    private Set<?> processProxies(final List<String> dataBuffer)
     {
-        final HashSet<Proxy> resultSet = new HashSet<>();
+        final Set<Proxy> resultSet = new HashSet<>();
 
         dataBuffer.forEach(proxy ->
         {

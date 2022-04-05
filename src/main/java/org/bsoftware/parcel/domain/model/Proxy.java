@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
  * Source is a class that is used for representing source item
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class Proxy
+public class Proxy implements Comparable<Proxy>
 {
     /**
      * IP-address container
@@ -24,4 +24,16 @@ public class Proxy
      * Port field
      */
     private final int port;
+
+    /**
+     * Comparing one proxy to another, using IP-address
+     *
+     * @param proxyToCompareWith - proxy to compare
+     * @return ratio, between two compared objects
+     */
+    @Override
+    public int compareTo(final Proxy proxyToCompareWith)
+    {
+        return this.ipAddress.compareTo(proxyToCompareWith.ipAddress);
+    }
 }

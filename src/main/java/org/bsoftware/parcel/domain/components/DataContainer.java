@@ -5,28 +5,28 @@ import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 
-import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 /**
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@SuppressWarnings(value = "MismatchedQueryAndUpdateOfCollection")
 public final class DataContainer
 {
     /**
      * Sources holder object
      */
-    private static final HashSet<Source> SOURCES = new HashSet<>();
+    private static final Queue<Source> SOURCES = new PriorityQueue<>();
 
     /**
      * Proxies holder object
      */
-    private static final HashSet<Proxy> PROXIES = new HashSet<>();
+    private static final Queue<Proxy> PROXIES = new PriorityQueue<>();
 
     /**
      * Refreshes sources holder object
@@ -48,5 +48,15 @@ public final class DataContainer
     {
         PROXIES.clear();
         PROXIES.addAll(proxies);
+    }
+
+    /**
+     * Checks if all data has been loaded
+     *
+     * @return boolean, depends on loaded all data or not
+     */
+    public static boolean isAllDataLoaded()
+    {
+        return (!SOURCES.isEmpty() && !PROXIES.isEmpty());
     }
 }
