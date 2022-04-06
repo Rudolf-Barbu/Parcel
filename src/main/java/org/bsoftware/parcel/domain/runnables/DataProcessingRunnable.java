@@ -3,8 +3,8 @@ package org.bsoftware.parcel.domain.runnables;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
 import org.bsoftware.parcel.domain.callbacks.DataProcessingCallback;
+import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
-import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 @RequiredArgsConstructor
 public class DataProcessingRunnable implements Runnable
@@ -71,14 +71,15 @@ public class DataProcessingRunnable implements Runnable
     @Override
     public void run()
     {
+        final long pointcut = System.nanoTime();
+
         try
         {
-            final long pointcut = System.nanoTime();
             final String detectedFileType = new Tika().detect(file);
 
             if (!detectedFileType.equals("text/plain"))
             {
-                dataProcessingCallback.handleDataProcessingMessage(LogLevel.ERROR, String.format("Only text files allowed, given: %s", detectedFileType));
+                dataProcessingCallback.handleDataProcessingMessage(LogView.LogLevel.ERROR, String.format("Only text files allowed, given: %s", detectedFileType));
                 return;
             }
 
@@ -87,15 +88,15 @@ public class DataProcessingRunnable implements Runnable
 
             if (totalBufferLines > MAX_LINES_ALLOWED)
             {
-                dataProcessingCallback.handleDataProcessingMessage(LogLevel.ERROR, String.format("Maximum number of lines allowed: %d, given: %d", MAX_LINES_ALLOWED, totalBufferLines));
+                dataProcessingCallback.handleDataProcessingMessage(LogView.LogLevel.ERROR, String.format("Maximum number of lines allowed: %d, given: %d", MAX_LINES_ALLOWED, totalBufferLines));
                 return;
             }
 
             dataProcessingCallback.handleProcessedData((dataType == DataType.SOURCE) ? processSources(dataBuffer) : processProxies(dataBuffer), dataType, (System.nanoTime() - pointcut) / 1_000_000);
         }
-        catch (IOException ioException)
+        catch (final IOException ioException)
         {
-            dataProcessingCallback.handleDataProcessingMessage(LogLevel.ERROR, String.format("IO exception occurred, clause: %s", ioException.getMessage()));
+            dataProcessingCallback.handleDataProcessingMessage(LogView.LogLevel.ERROR, String.format("IO exception occurred, clause: %s", ioException.getCause().getMessage()));
         }
     }
 

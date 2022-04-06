@@ -3,17 +3,18 @@ package org.bsoftware.parcel.mvc.services;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.RequiredArgsConstructor;
+import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.callbacks.DataProcessingCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
-import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.domain.runnables.DataProcessingRunnable;
 
 import java.io.File;
+import java.time.LocalTime;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,10 +24,10 @@ import java.util.Set;
  * MainService class is used for UI manipulation and thread creation
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 @RequiredArgsConstructor
-public class MainService implements DataProcessingCallback
+public class MainService implements DataProcessingCallback, BruteForceCallback
 {
     /**
      * Container for data processing threads
@@ -77,12 +78,12 @@ public class MainService implements DataProcessingCallback
             }
             else
             {
-                logViewLog.log(LogLevel.WARNING, "Cannot run two same tasks in parallel");
+                logViewLog.log(LogView.LogLevel.WARNING, "Cannot run two same tasks in parallel");
             }
         }
         else
         {
-            logViewLog.log(LogLevel.WARNING, "Operation cancelled by user");
+            logViewLog.log(LogView.LogLevel.WARNING, "Operation cancelled by user");
         }
     }
 
@@ -93,20 +94,22 @@ public class MainService implements DataProcessingCallback
     {
         if (!DataContainer.isAllDataLoaded())
         {
-            logViewLog.log(LogLevel.WARNING, "Load the proxies and sources, before starting");
+            logViewLog.log(LogView.LogLevel.WARNING, "Load the proxies and sources, before starting");
             return;
         }
 
-        logViewLog.log(LogLevel.INFO, "Work started");
+        final LocalTime startTime = LocalTime.now();
 
         for (int index = 0; index < BRUTE_FORCE_THREAD_ARRAY.length; index++)
         {
-            final BruteForceRunnable bruteForceRunnable = new BruteForceRunnable();
+            final BruteForceRunnable bruteForceRunnable = new BruteForceRunnable(startTime, this);
             final Thread thread = createDaemonThread(bruteForceRunnable, String.format("Brute-force thread #%d", index));
 
             BRUTE_FORCE_THREAD_ARRAY[index] = thread;
             thread.start();
         }
+
+        logViewLog.log(LogView.LogLevel.INFO, "Work started");
     }
 
     /**
@@ -122,7 +125,7 @@ public class MainService implements DataProcessingCallback
     {
         if (processedData.isEmpty())
         {
-            Platform.runLater(() -> logViewLog.log(LogLevel.WARNING, String.format("File with %s returned empty set", dataType.getDataTypeNameInPlural())));
+            Platform.runLater(() -> logViewLog.log(LogView.LogLevel.WARNING, String.format("File with %s returned empty set", dataType.getDataTypeNameInPlural())));
             return;
         }
 
@@ -137,7 +140,7 @@ public class MainService implements DataProcessingCallback
             Platform.runLater(() -> labelProxies.setText(String.valueOf(processedData.size())));
         }
 
-        Platform.runLater(() -> logViewLog.log(LogLevel.FINE, String.format("File with %s processed in %d ms", dataType.getDataTypeNameInPlural(), elapsedTimeInMilliseconds)));
+        Platform.runLater(() -> logViewLog.log(LogView.LogLevel.FINE, String.format("File with %s processed in %d ms", dataType.getDataTypeNameInPlural(), elapsedTimeInMilliseconds)));
     }
 
     /**
@@ -146,7 +149,36 @@ public class MainService implements DataProcessingCallback
      * @param message - message, which is transmitted to service
      */
     @Override
-    public void handleDataProcessingMessage(final LogLevel logLevel, final String message)
+    public void handleDataProcessingMessage(final LogView.LogLevel logLevel, final String message)
+    {
+        Platform.runLater(() -> logViewLog.log(logLevel, message));
+    }
+
+    /**
+     * Decrements one of counters, depending on data type
+     *
+     * @param dataType - data type, to determine right counter object
+     */
+    @Override
+    public synchronized void decrementCounter(final DataType dataType)
+    {
+        if (dataType == DataType.SOURCE)
+        {
+            Platform.runLater(() -> labelSources.setText(String.valueOf(Integer.parseInt(labelSources.getText()) - 1)));
+        }
+        else if (dataType == DataType.PROXY)
+        {
+            Platform.runLater(() -> labelProxies.setText(String.valueOf(Integer.parseInt(labelProxies.getText()) - 1)));
+        }
+    }
+
+    /**
+     * Prints message to LogView
+     *
+     * @param message - message, which is transmitted to service
+     */
+    @Override
+    public void handleBruteForceMessage(final LogView.LogLevel logLevel, final String message)
     {
         Platform.runLater(() -> logViewLog.log(logLevel, message));
     }

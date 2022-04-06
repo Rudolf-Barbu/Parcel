@@ -13,7 +13,7 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -37,6 +37,16 @@ public final class DataContainer
     {
         SOURCES.clear();
         SOURCES.addAll(sources);
+    }
+
+    /**
+     * Retrieves next element
+     *
+     * @return next source object
+     */
+    public static synchronized Source getNextSource()
+    {
+        return SOURCES.poll();
     }
 
     /**

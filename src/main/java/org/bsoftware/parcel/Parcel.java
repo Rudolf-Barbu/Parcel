@@ -22,7 +22,7 @@ import java.util.Optional;
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @SuppressWarnings(value = "DanglingJavadoc")
 public final class Parcel extends Application
@@ -40,9 +40,9 @@ public final class Parcel extends Application
             Files.copy(Objects.requireNonNull(inputStream), path, StandardCopyOption.REPLACE_EXISTING);
             System.load(path.toString());
         }
-        catch (IOException ioException)
+        catch (final IOException ioException)
         {
-            throw new BinaryFileException("Can't copy binary file in temporary directory, clause: %s", ioException.getMessage());
+            throw new BinaryFileException("Can't copy binary file in temporary directory, clause: %s", ioException.getCause().getMessage());
         }
 
         unlockBinary();

@@ -7,7 +7,6 @@ import javafx.stage.FileChooser;
 import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
-import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.mvc.services.MainService;
 
 import java.io.File;
@@ -17,7 +16,7 @@ import java.util.Optional;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 public class MainController
 {
@@ -104,6 +103,6 @@ public class MainController
     private void initialize()
     {
         mainService = new MainService(labelSources, labelProxies, logViewLog);
-        logViewLog.log(LogLevel.INFO, "Application initialized");
+        logViewLog.log(LogView.LogLevel.INFO, "Application initialized");
     }
 }

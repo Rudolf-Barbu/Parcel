@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.model.LogItem;
-import org.bsoftware.parcel.domain.model.LogLevel;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +19,7 @@ import java.util.Objects;
  * LogView is a class that is used for representing log section in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 public class LogView extends ScrollPane
 {
@@ -97,5 +99,23 @@ public class LogView extends ScrollPane
         fxmlLoader.setController(this);
 
         fxmlLoader.load();
+    }
+
+    /**
+     * Enum with all supported log levels
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public enum LogLevel
+    {
+        FINE(Color.DARKGREEN),
+        INFO(Color.DARKGRAY),
+        WARNING(Color.DARKORANGE),
+        ERROR(Color.DARKRED);
+
+        /**
+         * Color of corresponding log level
+         */
+        private final Color logColor;
     }
 }
