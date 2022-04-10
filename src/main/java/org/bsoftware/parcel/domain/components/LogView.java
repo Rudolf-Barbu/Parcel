@@ -44,7 +44,7 @@ public class LogView extends ScrollPane
     {
         final LogItem logItem = new LogItem();
 
-        logItem.getLabelTimestamp().setText(String.format("[%s]", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME)));
+        logItem.getLabelTimestamp().setText(String.format("[%s]", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME).replace(':', '.')));
         logItem.getLabelMessage().setText(logMessage);
         logItem.getLabelMessage().setTextFill(logLevel.getLogColor());
 

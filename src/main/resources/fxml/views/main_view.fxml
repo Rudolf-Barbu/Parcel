@@ -63,12 +63,12 @@
                   <Cursor fx:constant = "HAND" />
                </cursor>
             </Button>
-            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Stop" underline = "true">
+            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Terminate" underline = "true" onMouseClicked = "#terminate">
                <cursor>
                   <Cursor fx:constant = "HAND" />
                </cursor>
             </Button>
-            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Clear" underline = "true">
+            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Clear" underline = "true" onMouseClicked = "#clear">
                <cursor>
                   <Cursor fx:constant = "HAND" />
                </cursor>

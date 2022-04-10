@@ -15,6 +15,7 @@ import org.bsoftware.parcel.domain.runnables.DataProcessingRunnable;
 
 import java.io.File;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import java.util.Set;
  * MainService class is used for UI manipulation and thread creation
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @RequiredArgsConstructor
 public class MainService implements DataProcessingCallback, BruteForceCallback
@@ -37,7 +38,6 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     /**
      * Container for brute-force threads
      */
-    @SuppressWarnings(value = "MismatchedReadAndWriteOfArray")
     private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[20];
 
     /**
@@ -66,20 +66,17 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     {
         if (optionalFile.isPresent())
         {
-            final Thread oldThread = DATA_PROCESSING_THREAD_MAP.get(dataType);
-
-            if ((oldThread == null) || (oldThread.getState() == Thread.State.TERMINATED))
+            if (isThreadNotTerminated(DATA_PROCESSING_THREAD_MAP.get(dataType)) || isWorkNotTerminated())
             {
-                final DataProcessingRunnable dataProcessingRunnable = new DataProcessingRunnable(optionalFile.get(), dataType, this);
-                final Thread newThread = createDaemonThread(dataProcessingRunnable, String.format("Thread of %s processing", dataType.getDataTypeNameInPlural()));
+                logViewLog.log(LogView.LogLevel.WARNING, "Cannot run two same processing tasks or/and brute-force in parallel");
+                return;
+            }
 
-                DATA_PROCESSING_THREAD_MAP.put(dataType, newThread);
-                newThread.start();
-            }
-            else
-            {
-                logViewLog.log(LogView.LogLevel.WARNING, "Cannot run two same tasks in parallel");
-            }
+            final DataProcessingRunnable dataProcessingRunnable = new DataProcessingRunnable(optionalFile.get(), dataType, this);
+            final Thread newThread = createDaemonThread(dataProcessingRunnable, String.format("Thread of %s processing", dataType.getDataTypeNameInPlural()));
+
+            DATA_PROCESSING_THREAD_MAP.put(dataType, newThread);
+            newThread.start();
         }
         else
         {
@@ -92,9 +89,9 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
      */
     public synchronized void start()
     {
-        if (!DataContainer.isAllDataLoaded())
+        if (!DataContainer.isAllDataLoaded() || isWorkNotTerminated())
         {
-            logViewLog.log(LogView.LogLevel.WARNING, "Load the proxies and sources, before starting");
+            logViewLog.log(LogView.LogLevel.WARNING, "Load data or/and wait for work being terminated");
             return;
         }
 
@@ -110,6 +107,35 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
         }
 
         logViewLog.log(LogView.LogLevel.INFO, "Work started");
+    }
+
+    /**
+     * Interrupts brute-force threads
+     */
+    public void terminate()
+    {
+        if (isWorkNotTerminated())
+        {
+            Arrays.stream(BRUTE_FORCE_THREAD_ARRAY).forEach(Thread::interrupt);
+            return;
+        }
+
+        logViewLog.log(LogView.LogLevel.WARNING, "Work already terminated, or not started yet");
+    }
+
+    /**
+     * Clears sources and proxies
+     */
+    public void clear()
+    {
+        if (isWorkNotTerminated())
+        {
+            logViewLog.log(LogView.LogLevel.WARNING, "Cannot clear data, while work is not terminated");
+            return;
+        }
+
+        clearDataAndCounters();
+        logViewLog.log(LogView.LogLevel.INFO, "Data cleared");
     }
 
     /**
@@ -160,16 +186,10 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
      * @param dataType - data type, to determine right counter object
      */
     @Override
-    public synchronized void decrementCounter(final DataType dataType)
+    public void handleDecrementCounter(final DataType dataType)
     {
-        if (dataType == DataType.SOURCE)
-        {
-            Platform.runLater(() -> labelSources.setText(String.valueOf(Integer.parseInt(labelSources.getText()) - 1)));
-        }
-        else if (dataType == DataType.PROXY)
-        {
-            Platform.runLater(() -> labelProxies.setText(String.valueOf(Integer.parseInt(labelProxies.getText()) - 1)));
-        }
+        final Label targetObject = (dataType == DataType.SOURCE) ? labelSources : labelProxies;
+        Platform.runLater(() -> targetObject.setText(String.valueOf(Integer.parseInt(targetObject.getText()) - 1)));
     }
 
     /**
@@ -181,6 +201,21 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     public void handleBruteForceMessage(final LogView.LogLevel logLevel, final String message)
     {
         Platform.runLater(() -> logViewLog.log(logLevel, message));
+    }
+
+    /**
+     * Handles thread termination, and prints log
+     */
+    @Override
+    public synchronized void handleThreadTermination()
+    {
+        final long terminatedThreads = Arrays.stream(BRUTE_FORCE_THREAD_ARRAY).filter(thread -> thread.getState() == Thread.State.TERMINATED).count();
+
+        if ((BRUTE_FORCE_THREAD_ARRAY.length - terminatedThreads) == 1)
+        {
+            clearDataAndCounters();
+            Platform.runLater(() -> logViewLog.log(LogView.LogLevel.INFO, "Work terminated"));
+        }
     }
 
     /**
@@ -199,5 +234,44 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
         thread.setName(threadName);
 
         return thread;
+    }
+
+    /**
+     * Checks, if thread still executing
+     *
+     * @param thread - target thread
+     * @return true, if thread is not terminated
+     */
+    private boolean isThreadNotTerminated(final Thread thread)
+    {
+        return ((thread != null) && (thread.getState() != Thread.State.TERMINATED));
+    }
+
+    /**
+     * Checks if brute-force threads are still executing
+     *
+     * @return true, if work terminated
+     */
+    private boolean isWorkNotTerminated()
+    {
+        for (final Thread thread : BRUTE_FORCE_THREAD_ARRAY)
+        {
+            if (isThreadNotTerminated(thread))
+            {
+                return Boolean.TRUE;
+            }
+        }
+
+        return Boolean.FALSE;
+    }
+
+    /**
+     * Clears data and resets counters
+     */
+    private void clearDataAndCounters()
+    {
+        DataContainer.clearData();
+        Platform.runLater(() -> labelSources.setText("0"));
+        Platform.runLater(() -> labelProxies.setText("0"));
     }
 }

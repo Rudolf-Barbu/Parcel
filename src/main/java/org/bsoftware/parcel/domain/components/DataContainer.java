@@ -69,4 +69,13 @@ public final class DataContainer
     {
         return (!SOURCES.isEmpty() && !PROXIES.isEmpty());
     }
+
+    /**
+     * Clears all data
+     */
+    public static void clearData()
+    {
+        SOURCES.clear();
+        PROXIES.clear();
+    }
 }

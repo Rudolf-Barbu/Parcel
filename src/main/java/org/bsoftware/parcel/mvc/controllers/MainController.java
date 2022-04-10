@@ -16,7 +16,7 @@ import java.util.Optional;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 public class MainController
 {
@@ -76,6 +76,22 @@ public class MainController
     public void start()
     {
         mainService.start();
+    }
+
+    /**
+     * Interrupts working threads
+     */
+    public void terminate()
+    {
+        mainService.terminate();
+    }
+
+    /**
+     * Clears all data
+     */
+    public void clear()
+    {
+        mainService.clear();
     }
 
     /**
