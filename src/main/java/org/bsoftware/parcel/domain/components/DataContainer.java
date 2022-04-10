@@ -65,9 +65,9 @@ public final class DataContainer
      *
      * @return boolean, depends on loaded all data or not
      */
-    public static boolean isAllDataLoaded()
+    public static boolean isDataEmpty()
     {
-        return (!SOURCES.isEmpty() && !PROXIES.isEmpty());
+        return (SOURCES.isEmpty() && PROXIES.isEmpty());
     }
 
     /**

@@ -89,7 +89,7 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
      */
     public synchronized void start()
     {
-        if (!DataContainer.isAllDataLoaded() || isWorkNotTerminated())
+        if (DataContainer.isDataEmpty() || isWorkNotTerminated())
         {
             logViewLog.log(LogView.LogLevel.WARNING, "Load data or/and wait for work being terminated");
             return;
@@ -131,6 +131,11 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
         if (isWorkNotTerminated())
         {
             logViewLog.log(LogView.LogLevel.WARNING, "Cannot clear data, while work is not terminated");
+            return;
+        }
+        else if (DataContainer.isDataEmpty())
+        {
+            logViewLog.log(LogView.LogLevel.WARNING, "Data containers are already empty");
             return;
         }
 
