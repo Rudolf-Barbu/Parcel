@@ -13,7 +13,7 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -33,7 +33,7 @@ public final class DataContainer
      *
      * @param sources - new data payload
      */
-    public static synchronized void refreshSources(final Set<Source> sources)
+    public static void refreshSources(final Set<Source> sources)
     {
         SOURCES.clear();
         SOURCES.addAll(sources);
@@ -54,7 +54,7 @@ public final class DataContainer
      *
      * @param proxies - new data payload
      */
-    public static synchronized void refreshProxies(final Set<Proxy> proxies)
+    public static void refreshProxies(final Set<Proxy> proxies)
     {
         PROXIES.clear();
         PROXIES.addAll(proxies);

@@ -9,10 +9,17 @@ import java.util.Set;
  * DataProcessingCallback is an interface that is used for notifying service about actions in DataProcessingRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 public interface DataProcessingCallback
 {
+    /**
+     * Called, then message transmitted
+     *
+     * @param message - message, which is transmitted to service
+     */
+    void handleDataProcessingMessage(final LogView.LogLevel logLevel, final String message);
+
     /**
      * Called, then data is successfully processed
      *
@@ -21,11 +28,4 @@ public interface DataProcessingCallback
      * @param elapsedTimeInMilliseconds - execution time
      */
     void handleProcessedData(final Set<?> processedData, final DataType dataType, final long elapsedTimeInMilliseconds);
-
-    /**
-     * Called, then message transmitted
-     *
-     * @param message - message, which is transmitted to service
-     */
-    void handleDataProcessingMessage(final LogView.LogLevel logLevel, final String message);
 }

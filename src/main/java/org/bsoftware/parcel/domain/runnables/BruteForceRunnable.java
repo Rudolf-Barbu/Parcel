@@ -2,6 +2,7 @@ package org.bsoftware.parcel.domain.runnables;
 
 import com.chilkatsoft.CkImap;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.components.LogView;
@@ -9,22 +10,16 @@ import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Source;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 /**
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 0.9.0
+ * @version 0.9.6
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -45,9 +40,10 @@ public class BruteForceRunnable implements Runnable
     private static final String IMAP_SERVER = "secureimap.t-online.de";
 
     /**
-     * Timestamp on thread's start
+     * Directory, where result files will be created
      */
-    private final LocalTime startTime;
+    @Setter
+    private static Path workingDirectory;
 
     /**
      * Callback interface, which is used to deliver messages to service
@@ -78,7 +74,7 @@ public class BruteForceRunnable implements Runnable
                 ckImap.Disconnect();
             }
         }
-        catch (final URISyntaxException | IOException exception)
+        catch (final IOException exception)
         {
             bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, clause: %s", exception.getCause().getMessage()));
         }
@@ -91,20 +87,16 @@ public class BruteForceRunnable implements Runnable
      *
      * @param source - data to save in-to file
      * @param isLogged - Based on this flag, it is decided in which file to save the data
-     * @throws URISyntaxException if method can't generate URI
      * @throws IOException if method can't create file or directory
      */
-    private synchronized void saveSourceToFile(final Source source, final boolean isLogged) throws URISyntaxException, IOException
+    private static synchronized void saveSourceToFile(final Source source, final boolean isLogged) throws IOException
     {
-        final String fileName = isLogged ? "good" : "bad";
-        final Path pathToFolder = Paths.get(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).resolve(String.format("../results [%s]", startTime.truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME).replace(':', '.')));
-
-        if (!Files.exists(pathToFolder))
+        if (workingDirectory == null)
         {
-            Files.createDirectories(pathToFolder);
+            throw new IOException("Working directory cannot be null");
         }
 
-        final Path pathToFile = pathToFolder.resolve(String.format("%s.txt", fileName));
+        final Path pathToFile = workingDirectory.resolve(String.format("%s.txt", isLogged ? "good" : "bad"));
 
         try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
         {

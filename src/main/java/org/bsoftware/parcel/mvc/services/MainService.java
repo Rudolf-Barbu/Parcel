@@ -14,7 +14,14 @@ import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.domain.runnables.DataProcessingRunnable;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
@@ -25,7 +32,7 @@ import java.util.Set;
  * MainService class is used for UI manipulation and thread creation
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @RequiredArgsConstructor
 public class MainService implements DataProcessingCallback, BruteForceCallback
@@ -38,7 +45,7 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     /**
      * Container for brute-force threads
      */
-    private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[20];
+    private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[120];
 
     /**
      * Sources counter
@@ -89,17 +96,24 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
      */
     public synchronized void start()
     {
-        if (DataContainer.isDataEmpty() || isWorkNotTerminated())
+        try
         {
-            logViewLog.log(LogView.LogLevel.WARNING, "Load data or/and wait for work being terminated");
-            return;
-        }
+            if (DataContainer.isDataEmpty() || isWorkNotTerminated())
+            {
+                logViewLog.log(LogView.LogLevel.WARNING, "Load data or/and wait for work being terminated");
+                return;
+            }
 
-        final LocalTime startTime = LocalTime.now();
+            BruteForceRunnable.setWorkingDirectory(createWorkingDirectory());
+        }
+        catch (URISyntaxException | IOException exception)
+        {
+            logViewLog.log(LogView.LogLevel.ERROR, String.format("Unable to create working directory, clause: %s", exception.getCause().getMessage()));
+        }
 
         for (int index = 0; index < BRUTE_FORCE_THREAD_ARRAY.length; index++)
         {
-            final BruteForceRunnable bruteForceRunnable = new BruteForceRunnable(startTime, this);
+            final BruteForceRunnable bruteForceRunnable = new BruteForceRunnable(this);
             final Thread thread = createDaemonThread(bruteForceRunnable, String.format("Brute-force thread #%d", index));
 
             BRUTE_FORCE_THREAD_ARRAY[index] = thread;
@@ -144,6 +158,17 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     }
 
     /**
+     * Prints message to LogView
+     *
+     * @param message - message, which is transmitted to service
+     */
+    @Override
+    public void handleDataProcessingMessage(final LogView.LogLevel logLevel, final String message)
+    {
+        Platform.runLater(() -> logViewLog.log(logLevel, message));
+    }
+
+    /**
      * Saving processed data and updating counters
      *
      * @param processedData - set with processed data
@@ -152,7 +177,7 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
      */
     @Override
     @SuppressWarnings(value = "unchecked")
-    public void handleProcessedData(final Set<?> processedData, final DataType dataType, final long elapsedTimeInMilliseconds)
+    public synchronized void handleProcessedData(final Set<?> processedData, final DataType dataType, final long elapsedTimeInMilliseconds)
     {
         if (processedData.isEmpty())
         {
@@ -172,17 +197,6 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
         }
 
         Platform.runLater(() -> logViewLog.log(LogView.LogLevel.FINE, String.format("File with %s processed in %d ms", dataType.getDataTypeNameInPlural(), elapsedTimeInMilliseconds)));
-    }
-
-    /**
-     * Prints message to LogView
-     *
-     * @param message - message, which is transmitted to service
-     */
-    @Override
-    public void handleDataProcessingMessage(final LogView.LogLevel logLevel, final String message)
-    {
-        Platform.runLater(() -> logViewLog.log(logLevel, message));
     }
 
     /**
@@ -224,24 +238,6 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     }
 
     /**
-     * Creates and returns new daemon thread, with custom name
-     *
-     * @param runnable - separated runnable logic
-     * @param threadName - string, which will represent thread name
-     * @return newly created, daemon thread
-     */
-    private Thread createDaemonThread(final Runnable runnable, final String threadName)
-    {
-        final Thread thread = new Thread(runnable);
-
-        thread.setDaemon(Boolean.TRUE);
-        thread.setPriority(Thread.NORM_PRIORITY);
-        thread.setName(threadName);
-
-        return thread;
-    }
-
-    /**
      * Checks, if thread still executing
      *
      * @param thread - target thread
@@ -268,6 +264,41 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
         }
 
         return Boolean.FALSE;
+    }
+
+    /**
+     * Creates working directory
+     *
+     * @return path to directory
+     */
+    private Path createWorkingDirectory() throws URISyntaxException, IOException
+    {
+        final Path pathToWorkingDirectory = Paths.get(BruteForceRunnable.class.getProtectionDomain().getCodeSource().getLocation().toURI()).resolve(String.format("../results [%s]", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME).replace(':', '.')));
+
+        if (!Files.exists(pathToWorkingDirectory))
+        {
+            Files.createDirectories(pathToWorkingDirectory);
+        }
+
+        return pathToWorkingDirectory;
+    }
+
+    /**
+     * Creates and returns new daemon thread, with custom name
+     *
+     * @param runnable - separated runnable logic
+     * @param threadName - string, which will represent thread name
+     * @return newly created, daemon thread
+     */
+    private Thread createDaemonThread(final Runnable runnable, final String threadName)
+    {
+        final Thread thread = new Thread(runnable);
+
+        thread.setDaemon(Boolean.TRUE);
+        thread.setPriority(Thread.NORM_PRIORITY);
+        thread.setName(threadName);
+
+        return thread;
     }
 
     /**
