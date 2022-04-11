@@ -61,6 +61,16 @@ public final class DataContainer
     }
 
     /**
+     * Retrieves next element
+     *
+     * @return next proxy object
+     */
+    public static synchronized Proxy getNextProxy()
+    {
+        return PROXIES.poll();
+    }
+
+    /**
      * Checks if all data has been loaded
      *
      * @return boolean, depends on loaded all data or not

