@@ -13,7 +13,7 @@ This project can be used only in educational purposes, on your own accounts! The
 
 <p align = "center">
     <img src = "images/preview.png" alt = "Preview" />
-    <h7 align = "center">Preview</h7>
+    <h3 align = "center">Preview</h3>
 </p>
 
 ---
