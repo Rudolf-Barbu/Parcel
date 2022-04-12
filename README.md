@@ -25,13 +25,14 @@ This project can be used only in educational purposes, on your own accounts! The
 
     1. Clone the project
     2. Import project in your IDE as Maven project
-    3. mvn clean package
-    4. jar will be in the target folder
+    3. Add Chillkat repository to your .m2 folder
+    4. Fill all sensitive data, such as Chillkat license key and Imap server configuration
+    5. mvn clean package
 
 <br>
 
     Run jar file
 
     1. Create you own jar as described above
-    2. Execute jar on Windows or Linux with administrative rights
-    3. Enter localhost:4000 and set up application
+    2. Make shure you have Java 8 installed and JAVA_HOME is setted
+    3. Execute jar on Windows or Linux with administrative rights
