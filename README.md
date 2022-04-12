@@ -26,7 +26,7 @@ This project can be used only in educational purposes, on your own accounts! The
     1. Clone the project
     2. Import project in your IDE as Maven project
     3. Add Chillkat repository to your .m2 folder
-    4. Fill all sensitive data, such as Chillkat license key and Imap server configuration
+    4. Fill all sensitive data, such as Chillkat license key and IMAP server configuration
     5. mvn clean package
 
 <br>
