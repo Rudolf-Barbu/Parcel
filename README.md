@@ -20,5 +20,18 @@ This project can be used only in educational purposes, on your own accounts! The
 
 ---
 
-### Features
+### Installation
+    Create your own jar
 
+    1. Clone the project
+    2. Import project in your IDE as Maven project
+    3. mvn clean package
+    4. jar will be in the target folder
+
+<br>
+
+    Run jar file
+
+    1. Create you own jar as described above
+    2. Execute jar on Windows or Linux with administrative rights
+    3. Enter localhost:4000 and set up application
