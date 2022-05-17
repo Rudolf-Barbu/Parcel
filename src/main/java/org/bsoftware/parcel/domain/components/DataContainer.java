@@ -13,7 +13,7 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -71,7 +71,7 @@ public final class DataContainer
     }
 
     /**
-     * Checks if all data has been loaded
+     * Checks if all data has is empty
      *
      * @return boolean, depends on loaded all data or not
      */

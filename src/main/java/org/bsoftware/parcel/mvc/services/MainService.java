@@ -32,7 +32,7 @@ import java.util.Set;
  * MainService class is used for UI manipulation and thread creation
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 1.0.6
  */
 @RequiredArgsConstructor
 public class MainService implements DataProcessingCallback, BruteForceCallback
@@ -98,7 +98,7 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
     {
         try
         {
-            if (DataContainer.isDataEmpty() || isWorkNotTerminated())
+            if (!DataContainer.isDataEmpty() || isWorkNotTerminated())
             {
                 logViewLog.log(LogView.LogLevel.WARNING, "Load data or/and wait for work being terminated");
                 return;
