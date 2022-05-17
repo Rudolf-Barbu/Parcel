@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.mvc.services.MainService;
@@ -114,7 +113,6 @@ public class MainController
     /**
      * Triggered after all controls are loaded
      */
-    @SneakyThrows
     @FXML
     private void initialize()
     {

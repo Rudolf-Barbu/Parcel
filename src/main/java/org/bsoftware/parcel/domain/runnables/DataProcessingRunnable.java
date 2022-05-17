@@ -106,7 +106,7 @@ public class DataProcessingRunnable implements Runnable
      * @param dataBuffer - list, which contains unprocessed lines
      * @return unique set of processed sources
      */
-    private Set<?> processSources(final List<String> dataBuffer)
+    private Set<Source> processSources(final List<String> dataBuffer)
     {
         final Set<Source> resultSet = new HashSet<>();
 
@@ -136,7 +136,7 @@ public class DataProcessingRunnable implements Runnable
      * @param dataBuffer - list, which contains unprocessed lines
      * @return unique set of processed proxies
      */
-    private Set<?> processProxies(final List<String> dataBuffer)
+    private Set<Proxy> processProxies(final List<String> dataBuffer)
     {
         final Set<Proxy> resultSet = new HashSet<>();
 
