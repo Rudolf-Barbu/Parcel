@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @RequiredArgsConstructor
 public class DataProcessingRunnable implements Runnable
@@ -33,7 +33,7 @@ public class DataProcessingRunnable implements Runnable
     /**
      * Max lines allowed to contain in a processing file
      */
-    private static final int MAX_LINES_ALLOWED = 4_194_304;
+    private static final int MAX_LINES_ALLOWED = 16_777_216;
 
     /**
      * Regular expression for source's credential
