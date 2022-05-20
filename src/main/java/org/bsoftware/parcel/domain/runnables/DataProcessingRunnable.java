@@ -33,7 +33,7 @@ public class DataProcessingRunnable implements Runnable
     /**
      * Max lines allowed to contain in a processing file
      */
-    private static final int MAX_LINES_ALLOWED = 4_194_304;
+    private static final int MAX_LINES_ALLOWED = 16_777_216;
 
     /**
      * Regular expression for source's credential
