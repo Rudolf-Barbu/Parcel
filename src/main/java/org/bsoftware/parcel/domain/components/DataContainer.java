@@ -2,6 +2,7 @@ package org.bsoftware.parcel.domain.components;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 
@@ -13,7 +14,7 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -71,13 +72,24 @@ public final class DataContainer
     }
 
     /**
-     * Checks if all data has is empty
+     *  Checks if all data is empty
      *
-     * @return boolean, depends on loaded all data or not
+     * @return true, if all data is empty
      */
     public static boolean isDataEmpty()
     {
         return (SOURCES.isEmpty() && PROXIES.isEmpty());
+    }
+
+    /**
+     * Checks specified data-type for emptiness
+     *
+     * @param dataType - specified data-type to check
+     * @return true, if specified data-type is empty
+     */
+    public static boolean isDataEmpty(final DataType dataType)
+    {
+        return (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty();
     }
 
     /**
