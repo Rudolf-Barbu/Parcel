@@ -10,10 +10,10 @@
 
     <!-- properties -->
     <properties>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
         <oshi.version>6.1.6</oshi.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <tika.version>2.3.0</tika.version>
+        <tika.version>2.4.0</tika.version>
         <chilkat.version>9.5.0</chilkat.version>
         <maven.plugin.clean.version>3.2.0</maven.plugin.clean.version>
         <maven.plugin.resources.version>3.2.0</maven.plugin.resources.version>
@@ -21,7 +21,7 @@
         <maven.plugin.assembly.version>3.3.0</maven.plugin.assembly.version>
         <maven.plugin.install.version>3.0.0-M1</maven.plugin.install.version>
         <maven.plugin.deploy.version>3.0.0-M2</maven.plugin.deploy.version>
-        <maven.plugin.site.version>3.11.0</maven.plugin.site.version>
+        <maven.plugin.site.version>4.0.0-M1</maven.plugin.site.version>
     </properties>
 
     <!-- dependencies -->
