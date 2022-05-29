@@ -21,7 +21,7 @@
         <maven.plugin.assembly.version>3.3.0</maven.plugin.assembly.version>
         <maven.plugin.install.version>3.0.0-M1</maven.plugin.install.version>
         <maven.plugin.deploy.version>3.0.0-M2</maven.plugin.deploy.version>
-        <maven.plugin.site.version>3.11.0</maven.plugin.site.version>
+        <maven.plugin.site.version>4.0.0-M1</maven.plugin.site.version>
     </properties>
 
     <!-- dependencies -->
