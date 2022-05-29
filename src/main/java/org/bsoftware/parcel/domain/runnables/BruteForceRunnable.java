@@ -115,6 +115,28 @@ public class BruteForceRunnable implements Runnable
     }
 
     /**
+     * Saving source object to result file
+     *
+     * @param source - data to save in-to file
+     * @param isLogged - Based on this flag, it is decided in which file to save the data
+     * @throws IOException if method can't create file or directory
+     */
+    private static synchronized void saveSourceToFile(final Source source, final boolean isLogged) throws IOException
+    {
+        if (workingDirectory == null)
+        {
+            throw new IOException("Working directory cannot be null");
+        }
+
+        final Path pathToFile = workingDirectory.resolve(String.format("%s.txt", isLogged ? "good" : "bad"));
+
+        try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
+        {
+            asynchronousFileChannel.write(ByteBuffer.wrap(String.format("%s:%s%n", source.getCredential(), source.getPassword()).getBytes()), asynchronousFileChannel.size());
+        }
+    }
+
+    /**
      * Get new proxy until they available
      *
      * @param ckImap - imap object to probe connection
@@ -144,27 +166,5 @@ public class BruteForceRunnable implements Runnable
         }
 
         return Boolean.TRUE;
-    }
-
-    /**
-     * Saving source object to result file
-     *
-     * @param source - data to save in-to file
-     * @param isLogged - Based on this flag, it is decided in which file to save the data
-     * @throws IOException if method can't create file or directory
-     */
-    private static synchronized void saveSourceToFile(final Source source, final boolean isLogged) throws IOException
-    {
-        if (workingDirectory == null)
-        {
-            throw new IOException("Working directory cannot be null");
-        }
-
-        final Path pathToFile = workingDirectory.resolve(String.format("%s.txt", isLogged ? "good" : "bad"));
-
-        try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
-        {
-            asynchronousFileChannel.write(ByteBuffer.wrap(String.format("%s:%s%n", source.getCredential(), source.getPassword()).getBytes()), asynchronousFileChannel.size());
-        }
     }
 }
