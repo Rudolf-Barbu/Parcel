@@ -96,7 +96,7 @@ public class DataProcessingRunnable implements Runnable
         }
         catch (final IOException ioException)
         {
-            dataProcessingCallback.handleDataProcessingMessage(LogView.LogLevel.ERROR, String.format("IO exception occurred, clause: %s", ioException.getCause().getMessage()));
+            dataProcessingCallback.handleDataProcessingMessage(LogView.LogLevel.ERROR, String.format("IO exception occurred, clause: %s", ioException.getMessage()));
         }
     }
 

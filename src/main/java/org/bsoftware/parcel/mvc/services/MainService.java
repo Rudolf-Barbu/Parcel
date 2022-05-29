@@ -109,7 +109,7 @@ public class MainService implements DataProcessingCallback, BruteForceCallback
         }
         catch (URISyntaxException | IOException exception)
         {
-            logViewLog.log(LogView.LogLevel.ERROR, String.format("Unable to create working directory, clause: %s", exception.getCause().getMessage()));
+            logViewLog.log(LogView.LogLevel.ERROR, String.format("Unable to create working directory, clause: %s", exception.getMessage()));
         }
 
         for (int index = 0; index < BRUTE_FORCE_THREAD_ARRAY.length; index++)

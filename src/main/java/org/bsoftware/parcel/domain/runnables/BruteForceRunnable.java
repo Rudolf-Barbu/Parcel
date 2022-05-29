@@ -108,7 +108,7 @@ public class BruteForceRunnable implements Runnable
         }
         catch (final IOException exception)
         {
-            bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, clause: %s", exception.getCause().getMessage()));
+            bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, clause: %s", exception.getMessage()));
         }
 
         bruteForceCallback.handleThreadTermination();
