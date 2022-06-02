@@ -20,33 +20,33 @@ import java.util.stream.Collectors;
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @RequiredArgsConstructor
 public class DataProcessingRunnable implements Runnable
 {
     /**
-     * Source and proxy line delimiter
+     * Defines source and proxy line delimiter
      */
     private static final char DELIMITER = ':';
 
     /**
-     * Max lines allowed to contain in a processing file
+     * Defines max lines allowed to contain in a processing file
      */
     private static final int MAX_LINES_ALLOWED = 16_777_216;
 
     /**
-     * Regular expression for source's credential
+     * Defines regular expression for source's credential
      */
     private static final String CREDENTIAL_REGULAR_EXPRESSION = "[\\w.-]{5,30}@(t-online|magenta)\\.de";
 
     /**
-     * Regular expression for source's password
+     * Defines regular expression for source's password
      */
     private static final String PASSWORD_REGULAR_EXPRESSION = "[^;]{8,16}";
 
     /**
-     * Regular expression for proxy's IP address
+     * Defines regular expression for proxy's IP address
      */
     private static final String IP_ADDRESS_REGULAR_EXPRESSION = "([\\d]{1,3}\\.){3}[\\d]{1,3}";
 

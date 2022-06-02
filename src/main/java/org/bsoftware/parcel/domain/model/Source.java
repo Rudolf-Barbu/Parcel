@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
  * Source is a class that is used for representing source item
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Getter
 @EqualsAndHashCode
@@ -21,7 +21,7 @@ public class Source implements Comparable<Source>
     private final String credential;
 
     /**
-     * Password field
+     * Container for password field
      */
     private final String password;
 

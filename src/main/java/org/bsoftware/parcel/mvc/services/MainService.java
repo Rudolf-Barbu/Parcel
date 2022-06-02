@@ -32,18 +32,18 @@ import java.util.Set;
  * MainService class is used for UI manipulation and thread creation
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 @RequiredArgsConstructor
 public class MainService implements DataProcessingCallback, BruteForceCallback
 {
     /**
-     * Container for data processing threads
+     * Defines container for data processing threads
      */
     private static final Map<DataType, Thread> DATA_PROCESSING_THREAD_MAP = new EnumMap<>(DataType.class);
 
     /**
-     * Container for brute-force threads
+     * Defines container for brute-force threads
      */
     private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[120];
 

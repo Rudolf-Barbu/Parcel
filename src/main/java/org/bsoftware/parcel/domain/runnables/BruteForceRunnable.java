@@ -21,33 +21,33 @@ import java.nio.file.StandardOpenOption;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
 {
     /**
-     * Use or not SSL and TLS
+     * Defines use or not SSL and TLS
      */
     private static final boolean SSL_AND_TLS = Boolean.TRUE;
 
     /**
-     * IMAP server port
+     * Defines IMAP server port
      */
     private static final short IMAP_PORT = 993;
 
     /**
-     * Connection timeout
+     * Defines connection timeout
      */
     private static final byte CONNECTION_TIMEOUT = 5;
 
     /**
-     * Socks version
+     * Defines Socks version
      */
     private static final byte SOCKS_VERSION = 5;
 
     /**
-     * IMAP server host link
+     * Defines IMAP server host link
      */
     private static final String IMAP_SERVER = "secureimap.t-online.de";
 

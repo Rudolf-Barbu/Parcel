@@ -14,18 +14,18 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 1.0.6
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
 {
     /**
-     * Sources holder object
+     * Defines sources holder object
      */
     private static final Queue<Source> SOURCES = new PriorityQueue<>();
 
     /**
-     * Proxies holder object
+     * Defines proxies holder object
      */
     private static final Queue<Proxy> PROXIES = new PriorityQueue<>();
 

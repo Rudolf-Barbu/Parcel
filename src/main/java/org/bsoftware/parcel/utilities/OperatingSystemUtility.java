@@ -14,7 +14,7 @@ import java.util.Arrays;
  * OperatingSystemUtilities class is used for recognition of operating system
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @SuppressWarnings(value = "DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -33,12 +33,12 @@ public final class OperatingSystemUtility
     }
 
     /**
-     * Container for recognized operating system
+     * Defines container for recognized operating system
      */
     private static final OperatingSystem OPERATING_SYSTEM;
 
     /**
-     * Container and getter for operating system's bit depth
+     * Defines container and getter for operating system's bit depth
      */
     @Getter
     private static final String BIT_DEPTH;
