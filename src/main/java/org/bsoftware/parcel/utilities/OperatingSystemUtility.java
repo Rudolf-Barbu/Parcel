@@ -8,15 +8,18 @@ import org.bsoftware.parcel.domain.exceptions.OperatingSystemNotSupportedExcepti
 import oshi.SystemInfo;
 import oshi.software.common.AbstractOperatingSystem;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 /**
  * OperatingSystemUtilities class is used for recognition of operating system
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
-@SuppressWarnings(value = "DanglingJavadoc")
+@SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OperatingSystemUtility
 {
@@ -51,6 +54,16 @@ public final class OperatingSystemUtility
     public static String getBinaryExtension()
     {
         return OPERATING_SYSTEM.binaryExtension;
+    }
+
+    /**
+     * Method to get current time
+     *
+     * @return properly-formatted current time
+     */
+    public static String getFormattedCurrentTime()
+    {
+        return LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME).replace(':', '.');
     }
 
     /**

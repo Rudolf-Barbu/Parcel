@@ -4,10 +4,15 @@ package org.bsoftware.parcel.domain.exceptions;
  * OperatingSystemNotSupportedException indicates that current operating system is unsupported
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class OperatingSystemNotSupportedException extends RuntimeException
 {
+    /**
+     * Defines message pattern for exception
+     */
+    public static final String PATTERN = "Current operating system: %s is not supported";
+
     /**
      * Call super class with customized exception message
      *
@@ -15,6 +20,6 @@ public final class OperatingSystemNotSupportedException extends RuntimeException
      */
     public OperatingSystemNotSupportedException(final String operatingSystem)
     {
-        super(String.format("Current operating system: %s is not supported", operatingSystem));
+        super(String.format(PATTERN, operatingSystem));
     }
 }

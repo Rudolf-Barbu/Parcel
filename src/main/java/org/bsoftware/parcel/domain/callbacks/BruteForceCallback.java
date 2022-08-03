@@ -7,14 +7,14 @@ import org.bsoftware.parcel.domain.model.DataType;
  * BruteForceCallback is an interface that is used for notifying service about actions in BruteForceRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface BruteForceCallback
 {
     /**
      * Used to decrement counters
      *
-     * @param dataType - data type, to determine right counter object
+     * @param dataType - data-type, to determine right counter object
      */
     void handleDecrementCounter(final DataType dataType);
 
@@ -28,5 +28,5 @@ public interface BruteForceCallback
     /**
      * Called, on last stage of bruteforce algorithm
      */
-    void handleThreadTermination();
+    void handleThreadInterruption();
 }

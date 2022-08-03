@@ -1,0 +1,7 @@
+/* Adds background color and border */
+VBox.container
+{
+    -fx-background-color: #E9E9E9;
+    -fx-border-style: hidden solid solid solid;
+    -fx-border-color: #C9C9C9;
+}

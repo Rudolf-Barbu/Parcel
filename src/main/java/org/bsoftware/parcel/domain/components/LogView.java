@@ -9,20 +9,24 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.model.LogItem;
+import org.bsoftware.parcel.utilities.OperatingSystemUtility;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 /**
  * LogView is a class that is used for representing log section in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.6
+ * @version 1.0.7
  */
+@SuppressWarnings("java:S110")
 public class LogView extends ScrollPane
 {
+    /**
+     * Defines path to log view FXML
+     */
+    public static final String FXML = "/fxml/components/log_view.fxml";
+
     /**
      * Defines max allowed log items
      */
@@ -44,7 +48,7 @@ public class LogView extends ScrollPane
     {
         final LogItem logItem = new LogItem();
 
-        logItem.getLabelTimestamp().setText(String.format("[%s]", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_TIME).replace(':', '.')));
+        logItem.getLabelTimestamp().setText(String.format("[%s]", OperatingSystemUtility.getFormattedCurrentTime()));
         logItem.getLabelMessage().setText(logMessage);
         logItem.getLabelMessage().setTextFill(logLevel.getLogColor());
 
@@ -93,7 +97,7 @@ public class LogView extends ScrollPane
     @SneakyThrows
     public LogView()
     {
-        final FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(LogView.class.getResource("/fxml/components/log_view.fxml")));
+        final FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(LogView.class.getResource(FXML)));
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);

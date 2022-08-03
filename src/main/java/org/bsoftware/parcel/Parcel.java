@@ -22,9 +22,9 @@ import java.util.Optional;
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
-@SuppressWarnings(value = "DanglingJavadoc")
+@SuppressWarnings("DanglingJavadoc")
 public final class Parcel extends Application
 {
     /**
@@ -32,10 +32,9 @@ public final class Parcel extends Application
      */
     static
     {
-        final InputStream inputStream = Parcel.class.getResourceAsStream(String.format("/binaries/%s/chilkat.%s", OperatingSystemUtility.getBIT_DEPTH(), OperatingSystemUtility.getBinaryExtension()));
         final Path path = Paths.get(System.getProperty("java.io.tmpdir"), String.format("chilkat.%s", OperatingSystemUtility.getBinaryExtension()));
 
-        try
+        try (final InputStream inputStream = Parcel.class.getResourceAsStream(String.format("/binaries/%s/chilkat.%s", OperatingSystemUtility.getBIT_DEPTH(), OperatingSystemUtility.getBinaryExtension())))
         {
             Files.copy(Objects.requireNonNull(inputStream), path, StandardCopyOption.REPLACE_EXISTING);
             System.load(path.toString());
@@ -49,9 +48,9 @@ public final class Parcel extends Application
     }
 
     /**
-     * Defines licence key for binary
+     * Defines path to main view FXML
      */
-    private static final String UNLOCK_KEY = "3o3UnK.CBX0926_sYR54NwIB0nb";
+    private static final String FXML = "/fxml/views/main_view.fxml";
 
     /**
      * Defines application icon
@@ -62,6 +61,11 @@ public final class Parcel extends Application
      * Defines computed application title
      */
     private static final String TITLE = String.format("Parcel (%s | %s)", Optional.ofNullable(Parcel.class.getPackage().getImplementationVersion()).orElse("Developer mode"), OperatingSystemUtility.getBIT_DEPTH());
+
+    /**
+     * Defines licence key for binary
+     */
+    private static final String UNLOCK_KEY = "3o3UnK.CBX0926_sYR54NwIB0nb";
 
     /**
      * Entry point of the application
@@ -82,7 +86,7 @@ public final class Parcel extends Application
     @Override
     public void start(final Stage stage) throws IOException
     {
-        final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Parcel.class.getResource("/fxml/views/main_view.fxml"))));
+        final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Parcel.class.getResource(FXML))));
 
         stage.getIcons().add(ICON);
         stage.setTitle(TITLE);

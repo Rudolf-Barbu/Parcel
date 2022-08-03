@@ -13,11 +13,17 @@ import java.util.Objects;
  * LogItem is a class that is used for representing log item in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @Getter
+@SuppressWarnings("java:S110")
 public final class LogItem extends HBox
 {
+    /**
+     * Defines path to log item FXML
+     */
+    public static final String FXML = "/fxml/model/log_item.fxml";
+
     /**
      * Container for log item's timestamp
      */
@@ -36,7 +42,7 @@ public final class LogItem extends HBox
     @SneakyThrows
     public LogItem()
     {
-        final FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(LogItem.class.getResource("/fxml/model/log_item.fxml")));
+        final FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(LogItem.class.getResource(FXML)));
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);

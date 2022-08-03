@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * DataType is enum, which indicates allowed data-types for controller and service classes
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Getter
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public enum DataType
     PROXY("proxies");
 
     /**
-     * Verbal representation of the data type, in plural
+     * Verbal representation of the data-type, in plural
      */
     private final String dataTypeNameInPlural;
 }
