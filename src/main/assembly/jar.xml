@@ -1,9 +1,11 @@
 <?xml version = "1.0" encoding = "UTF-8" ?>
 
 <!-- headline -->
-<assembly xmlns = "http://maven.apache.org/ASSEMBLY/2.1.0">
-    <id>jar</id>
+<assembly xmlns = "http://maven.apache.org/ASSEMBLY/2.1.1">
+
+    <!-- options -->
     <includeBaseDirectory>false</includeBaseDirectory>
+    <id>jar</id>
 
     <!-- output format -->
     <formats>
