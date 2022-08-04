@@ -1,6 +1,8 @@
 package org.bsoftware.parcel.domain.components;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
 import org.bsoftware.parcel.domain.model.DataType;
@@ -19,6 +21,7 @@ import java.util.stream.Stream;
  * @author Rudolf Barbu
  * @version 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ThreadContainer
 {
     /**
