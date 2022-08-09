@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ThreadContainer
@@ -151,8 +151,7 @@ public class ThreadContainer
     @RequiredArgsConstructor
     public enum WorkType
     {
-        LOADING("Thread of %s loading"),
-        BRUTEFORCE("Brute-force thread #%d");
+        LOADING("Thread of %s loading"), BRUTEFORCE("Brute-force thread #%d");
 
         /**
          * Defines thread name pattern

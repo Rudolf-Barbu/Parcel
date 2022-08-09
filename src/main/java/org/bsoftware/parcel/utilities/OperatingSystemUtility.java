@@ -17,7 +17,7 @@ import java.util.Arrays;
  * OperatingSystemUtilities class is used for recognition of operating system
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -72,8 +72,7 @@ public final class OperatingSystemUtility
     @RequiredArgsConstructor
     private enum OperatingSystem
     {
-        WINDOWS("Windows", "dll"),
-        LINUX("Linux", "so");
+        WINDOWS("Windows", "dll"), LINUX("Linux", "so");
 
         /**
          * Keyword for matching the operating system

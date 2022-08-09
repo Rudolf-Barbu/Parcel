@@ -17,7 +17,7 @@ import java.util.Objects;
  * LogView is a class that is used for representing log section in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 @SuppressWarnings("java:S110")
 public class LogView extends ScrollPane
@@ -112,10 +112,7 @@ public class LogView extends ScrollPane
     @RequiredArgsConstructor
     public enum LogLevel
     {
-        FINE(Color.DARKGREEN),
-        INFO(Color.DARKGRAY),
-        WARNING(Color.DARKORANGE),
-        ERROR(Color.DARKRED);
+        FINE(Color.DARKGREEN), INFO(Color.DARKGRAY), WARNING(Color.DARKORANGE), ERROR(Color.DARKRED);
 
         /**
          * Color of corresponding log level

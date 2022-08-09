@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system operations
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileSystemUtility
@@ -79,13 +79,13 @@ public class FileSystemUtility
     }
 
     /**
-     * Saves line to file
+     * Saves source to file
      *
      * @param fileName - destination file name
-     * @param lineParts - parts of the line
+     * @param lineParts - additional parts of the line
      * @throws IOException if method can't create file or directory
      */
-    public static synchronized void saveLineToFile(final String fileName, final Source source, final String... lineParts) throws IOException
+    public static synchronized void saveSourceToFile(final String fileName, final Source source, final String... lineParts) throws IOException
     {
         if (workingDirectory == null)
         {
