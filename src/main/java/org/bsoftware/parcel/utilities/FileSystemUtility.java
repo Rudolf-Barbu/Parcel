@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -96,9 +96,9 @@ public class FileSystemUtility
         final String sourcePrefix = String.format("%s:%s", source.getCredential(), source.getPassword());
         final String sourcePostfix = Arrays.stream(lineParts).map(linePart -> String.format(" | %s", linePart)).collect(Collectors.joining());
 
-        try (final FileChannel fileChannel = FileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
+        try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
         {
-            fileChannel.write(ByteBuffer.wrap(sourcePrefix.concat(sourcePostfix).concat(System.lineSeparator()).getBytes()), fileChannel.size());
+            asynchronousFileChannel.write(ByteBuffer.wrap(sourcePrefix.concat(sourcePostfix).concat(System.lineSeparator()).getBytes()), asynchronousFileChannel.size());
         }
     }
 
