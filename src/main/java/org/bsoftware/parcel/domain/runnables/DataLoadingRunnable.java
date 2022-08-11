@@ -142,12 +142,10 @@ public class DataLoadingRunnable implements Runnable
             final String ipAddress = proxy.substring(0, proxy.indexOf(DELIMITER));
             final int port = Integer.parseInt(proxy.substring(proxy.indexOf(DELIMITER) + 1));
 
-            if (!ipAddress.matches(IP_ADDRESS_REGULAR_EXPRESSION) && ((port < 80) || (port > 65_535)))
+            if (ipAddress.matches(IP_ADDRESS_REGULAR_EXPRESSION) && ((port > 80) && (port < 65_535)))
             {
-                continue;
+                resultSet.add(new Proxy(ipAddress, port));
             }
-
-            resultSet.add(new Proxy(ipAddress, port));
         }
 
         return resultSet;
