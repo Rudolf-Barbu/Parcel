@@ -84,9 +84,10 @@ public class BruteForceRunnable implements Runnable
                 ckImap.Disconnect();
             }
         }
-        catch (final IOException exception)
+        catch (final IOException ioException)
         {
-            bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, clause: %s", exception.getMessage()));
+            ioException.printStackTrace();
+            bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, clause: %s", ioException.getMessage()));
         }
 
         bruteForceCallback.handleThreadInterruption();
