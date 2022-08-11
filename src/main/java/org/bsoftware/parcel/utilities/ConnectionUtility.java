@@ -48,7 +48,7 @@ public class ConnectionUtility
 
             CONNECTION_MAP = buffer;
         }
-        catch (IOException ioException)
+        catch (final IOException ioException)
         {
             throw new CSVParsingException(ioException.getMessage());
         }
@@ -62,7 +62,7 @@ public class ConnectionUtility
     /**
      * Defines email domain symbol
      */
-    public static final char DOMAIN = '@';
+    private static final char DOMAIN = '@';
 
     /**
      * Checks, if application can connect to this domain

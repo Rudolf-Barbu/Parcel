@@ -84,7 +84,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
             FileSystemUtility.createWorkingDirectory();
             ThreadContainer.startBruteForceThreads(new BruteForceRunnable(!DataContainer.isDataEmpty(DataType.PROXY), this));
         }
-        catch (URISyntaxException | IOException exception)
+        catch (final URISyntaxException | IOException exception)
         {
             logViewLog.log(LogView.LogLevel.ERROR, "Can't create working directory");
         }

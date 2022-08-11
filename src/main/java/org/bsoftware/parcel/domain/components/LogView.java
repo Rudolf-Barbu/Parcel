@@ -25,7 +25,7 @@ public class LogView extends ScrollPane
     /**
      * Defines path to log view FXML
      */
-    public static final String FXML = "/fxml/components/log_view.fxml";
+    private static final String FXML = "/fxml/components/log_view.fxml";
 
     /**
      * Defines max allowed log items
