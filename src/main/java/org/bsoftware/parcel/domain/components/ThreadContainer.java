@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ThreadContainer
@@ -33,37 +33,6 @@ public class ThreadContainer
      * Defines container for brute-force threads
      */
     private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[120];
-
-    /**
-     * Checks if work is not interrupted
-     *
-     * @param workTypes - work type, which may present
-     * @return boolean depends on work status
-     * @throws IllegalArgumentException if arguments are not applicable
-     */
-    public static boolean isWorkNotInterrupted(final WorkType... workTypes) throws IllegalArgumentException
-    {
-        if ((workTypes.length == 0) || (workTypes.length > 2))
-        {
-            throw new IllegalArgumentException("WorkTypes length is out on ranges");
-        }
-        else if (Arrays.stream(workTypes).distinct().count() < workTypes.length)
-        {
-            throw new IllegalArgumentException("You can't pass the same workType several times");
-        }
-
-        for (final WorkType workType : workTypes)
-        {
-            final Stream<Thread> threadStream = (workType == WorkType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
-
-            if (threadStream.anyMatch(ThreadContainer::isThreadNotInterrupted))
-            {
-                return Boolean.TRUE;
-            }
-        }
-
-        return Boolean.FALSE;
-    }
 
     /**
      * Starts corresponding, loading thread
@@ -98,11 +67,42 @@ public class ThreadContainer
     }
 
     /**
+     * Checks if work is not interrupted
+     *
+     * @param workTypes - work type, which may present
+     * @return boolean depends on work status
+     * @throws IllegalArgumentException if arguments are not applicable
+     */
+    public static boolean isWorkStillExecuting(final WorkType... workTypes) throws IllegalArgumentException
+    {
+        if ((workTypes.length == 0) || (workTypes.length > 2))
+        {
+            throw new IllegalArgumentException("WorkTypes length is out on ranges");
+        }
+        else if (Arrays.stream(workTypes).distinct().count() < workTypes.length)
+        {
+            throw new IllegalArgumentException("You can't pass the same workType several times");
+        }
+
+        for (final WorkType workType : workTypes)
+        {
+            final Stream<Thread> threadStream = (workType == WorkType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
+
+            if (threadStream.anyMatch(ThreadContainer::isThreadStillExecuting))
+            {
+                return Boolean.TRUE;
+            }
+        }
+
+        return Boolean.FALSE;
+    }
+
+    /**
      * Interrupts bruteforce threads
      */
     public static void interruptBruteforceThreads()
     {
-        Arrays.stream(BRUTE_FORCE_THREAD_ARRAY).filter(ThreadContainer::isThreadNotInterrupted).forEach(Thread::interrupt);
+        Arrays.stream(BRUTE_FORCE_THREAD_ARRAY).filter(ThreadContainer::isThreadStillExecuting).forEach(Thread::interrupt);
     }
 
     /**
@@ -110,9 +110,9 @@ public class ThreadContainer
      *
      * @return true, in only one thread left
      */
-    public static synchronized boolean isTheLastBruteForceThreadLeft()
+    public static boolean isTheLastBruteForceThreadLeft()
     {
-        return (Arrays.stream(BRUTE_FORCE_THREAD_ARRAY).filter(ThreadContainer::isThreadNotInterrupted).count() == 1L);
+        return (Arrays.stream(BRUTE_FORCE_THREAD_ARRAY).filter(ThreadContainer::isThreadStillExecuting).count() == 1L);
     }
 
     /**
@@ -121,9 +121,9 @@ public class ThreadContainer
      * @param thread - target thread
      * @return true, if thread is not interrupted
      */
-    private static boolean isThreadNotInterrupted(final Thread thread)
+    private static boolean isThreadStillExecuting(final Thread thread)
     {
-        return ((thread != null) && (thread.getState() != Thread.State.TERMINATED));
+        return ((thread != null) && thread.isAlive());
     }
 
     /**

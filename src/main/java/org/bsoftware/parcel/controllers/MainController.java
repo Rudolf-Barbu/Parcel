@@ -21,7 +21,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 1.0.6
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -75,7 +75,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     {
         try
         {
-            if (DataContainer.isDataEmpty(DataType.SOURCE) || ThreadContainer.isWorkNotInterrupted(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+            if (DataContainer.isDataEmpty(DataType.SOURCE) || ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
             {
                 logViewLog.log(LogView.LogLevel.WARNING, "Load sources or/and wait, until all work is interrupted");
                 return;
@@ -98,7 +98,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void interrupt()
     {
-        if (ThreadContainer.isWorkNotInterrupted(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+        if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
         {
             ThreadContainer.interruptBruteforceThreads();
             return;
@@ -113,7 +113,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void clear()
     {
-        if (ThreadContainer.isWorkNotInterrupted(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+        if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
         {
             logViewLog.log(LogView.LogLevel.WARNING, "Cannot clear data, until all work is not interrupted");
             return;
@@ -146,7 +146,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
      * @param dataType - data-type, which presented in processed data set
      */
     @Override
-    public void handleLoadedData(final Set<?> loadedData, final DataType dataType)
+    public synchronized void handleLoadedData(final Set<?> loadedData, final DataType dataType)
     {
         if (loadedData.isEmpty())
         {
@@ -177,6 +177,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     public void handleDecrementCounter(final DataType dataType)
     {
         final Label targetLabel = (dataType == DataType.SOURCE) ? labelSources : labelProxies;
+
         Platform.runLater(() -> targetLabel.setText(String.valueOf(Integer.parseInt(targetLabel.getText()) - 1)));
     }
 
@@ -195,7 +196,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
      * Handles thread interruption, and prints log
      */
     @Override
-    public void handleThreadInterruption()
+    public synchronized void handleThreadInterruption()
     {
         if (ThreadContainer.isTheLastBruteForceThreadLeft())
         {
