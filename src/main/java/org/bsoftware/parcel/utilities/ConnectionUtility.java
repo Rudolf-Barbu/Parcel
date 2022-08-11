@@ -3,6 +3,7 @@ package org.bsoftware.parcel.utilities;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.bsoftware.parcel.Parcel;
 import org.bsoftware.parcel.domain.exceptions.CSVParsingException;
@@ -18,7 +19,7 @@ import java.util.Objects;
  * ConnectionUtility class provides various connection operations
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,15 +33,17 @@ public class ConnectionUtility
         try
         {
             final Map<String, Connection> buffer = new HashMap<>();
-            final InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(Parcel.class.getResourceAsStream("/connection.csv")));
 
-            for (CSVRecord csvRecord : CSVFormat.Builder.create().setHeader(Header.class).build().parse(inputStreamReader))
+            try (final InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(Parcel.class.getResourceAsStream("/connection.csv"))); final CSVParser csvParser = CSVFormat.Builder.create().setHeader(Header.class).build().parse(inputStreamReader))
             {
-                final int port = Integer.parseInt(csvRecord.get(Header.PORT));
-                final boolean ssl = Boolean.parseBoolean(csvRecord.get(Header.SSL));
-                final boolean tls = Boolean.parseBoolean(csvRecord.get(Header.TLS));
+                for (CSVRecord csvRecord : csvParser)
+                {
+                    final int port = Integer.parseInt(csvRecord.get(Header.PORT));
+                    final boolean ssl = Boolean.parseBoolean(csvRecord.get(Header.SSL));
+                    final boolean tls = Boolean.parseBoolean(csvRecord.get(Header.TLS));
 
-                buffer.put(csvRecord.get(Header.DOMAIN), new Connection(csvRecord.get(Header.HOST), port, ssl, tls));
+                    buffer.put(csvRecord.get(Header.DOMAIN), new Connection(csvRecord.get(Header.HOST), port, ssl, tls));
+                }
             }
 
             CONNECTION_MAP = buffer;
@@ -97,7 +100,7 @@ public class ConnectionUtility
     /**
      * Enum, with all possible headers
      */
-    public enum Header
+    private enum Header
     {
         DOMAIN, HOST, PORT, SSL, TLS
     }

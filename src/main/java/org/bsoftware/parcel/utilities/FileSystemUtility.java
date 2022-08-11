@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system operations
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileSystemUtility
@@ -56,7 +56,7 @@ public class FileSystemUtility
 
         if (optionalFile.isPresent())
         {
-            if (ThreadContainer.isWorkNotInterrupted(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+            if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
             {
                 dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.WARNING, "Cannot run two processing tasks or/and brute-force in parallel");
                 return;

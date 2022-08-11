@@ -33,26 +33,6 @@ public final class DataContainer
     private static final Queue<Proxy> PROXIES = new PriorityQueue<>();
 
     /**
-     * Retrieves next element
-     *
-     * @return next source object
-     */
-    public static synchronized Source getNextSource()
-    {
-        return SOURCES.poll();
-    }
-
-    /**
-     * Retrieves next element
-     *
-     * @return next proxy object
-     */
-    public static synchronized Proxy getNextProxy()
-    {
-        return PROXIES.poll();
-    }
-
-    /**
      * Refreshes data holder object, for corresponding data-type
      *
      * @param dataType - particular data-type
@@ -71,6 +51,26 @@ public final class DataContainer
             PROXIES.clear();
             PROXIES.addAll((Set<Proxy>) data);
         }
+    }
+
+    /**
+     * Retrieves next element
+     *
+     * @return next source object
+     */
+    public static synchronized Source getNextSource()
+    {
+        return SOURCES.poll();
+    }
+
+    /**
+     * Retrieves next element
+     *
+     * @return next proxy object
+     */
+    public static synchronized Proxy getNextProxy()
+    {
+        return PROXIES.poll();
     }
 
     /**
