@@ -34,7 +34,7 @@ public class DataLoadingRunnable implements Runnable
     /**
      * Defines email domain symbol
      */
-    public static final char DOMAIN = '@';
+    private static final char DOMAIN = '@';
 
     /**
      * Defines max lines allowed to contain in a processing file

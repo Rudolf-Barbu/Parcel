@@ -11,7 +11,7 @@ public class CSVParsingException extends RuntimeException
     /**
      * Defines message pattern for exception
      */
-    public static final String PATTERN = "Can't parse CSV file, clause: %s";
+    private static final String PATTERN = "Can't parse CSV file, clause: %s";
 
     /**
      * Call super class with customized exception message

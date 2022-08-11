@@ -22,7 +22,7 @@ public final class LogItem extends HBox
     /**
      * Defines path to log item FXML
      */
-    public static final String FXML = "/fxml/model/log_item.fxml";
+    private static final String FXML = "/fxml/model/log_item.fxml";
 
     /**
      * Container for log item's timestamp

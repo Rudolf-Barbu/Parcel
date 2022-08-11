@@ -11,7 +11,7 @@ public final class OperatingSystemNotSupportedException extends RuntimeException
     /**
      * Defines message pattern for exception
      */
-    public static final String PATTERN = "Current operating system: %s is not supported";
+    private static final String PATTERN = "Current operating system: %s is not supported";
 
     /**
      * Call super class with customized exception message
