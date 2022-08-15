@@ -9,7 +9,6 @@ import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Source;
-import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +74,7 @@ public final class FileSystemUtility
      */
     public static void createWorkingDirectory() throws URISyntaxException, IOException
     {
-        workingDirectory = Files.createDirectory(Paths.get(BruteForceRunnable.class.getProtectionDomain().getCodeSource().getLocation().toURI()).resolve(String.format("../results [%s]", OperatingSystemUtility.getFormattedCurrentTime())));
+        workingDirectory = Files.createDirectory(Paths.get(FileSystemUtility.class.getProtectionDomain().getCodeSource().getLocation().toURI()).resolve(String.format("../results [%s]", OperatingSystemUtility.getFormattedCurrentTime())));
     }
 
     /**

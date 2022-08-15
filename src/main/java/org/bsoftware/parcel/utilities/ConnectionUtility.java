@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.bsoftware.parcel.Parcel;
 import org.bsoftware.parcel.domain.exceptions.CSVParsingException;
 import org.bsoftware.parcel.domain.model.Connection;
 
@@ -34,7 +33,7 @@ public final class ConnectionUtility
         {
             final Map<String, Connection> buffer = new HashMap<>();
 
-            try (final InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(Parcel.class.getResourceAsStream("/connection.csv"))); final CSVParser csvParser = CSVFormat.Builder.create().setHeader(Header.class).build().parse(inputStreamReader))
+            try (final InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(ConnectionUtility.class.getResourceAsStream("/connection.csv"))); final CSVParser csvParser = CSVFormat.Builder.create().setHeader(Header.class).build().parse(inputStreamReader))
             {
                 for (CSVRecord csvRecord : csvParser)
                 {
