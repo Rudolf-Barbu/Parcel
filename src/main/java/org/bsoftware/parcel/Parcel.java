@@ -41,7 +41,7 @@ public final class Parcel extends Application
         }
         catch (final IOException ioException)
         {
-            throw new BinaryFileException("Can't copy binary file in temporary directory, clause: %s", ioException.getMessage());
+            throw new BinaryFileException("Can't copy binary file in temporary directory, message: %s", ioException.getMessage());
         }
 
         unlockBinary();

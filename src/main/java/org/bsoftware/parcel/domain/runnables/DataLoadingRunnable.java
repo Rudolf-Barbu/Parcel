@@ -92,7 +92,7 @@ public class DataLoadingRunnable implements Runnable
         }
         catch (final IOException ioException)
         {
-            dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, String.format("IO exception occurred, clause: %s", ioException.getMessage()));
+            dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, String.format("IO exception occurred, message: %s", ioException.getMessage()));
         }
     }
 
