@@ -29,7 +29,7 @@ public class DataLoadingRunnable implements Runnable
     /**
      * Defines text file extension pattern
      */
-    private static final String TEXT_EXTENSION_PATTERN = "text/plain";
+    private static final String TEXT_FILE_EXTENSION_PATTERN = "text/plain";
 
     /**
      * Defines source and proxy line delimiter
@@ -74,7 +74,7 @@ public class DataLoadingRunnable implements Runnable
     {
         try
         {
-            if (!new Tika().detect(file).equals(TEXT_EXTENSION_PATTERN))
+            if (!new Tika().detect(file).equals(TEXT_FILE_EXTENSION_PATTERN))
             {
                 dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, "Only text files allowed");
                 return;
