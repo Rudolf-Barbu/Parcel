@@ -6,9 +6,7 @@ import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -17,7 +15,7 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -79,6 +77,7 @@ public final class DataContainer
      * @param dataTypes - particular data-types
      * @return trye, if all listed data-types are empty
      */
+    @SuppressWarnings("SimplifyStreamApiCallChains")
     public static boolean isDataEmpty(final DataType... dataTypes)
     {
         if ((dataTypes.length == 0) || (dataTypes.length > 2))
@@ -90,10 +89,7 @@ public final class DataContainer
             throw new IllegalArgumentException("You can't pass the same dataType several times");
         }
 
-        final List<Boolean> booleanList = new ArrayList<>();
-        Arrays.stream(dataTypes).forEach(dataType -> booleanList.add((dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()));
-
-        return booleanList.stream().allMatch(Boolean.TRUE::equals);
+        return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
     }
 
     /**

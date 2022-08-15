@@ -27,6 +27,11 @@ import java.util.stream.Collectors;
 public class DataLoadingRunnable implements Runnable
 {
     /**
+     * Defines text file extension pattern
+     */
+    private static final String TEXT_EXTENSION_PATTERN = "text/plain";
+
+    /**
      * Defines source and proxy line delimiter
      */
     private static final char DELIMITER = ':';
@@ -69,7 +74,7 @@ public class DataLoadingRunnable implements Runnable
     {
         try
         {
-            if (!new Tika().detect(file).equals("text/plain"))
+            if (!new Tika().detect(file).equals(TEXT_EXTENSION_PATTERN))
             {
                 dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, "Only text files allowed");
                 return;
