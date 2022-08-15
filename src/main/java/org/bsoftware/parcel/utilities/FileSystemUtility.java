@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @version 1.0.2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class FileSystemUtility
+public final class FileSystemUtility
 {
     /**
      * Defines title for file dialog

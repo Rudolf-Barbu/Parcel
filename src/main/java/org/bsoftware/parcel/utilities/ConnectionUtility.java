@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ConnectionUtility
+public final class ConnectionUtility
 {
     /**
      * Initializing list with possible connections
