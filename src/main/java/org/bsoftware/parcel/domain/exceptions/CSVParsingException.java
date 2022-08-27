@@ -16,7 +16,7 @@ public class CSVParsingException extends RuntimeException
     /**
      * Call super class with customized exception message
      *
-     * @param message - parsing failure details
+     * @param message parsing failure details
      */
     public CSVParsingException(final String message)
     {

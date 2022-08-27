@@ -28,7 +28,7 @@ public class Proxy implements Comparable<Proxy>
     /**
      * Comparing one proxy to another, using IP-address
      *
-     * @param proxyToCompareWith - proxy to compare
+     * @param proxyToCompareWith proxy to compare
      * @return ratio, between two compared objects
      */
     @Override

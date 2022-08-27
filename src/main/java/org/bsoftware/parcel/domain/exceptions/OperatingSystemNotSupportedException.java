@@ -16,7 +16,7 @@ public final class OperatingSystemNotSupportedException extends RuntimeException
     /**
      * Call super class with customized exception message
      *
-     * @param operatingSystem - name of unsupported operating system
+     * @param operatingSystem name of unsupported operating system
      */
     public OperatingSystemNotSupportedException(final String operatingSystem)
     {

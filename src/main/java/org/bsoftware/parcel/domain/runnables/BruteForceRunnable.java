@@ -96,8 +96,8 @@ public class BruteForceRunnable implements Runnable
     /**
      * Get new proxy until they available
      *
-     * @param ckImap - IMAP object to probe connection
-     * @param host - particular IMAP server to connect
+     * @param ckImap IMAP to probe connection
+     * @param host particular IMAP server to connect
      * @return true, when cannot connect to IMAP server
      */
     private boolean isFailedToConnect(final CkImap ckImap, final String host)

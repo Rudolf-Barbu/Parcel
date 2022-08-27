@@ -37,9 +37,9 @@ public class ThreadContainer
     /**
      * Starts corresponding, loading thread
      *
-     * @param file - file to load
-     * @param dataType - type of data, file contain
-     * @param dataLoadingCallback - callback
+     * @param file file to load
+     * @param dataType type of data, file contain
+     * @param dataLoadingCallback callback
      */
     public static void startLoadingThread(final File file, final DataType dataType, final DataLoadingCallback dataLoadingCallback)
     {
@@ -53,7 +53,7 @@ public class ThreadContainer
     /**
      * Starts bruteforce threads
      *
-     * @param bruteForceRunnable - runnable to be passed to thread
+     * @param bruteForceRunnable runnable to be passed to thread
      */
     public static void startBruteForceThreads(final BruteForceRunnable bruteForceRunnable)
     {
@@ -69,7 +69,7 @@ public class ThreadContainer
     /**
      * Checks if work is not interrupted
      *
-     * @param workTypes - work type, which may present
+     * @param workTypes work type, which may present
      * @return boolean depends on work status
      * @throws IllegalArgumentException if arguments are not applicable
      */
@@ -118,7 +118,7 @@ public class ThreadContainer
     /**
      * Checks, if thread still executing
      *
-     * @param thread - target thread
+     * @param thread target thread
      * @return true, if thread is not interrupted
      */
     private static boolean isThreadStillExecuting(final Thread thread)
@@ -129,8 +129,8 @@ public class ThreadContainer
     /**
      * Creates and returns new daemon thread, with custom name
      *
-     * @param runnable - separated runnable logic
-     * @param threadName - string, which will represent thread name
+     * @param runnable separated runnable logic
+     * @param threadName string, which will represent thread name
      * @return newly created, daemon thread
      */
     private static Thread createDaemonThread(final Runnable runnable, final String threadName)

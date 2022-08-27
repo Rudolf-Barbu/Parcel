@@ -16,15 +16,15 @@ public interface DataLoadingCallback
     /**
      * Called, then message transmitted
      *
-     * @param message - message, which is transmitted to service
+     * @param message message, which is transmitted to service
      */
     void handleDataLoadingMessage(final LogView.LogLevel logLevel, final String message);
 
     /**
      * Called, then data is successfully loaded
      *
-     * @param loadedData - set with loaded data
-     * @param dataType - data-type, which presented in loaded data set
+     * @param loadedData set with loaded data
+     * @param dataType data-type, which presented in loaded data set
      */
     void handleLoadedData(final Set<?> loadedData, final DataType dataType);
 }

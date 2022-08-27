@@ -28,7 +28,7 @@ public class Source implements Comparable<Source>
     /**
      * Comparing one source to another, using credential
      *
-     * @param sourceToCompareWith - source to compare
+     * @param sourceToCompareWith source to compare
      * @return ratio, between two compared objects
      */
     @Override

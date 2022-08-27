@@ -33,8 +33,8 @@ public final class DataContainer
     /**
      * Refreshes data holder object, for corresponding data-type
      *
-     * @param dataType - particular data-type
-     * @param data - data to refresh
+     * @param dataType particular data-type
+     * @param data data to refresh
      */
     @SuppressWarnings("unchecked")
     public static void refreshData(final DataType dataType, final Set<?> data)
@@ -74,8 +74,8 @@ public final class DataContainer
     /**
      * Checks if particular data is empty
      *
-     * @param dataTypes - particular data-types
-     * @return trye, if all listed data-types are empty
+     * @param dataTypes particular data-types
+     * @return true, if all listed data-types are empty
      */
     @SuppressWarnings("SimplifyStreamApiCallChains")
     public static boolean isDataEmpty(final DataType... dataTypes)

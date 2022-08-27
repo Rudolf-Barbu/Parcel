@@ -99,8 +99,8 @@ public class DataLoadingRunnable implements Runnable
     /**
      * Checks, if presented symbol entries the line, but only one time
      *
-     * @param line - particular line, to be checked
-     * @param indexSymbol - symbol to find
+     * @param line particular line, to be checked
+     * @param indexSymbol symbol to find
      * @return true, if line passes the check
      */
     private boolean singleEntryCheck(final String line, final char indexSymbol)
@@ -111,7 +111,7 @@ public class DataLoadingRunnable implements Runnable
     /**
      * Source validation method
      *
-     * @param buffer - list, which contains unprocessed lines
+     * @param buffer list, which contains unprocessed lines
      * @return unique set of loaded sources
      */
     private Set<Source> loadSources(final List<String> buffer)
@@ -135,7 +135,7 @@ public class DataLoadingRunnable implements Runnable
     /**
      * Proxy validation method
      *
-     * @param buffer - list, which contains unprocessed lines
+     * @param buffer list, which contains unprocessed lines
      * @return unique set of loaded proxies
      */
     private Set<Proxy> loadProxies(final List<String> buffer)

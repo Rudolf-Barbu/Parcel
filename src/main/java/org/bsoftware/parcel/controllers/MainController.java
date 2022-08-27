@@ -131,7 +131,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Prints message to LogView
      *
-     * @param message - message, which is transmitted to service
+     * @param message message, which is transmitted to service
      */
     @Override
     public void handleDataLoadingMessage(final LogView.LogLevel logLevel, final String message)
@@ -142,8 +142,8 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Saving processed data and updating counters
      *
-     * @param loadedData - set with loaded data
-     * @param dataType - data-type, which presented in processed data set
+     * @param loadedData set with loaded data
+     * @param dataType data-type, which presented in processed data set
      */
     @Override
     public synchronized void handleLoadedData(final Set<?> loadedData, final DataType dataType)
@@ -171,7 +171,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Decrements one of counters, depending on data-type
      *
-     * @param dataType - data-type, to determine right counter object
+     * @param dataType data-type, to determine right counter object
      */
     @Override
     public void handleDecrementCounter(final DataType dataType)
@@ -184,7 +184,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Prints message to LogView
      *
-     * @param message - message, which is transmitted to service
+     * @param message message, which is transmitted to service
      */
     @Override
     public void handleBruteForceMessage(final LogView.LogLevel logLevel, final String message)

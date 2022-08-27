@@ -41,8 +41,8 @@ public class LogView extends ScrollPane
     /**
      * Adds new log item, with log level
      *
-     * @param logLevel - color, that represents log level
-     * @param logMessage - particular log message
+     * @param logLevel color, that represents log level
+     * @param logMessage particular log message
      */
     public void log(final LogLevel logLevel, final String logMessage)
     {

@@ -66,7 +66,7 @@ public final class ConnectionUtility
     /**
      * Checks, if application can connect to this domain
      *
-     * @param credential - credentials to connect
+     * @param credential credentials to connect
      * @return true, if application is possible able to connect
      */
     public static synchronized boolean isConnectionSupported(final String credential)
@@ -77,7 +77,7 @@ public final class ConnectionUtility
     /**
      * Gets connection object
      *
-     * @param credential - connection key
+     * @param credential connection key
      * @return corresponding connection object
      */
     public static synchronized Connection getConnection(final String credential)
@@ -88,7 +88,7 @@ public final class ConnectionUtility
     /**
      * Returns domain from credential
      *
-     * @param credentials - incoming credentials
+     * @param credentials incoming credentials
      * @return cut domain
      */
     private static String getDomain(final String credentials)

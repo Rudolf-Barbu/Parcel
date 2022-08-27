@@ -14,14 +14,14 @@ public interface BruteForceCallback
     /**
      * Used to decrement counters
      *
-     * @param dataType - data-type, to determine right counter object
+     * @param dataType data-type, to determine right counter object
      */
     void handleDecrementCounter(final DataType dataType);
 
     /**
      * Called, then message transmitted
      *
-     * @param message - message, which is transmitted to service
+     * @param message message, which is transmitted to service
      */
     void handleBruteForceMessage(final LogView.LogLevel logLevel, final String message);
 

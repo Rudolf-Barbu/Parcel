@@ -80,8 +80,8 @@ public final class FileSystemUtility
     /**
      * Saves source to file
      *
-     * @param fileName - destination file name
-     * @param lineParts - additional parts of the line
+     * @param fileName destination file name
+     * @param lineParts additional parts of the line
      * @throws IOException if method can't create file or directory
      */
     public static synchronized void saveSourceToFile(final String fileName, final Source source, final String... lineParts) throws IOException
@@ -104,7 +104,7 @@ public final class FileSystemUtility
     /**
      * Allows to user to choose a text file
      *
-     * @param node - parent element of current, active window
+     * @param node parent element of current, active window
      * @return path to selected file, null if operation cancelled
      */
     private static Optional<File> loadTextFile(final Node node, final DataType dataType)

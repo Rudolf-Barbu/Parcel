@@ -22,7 +22,7 @@ import java.util.Optional;
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @SuppressWarnings("DanglingJavadoc")
 public final class Parcel extends Application
@@ -70,7 +70,7 @@ public final class Parcel extends Application
     /**
      * Entry point of the application
      *
-     * @param arguments - parameters passed though the command line, if presents
+     * @param arguments parameters passed though the command line, if presents
      */
     public static void main(final String... arguments)
     {
@@ -80,8 +80,8 @@ public final class Parcel extends Application
     /**
      * Setups the application window
      *
-     * @param stage - main stage of the application
-     * @throws IOException, if application can't load the FXML file
+     * @param stage main stage of the application
+     * @throws IOException if application can't load the FXML file
      */
     @Override
     public void start(final Stage stage) throws IOException
@@ -99,7 +99,7 @@ public final class Parcel extends Application
     /**
      * Unlocks loaded binary, using license key
      *
-     * @throws BinaryFileException, if license key is invalid or expired
+     * @throws BinaryFileException if license key is invalid or expired
      */
     private static void unlockBinary() throws BinaryFileException
     {
