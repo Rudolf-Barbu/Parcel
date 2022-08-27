@@ -17,7 +17,7 @@ import java.util.Objects;
  * LogView is a class that is used for representing log section in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 1.0.9
  */
 @SuppressWarnings("java:S110")
 public class LogView extends ScrollPane
@@ -92,7 +92,7 @@ public class LogView extends ScrollPane
     }
 
     /**
-     * Constructor which loadings UI representation from corresponding FXNL file
+     * Constructor which loadings UI representation from corresponding FXML file
      */
     @SneakyThrows
     public LogView()
