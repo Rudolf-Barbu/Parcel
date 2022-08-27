@@ -71,9 +71,8 @@ public class ThreadContainer
      *
      * @param workTypes work type, which may present
      * @return boolean depends on work status
-     * @throws IllegalArgumentException if arguments are not applicable
      */
-    public static boolean isWorkStillExecuting(final WorkType... workTypes) throws IllegalArgumentException
+    public static boolean isWorkStillExecuting(final WorkType... workTypes)
     {
         if ((workTypes.length == 0) || (workTypes.length > 2))
         {
