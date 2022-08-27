@@ -35,7 +35,7 @@ public final class ConnectionUtility
 
             try (final InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(ConnectionUtility.class.getResourceAsStream("/connection.csv"))); final CSVParser csvParser = CSVFormat.Builder.create().setHeader(Header.class).build().parse(inputStreamReader))
             {
-                for (CSVRecord csvRecord : csvParser)
+                for (final CSVRecord csvRecord : csvParser)
                 {
                     final int port = Integer.parseInt(csvRecord.get(Header.PORT));
                     final boolean ssl = Boolean.parseBoolean(csvRecord.get(Header.SSL));
