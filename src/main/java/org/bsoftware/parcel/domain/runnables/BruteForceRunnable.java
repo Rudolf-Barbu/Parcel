@@ -69,7 +69,7 @@ public class BruteForceRunnable implements Runnable
                 ckImap.put_Ssl(connection.isSsl());
                 ckImap.put_StartTls(connection.isTls());
 
-                if ((useProxies && isFailedToConnect(ckImap, connection.getHost())) || (!ckImap.Connect(connection.getHost())))
+                if ((useProxies && isFailedToConnect(ckImap, connection.getHost())) || !ckImap.Connect(connection.getHost()))
                 {
                     break;
                 }
