@@ -69,18 +69,18 @@ public class ThreadContainer
     /**
      * Checks if work is not interrupted
      *
-     * @param workTypes work type, which may present
+     * @param workTypes work-type, which may present
      * @return boolean depends on work status
      */
     public static boolean isWorkStillExecuting(final WorkType... workTypes)
     {
         if ((workTypes.length == 0) || (workTypes.length > 2))
         {
-            throw new IllegalArgumentException("WorkTypes length is out on ranges");
+            throw new IllegalArgumentException("Work-types length is out on ranges");
         }
         else if (Arrays.stream(workTypes).distinct().count() < workTypes.length)
         {
-            throw new IllegalArgumentException("You can't pass the same workType several times");
+            throw new IllegalArgumentException("You can't pass the same work-type several times");
         }
 
         for (final WorkType workType : workTypes)

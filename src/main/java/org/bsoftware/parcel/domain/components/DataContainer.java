@@ -82,11 +82,11 @@ public final class DataContainer
     {
         if ((dataTypes.length == 0) || (dataTypes.length > 2))
         {
-            throw new IllegalArgumentException("WorkTypes length is out on ranges");
+            throw new IllegalArgumentException("Data-types length is out on ranges");
         }
         else if (Arrays.stream(dataTypes).distinct().count() < dataTypes.length)
         {
-            throw new IllegalArgumentException("You can't pass the same dataType several times");
+            throw new IllegalArgumentException("You can't pass the same data-type several times");
         }
 
         return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
