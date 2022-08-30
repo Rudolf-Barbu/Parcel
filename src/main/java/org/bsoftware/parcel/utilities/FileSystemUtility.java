@@ -40,7 +40,7 @@ public final class FileSystemUtility
     /**
      * Defines file extension pattern
      */
-    public static final String EXTENSION_PATTERN = "*.txt";
+    private static final String EXTENSION_PATTERN = "*.txt";
 
     /**
      * Path to working directory
