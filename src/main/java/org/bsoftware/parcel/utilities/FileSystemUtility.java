@@ -35,7 +35,12 @@ public final class FileSystemUtility
     /**
      * Defines title for file dialog
      */
-    private static final String TITLE = "Load %s file";
+    private static final String TITLE_PATTERN = "Load %s file";
+
+    /**
+     * Defines file extension pattern
+     */
+    public static final String EXTENSION_PATTERN = "*.txt";
 
     /**
      * Path to working directory
@@ -111,8 +116,8 @@ public final class FileSystemUtility
     {
         final FileChooser fileChooser = new FileChooser();
 
-        fileChooser.setTitle(String.format(TITLE, dataType.getDataTypeNameInPlural()));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        fileChooser.setTitle(String.format(TITLE_PATTERN, dataType.getDataTypeNameInPlural()));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", EXTENSION_PATTERN));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         return Optional.ofNullable(fileChooser.showOpenDialog(node.getScene().getWindow()));
