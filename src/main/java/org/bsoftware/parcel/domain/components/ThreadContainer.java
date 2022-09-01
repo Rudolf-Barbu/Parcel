@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * @version 1.0.2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ThreadContainer
+public final class ThreadContainer
 {
     /**
      * Defines container for data processing threads
