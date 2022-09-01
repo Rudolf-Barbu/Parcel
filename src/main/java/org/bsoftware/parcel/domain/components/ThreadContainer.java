@@ -144,7 +144,7 @@ public final class ThreadContainer
     }
 
     /**
-     * Enum with all supported wo
+     * Enum with all supported work-types
      */
     @Getter
     @RequiredArgsConstructor
