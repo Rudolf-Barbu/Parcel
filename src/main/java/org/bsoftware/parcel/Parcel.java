@@ -68,6 +68,21 @@ public final class Parcel extends Application
     private static final String UNLOCK_KEY = "3o3UnK.CBX0926_sYR54NwIB0nb";
 
     /**
+     * Unlocks loaded binary, using license key
+     *
+     * @throws BinaryFileException if license key is invalid or expired
+     */
+    private static void unlockBinary() throws BinaryFileException
+    {
+        final CkGlobal ckGlobal = new CkGlobal();
+
+        if ((ckGlobal.UnlockBundle(UNLOCK_KEY)) && (ckGlobal.get_UnlockStatus() != 2))
+        {
+            throw new BinaryFileException("Can't unlock binary, reason: %s", ckGlobal.lastErrorText());
+        }
+    }
+
+    /**
      * Entry point of the application
      *
      * @param arguments parameters passed though the command line, if presents
@@ -94,20 +109,5 @@ public final class Parcel extends Application
         stage.setResizable(Boolean.FALSE);
 
         stage.show();
-    }
-
-    /**
-     * Unlocks loaded binary, using license key
-     *
-     * @throws BinaryFileException if license key is invalid or expired
-     */
-    private static void unlockBinary() throws BinaryFileException
-    {
-        final CkGlobal ckGlobal = new CkGlobal();
-
-        if ((ckGlobal.UnlockBundle(UNLOCK_KEY)) && (ckGlobal.get_UnlockStatus() != 2))
-        {
-            throw new BinaryFileException("Can't unlock binary, reason: %s", ckGlobal.lastErrorText());
-        }
     }
 }
