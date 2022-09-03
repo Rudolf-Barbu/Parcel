@@ -111,48 +111,48 @@ public class DataLoadingRunnable implements Runnable
     /**
      * Source validation method
      *
-     * @param buffer list, which contains unprocessed lines
+     * @param unprocessedLines list, which contains unprocessed lines
      * @return unique set of loaded sources
      */
-    private Set<Source> loadSources(final List<String> buffer)
+    private Set<Source> loadSources(final List<String> unprocessedLines)
     {
-        final Set<Source> resultSet = new HashSet<>();
+        final Set<Source> buffer = new HashSet<>();
 
-        for (final String source : buffer)
+        for (final String source : unprocessedLines)
         {
             final String credential = source.substring(0, source.indexOf(DELIMITER));
 
             if (singleEntryCheck(credential, DOMAIN) && ConnectionUtility.isConnectionSupported(credential))
             {
                 final String password = source.substring(source.indexOf(DELIMITER) + 1);
-                resultSet.add(new Source(credential, password));
+                buffer.add(new Source(credential, password));
             }
         }
 
-        return resultSet;
+        return buffer;
     }
 
     /**
      * Proxy validation method
      *
-     * @param buffer list, which contains unprocessed lines
+     * @param unprocessedLines list, which contains unprocessed lines
      * @return unique set of loaded proxies
      */
-    private Set<Proxy> loadProxies(final List<String> buffer)
+    private Set<Proxy> loadProxies(final List<String> unprocessedLines)
     {
-        final Set<Proxy> resultSet = new HashSet<>();
+        final Set<Proxy> buffer = new HashSet<>();
 
-        for (final String proxy : buffer)
+        for (final String proxy : unprocessedLines)
         {
             final String ipAddress = proxy.substring(0, proxy.indexOf(DELIMITER));
             final int port = Integer.parseInt(proxy.substring(proxy.indexOf(DELIMITER) + 1));
 
             if (ipAddress.matches(IP_ADDRESS_REGULAR_EXPRESSION) && ((port > 80) && (port < 65_535)))
             {
-                resultSet.add(new Proxy(ipAddress, port));
+                buffer.add(new Proxy(ipAddress, port));
             }
         }
 
-        return resultSet;
+        return buffer;
     }
 }
