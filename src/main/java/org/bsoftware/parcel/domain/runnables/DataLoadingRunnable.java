@@ -11,6 +11,7 @@ import org.bsoftware.parcel.utilities.ConnectionUtility;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +81,7 @@ public class DataLoadingRunnable implements Runnable
                 return;
             }
 
-            final List<String> buffer = Files.readAllLines(file.toPath()).stream().filter(line -> singleEntryCheck(line, DELIMITER)).collect(Collectors.toList());
+            final List<String> buffer = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8).stream().filter(line -> singleEntryCheck(line, DELIMITER)).collect(Collectors.toList());
 
             if (buffer.size() > MAX_LINES_ALLOWED)
             {
