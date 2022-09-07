@@ -1,11 +1,10 @@
 package org.bsoftware.parcel.domain.components;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.WorkType;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.domain.runnables.DataLoadingRunnable;
 
@@ -19,7 +18,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadContainer
@@ -141,20 +140,5 @@ public final class ThreadContainer
         thread.setName(threadName);
 
         return thread;
-    }
-
-    /**
-     * Enum with all supported work-types
-     */
-    @Getter
-    @RequiredArgsConstructor
-    public enum WorkType
-    {
-        LOADING("Thread of %s loading"), BRUTEFORCE("Brute-force thread #%d");
-
-        /**
-         * Defines thread name pattern
-         */
-        private final String threadNamePattern;
     }
 }

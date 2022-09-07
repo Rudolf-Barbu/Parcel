@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * LogLevel is enum with all supported log levels
+ * LogLevel is an enum with all supported log levels
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Getter
 @RequiredArgsConstructor

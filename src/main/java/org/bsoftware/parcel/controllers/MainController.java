@@ -11,6 +11,7 @@ import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.LogLevel;
+import org.bsoftware.parcel.domain.model.WorkType;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.utilities.FileSystemUtility;
 
@@ -22,7 +23,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -76,7 +77,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     {
         try
         {
-            if (DataContainer.isDataEmpty(DataType.SOURCE) || ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+            if (DataContainer.isDataEmpty(DataType.SOURCE) || ThreadContainer.isWorkStillExecuting(WorkType.LOADING, WorkType.BRUTEFORCE))
             {
                 logViewLog.log(LogLevel.WARNING, "Load sources or/and wait, until all work is interrupted");
                 return;
@@ -99,7 +100,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void interrupt()
     {
-        if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+        if (ThreadContainer.isWorkStillExecuting(WorkType.LOADING, WorkType.BRUTEFORCE))
         {
             ThreadContainer.interruptBruteforceThreads();
             return;
@@ -114,7 +115,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void clear()
     {
-        if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
+        if (ThreadContainer.isWorkStillExecuting(WorkType.LOADING, WorkType.BRUTEFORCE))
         {
             logViewLog.log(LogLevel.WARNING, "Cannot clear data, until all work is not interrupted");
             return;
