@@ -10,6 +10,7 @@ import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.utilities.FileSystemUtility;
 
@@ -21,7 +22,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.6
+ * @version 1.0.7
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -77,7 +78,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
         {
             if (DataContainer.isDataEmpty(DataType.SOURCE) || ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
             {
-                logViewLog.log(LogView.LogLevel.WARNING, "Load sources or/and wait, until all work is interrupted");
+                logViewLog.log(LogLevel.WARNING, "Load sources or/and wait, until all work is interrupted");
                 return;
             }
 
@@ -86,10 +87,10 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
         }
         catch (final URISyntaxException | IOException exception)
         {
-            logViewLog.log(LogView.LogLevel.ERROR, "Can't create working directory");
+            logViewLog.log(LogLevel.ERROR, "Can't create working directory");
         }
 
-        logViewLog.log(LogView.LogLevel.INFO, "Work started");
+        logViewLog.log(LogLevel.INFO, "Work started");
     }
 
     /**
@@ -104,7 +105,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
             return;
         }
 
-        logViewLog.log(LogView.LogLevel.WARNING, "Work already interrupted, or not started yet");
+        logViewLog.log(LogLevel.WARNING, "Work already interrupted, or not started yet");
     }
 
     /**
@@ -115,17 +116,17 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     {
         if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
         {
-            logViewLog.log(LogView.LogLevel.WARNING, "Cannot clear data, until all work is not interrupted");
+            logViewLog.log(LogLevel.WARNING, "Cannot clear data, until all work is not interrupted");
             return;
         }
         else if (DataContainer.isDataEmpty(DataType.SOURCE, DataType.PROXY))
         {
-            logViewLog.log(LogView.LogLevel.WARNING, "Data containers are already empty");
+            logViewLog.log(LogLevel.WARNING, "Data containers are already empty");
             return;
         }
 
         clearDataAndResetCounters();
-        logViewLog.log(LogView.LogLevel.INFO, "Data cleared");
+        logViewLog.log(LogLevel.INFO, "Data cleared");
     }
 
     /**
@@ -134,7 +135,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
      * @param message message, which is transmitted to service
      */
     @Override
-    public void handleDataLoadingMessage(final LogView.LogLevel logLevel, final String message)
+    public void handleDataLoadingMessage(final LogLevel logLevel, final String message)
     {
         Platform.runLater(() -> logViewLog.log(logLevel, message));
     }
@@ -150,7 +151,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     {
         if (loadedData.isEmpty())
         {
-            Platform.runLater(() -> logViewLog.log(LogView.LogLevel.WARNING, String.format("File with %s returned empty set", dataType.getDataTypeNameInPlural())));
+            Platform.runLater(() -> logViewLog.log(LogLevel.WARNING, String.format("File with %s returned empty set", dataType.getDataTypeNameInPlural())));
             return;
         }
 
@@ -165,7 +166,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
             Platform.runLater(() -> labelProxies.setText(String.valueOf(loadedData.size())));
         }
 
-        Platform.runLater(() -> logViewLog.log(LogView.LogLevel.FINE, String.format("File with %s processed", dataType.getDataTypeNameInPlural())));
+        Platform.runLater(() -> logViewLog.log(LogLevel.FINE, String.format("File with %s processed", dataType.getDataTypeNameInPlural())));
     }
 
     /**
@@ -187,7 +188,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
      * @param message message, which is transmitted to service
      */
     @Override
-    public void handleBruteForceMessage(final LogView.LogLevel logLevel, final String message)
+    public void handleBruteForceMessage(final LogLevel logLevel, final String message)
     {
         Platform.runLater(() -> logViewLog.log(logLevel, message));
     }
@@ -201,7 +202,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
         if (ThreadContainer.isTheLastBruteForceThreadLeft())
         {
             clearDataAndResetCounters();
-            Platform.runLater(() -> logViewLog.log(LogView.LogLevel.INFO, "Work interrupted"));
+            Platform.runLater(() -> logViewLog.log(LogLevel.INFO, "Work interrupted"));
         }
     }
 
@@ -221,6 +222,6 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void initialize()
     {
-        logViewLog.log(LogView.LogLevel.INFO, "Application initialized");
+        logViewLog.log(LogLevel.INFO, "Application initialized");
     }
 }

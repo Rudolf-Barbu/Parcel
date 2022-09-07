@@ -5,9 +5,9 @@ import com.chilkatsoft.CkString;
 import lombok.RequiredArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
-import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.Connection;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ConnectionUtility;
@@ -19,7 +19,7 @@ import java.io.IOException;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 1.0.6
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -81,7 +81,7 @@ public class BruteForceRunnable implements Runnable
         }
         catch (final IOException ioException)
         {
-            bruteForceCallback.handleBruteForceMessage(LogView.LogLevel.ERROR, String.format("Exception occurred, while saving source to file, message: %s", ioException.getMessage()));
+            bruteForceCallback.handleBruteForceMessage(LogLevel.ERROR, String.format("Exception occurred, while saving source to file, message: %s", ioException.getMessage()));
         }
 
         bruteForceCallback.handleThreadInterruption();

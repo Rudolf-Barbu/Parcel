@@ -3,8 +3,8 @@ package org.bsoftware.parcel.domain.runnables;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
-import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ConnectionUtility;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 @RequiredArgsConstructor
 public class DataLoadingRunnable implements Runnable
@@ -77,7 +77,7 @@ public class DataLoadingRunnable implements Runnable
         {
             if (!new Tika().detect(file).equals(TEXT_FILE_EXTENSION_PATTERN))
             {
-                dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, "Only text files allowed");
+                dataLoadingCallback.handleDataLoadingMessage(LogLevel.ERROR, "Only text files allowed");
                 return;
             }
 
@@ -85,7 +85,7 @@ public class DataLoadingRunnable implements Runnable
 
             if (buffer.size() > MAX_LINES_ALLOWED)
             {
-                dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, "Exceeded line count limit");
+                dataLoadingCallback.handleDataLoadingMessage(LogLevel.ERROR, "Exceeded line count limit");
                 return;
             }
 
@@ -93,7 +93,7 @@ public class DataLoadingRunnable implements Runnable
         }
         catch (final IOException ioException)
         {
-            dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.ERROR, String.format("IO exception occurred, message: %s", ioException.getMessage()));
+            dataLoadingCallback.handleDataLoadingMessage(LogLevel.ERROR, String.format("IO exception occurred, message: %s", ioException.getMessage()));
         }
     }
 

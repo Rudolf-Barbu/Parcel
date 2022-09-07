@@ -5,9 +5,9 @@ import javafx.stage.FileChooser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
-import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Source;
 
 import java.io.File;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system operations
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility
@@ -62,7 +62,7 @@ public final class FileSystemUtility
         {
             if (ThreadContainer.isWorkStillExecuting(ThreadContainer.WorkType.LOADING, ThreadContainer.WorkType.BRUTEFORCE))
             {
-                dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.WARNING, "Cannot run two processing tasks or/and brute-force in parallel");
+                dataLoadingCallback.handleDataLoadingMessage(LogLevel.WARNING, "Cannot run two processing tasks or/and brute-force in parallel");
                 return;
             }
 
@@ -70,7 +70,7 @@ public final class FileSystemUtility
         }
         else
         {
-            dataLoadingCallback.handleDataLoadingMessage(LogView.LogLevel.WARNING, "Operation cancelled by user");
+            dataLoadingCallback.handleDataLoadingMessage(LogLevel.WARNING, "Operation cancelled by user");
         }
     }
 

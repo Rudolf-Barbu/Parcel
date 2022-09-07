@@ -1,13 +1,13 @@
 package org.bsoftware.parcel.domain.callbacks;
 
-import org.bsoftware.parcel.domain.components.LogView;
 import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.LogLevel;
 
 /**
  * BruteForceCallback is an interface that is used for notifying service about actions in BruteForceRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 public interface BruteForceCallback
 {
@@ -23,7 +23,7 @@ public interface BruteForceCallback
      *
      * @param message message, which is transmitted to service
      */
-    void handleBruteForceMessage(final LogView.LogLevel logLevel, final String message);
+    void handleBruteForceMessage(final LogLevel logLevel, final String message);
 
     /**
      * Called, on last stage of bruteforce algorithm
