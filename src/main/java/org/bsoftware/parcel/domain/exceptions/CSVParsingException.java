@@ -4,9 +4,9 @@ package org.bsoftware.parcel.domain.exceptions;
  * CSVParsingException indicates that application can't parse the CSV file
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
-public class CSVParsingException extends RuntimeException
+public final class CSVParsingException extends RuntimeException
 {
     /**
      * Defines message pattern for exception
