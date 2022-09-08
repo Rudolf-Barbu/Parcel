@@ -8,9 +8,8 @@ import lombok.RequiredArgsConstructor;
  * LogLevel is an enum with all supported log levels
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
-@Getter
 @RequiredArgsConstructor
 public enum LogLevel
 {
@@ -19,5 +18,6 @@ public enum LogLevel
     /**
      * Color of corresponding log level
      */
+    @Getter
     private final Color logColor;
 }

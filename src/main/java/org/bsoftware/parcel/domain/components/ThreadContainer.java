@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
 import org.bsoftware.parcel.domain.model.DataType;
-import org.bsoftware.parcel.domain.model.WorkType;
+import org.bsoftware.parcel.domain.model.ThreadType;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.domain.runnables.DataLoadingRunnable;
 
@@ -43,7 +43,7 @@ public final class ThreadContainer
     public static void startLoadingThread(final File file, final DataType dataType, final DataLoadingCallback dataLoadingCallback)
     {
         final DataLoadingRunnable dataLoadingRunnable = new DataLoadingRunnable(file, dataType, dataLoadingCallback);
-        final Thread thread = createDaemonThread(dataLoadingRunnable, String.format(WorkType.LOADING.getThreadNamePattern(), dataType.getDataTypeNameInPlural()));
+        final Thread thread = createDaemonThread(dataLoadingRunnable, String.format(ThreadType.LOADING.getThreadNamePattern(), dataType.getDataTypeNameInPlural()));
 
         DATA_LOADING_THREAD_MAP.put(dataType, thread);
         thread.start();
@@ -58,7 +58,7 @@ public final class ThreadContainer
     {
         for (int index = 0; index < BRUTE_FORCE_THREAD_ARRAY.length; index++)
         {
-            final Thread thread = createDaemonThread(bruteForceRunnable, String.format(WorkType.BRUTEFORCE.getThreadNamePattern(), index));
+            final Thread thread = createDaemonThread(bruteForceRunnable, String.format(ThreadType.BRUTEFORCE.getThreadNamePattern(), index));
 
             BRUTE_FORCE_THREAD_ARRAY[index] = thread;
             thread.start();
@@ -68,23 +68,23 @@ public final class ThreadContainer
     /**
      * Checks if work is not interrupted
      *
-     * @param workTypes work-type, which may present
+     * @param threadTypes work-type, which may present
      * @return boolean depends on work status
      */
-    public static boolean isWorkStillExecuting(final WorkType... workTypes)
+    public static boolean isWorkStillExecuting(final ThreadType... threadTypes)
     {
-        if ((workTypes.length == 0) || (workTypes.length > 2))
+        if ((threadTypes.length == 0) || (threadTypes.length > 2))
         {
             throw new IllegalArgumentException("Work-types length is out on ranges");
         }
-        else if (Arrays.stream(workTypes).distinct().count() < workTypes.length)
+        else if (Arrays.stream(threadTypes).distinct().count() < threadTypes.length)
         {
             throw new IllegalArgumentException("You can't pass the same work-type several times");
         }
 
-        for (final WorkType workType : workTypes)
+        for (final ThreadType threadType : threadTypes)
         {
-            final Stream<Thread> threadStream = (workType == WorkType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
+            final Stream<Thread> threadStream = (threadType == ThreadType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
 
             if (threadStream.anyMatch(ThreadContainer::isThreadStillExecuting))
             {

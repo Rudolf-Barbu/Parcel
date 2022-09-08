@@ -7,16 +7,16 @@ import lombok.RequiredArgsConstructor;
  * WorkType is an enum with all supported work-types
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 1.0.9
  */
-@Getter
 @RequiredArgsConstructor
-public enum WorkType
+public enum ThreadType
 {
     LOADING("Thread of %s loading"), BRUTEFORCE("Brute-force thread #%d");
 
     /**
      * Defines thread name pattern
      */
+    @Getter
     private final String threadNamePattern;
 }

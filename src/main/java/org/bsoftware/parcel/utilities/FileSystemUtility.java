@@ -9,7 +9,7 @@ import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Source;
-import org.bsoftware.parcel.domain.model.WorkType;
+import org.bsoftware.parcel.domain.model.ThreadType;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system operations
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility
@@ -61,7 +61,7 @@ public final class FileSystemUtility
 
         if (optionalFile.isPresent())
         {
-            if (ThreadContainer.isWorkStillExecuting(WorkType.LOADING, WorkType.BRUTEFORCE))
+            if (ThreadContainer.isWorkStillExecuting(ThreadType.LOADING, ThreadType.BRUTEFORCE))
             {
                 dataLoadingCallback.handleDataLoadingMessage(LogLevel.WARNING, "Cannot run two processing tasks or/and brute-force in parallel");
                 return;

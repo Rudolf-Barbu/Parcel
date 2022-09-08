@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
  * DataType is enum, which indicates allowed data-types for controller and service classes
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
-@Getter
 @RequiredArgsConstructor
 public enum DataType
 {
@@ -18,5 +17,6 @@ public enum DataType
     /**
      * Verbal representation of the data-type, in plural
      */
+    @Getter
     private final String dataTypeNameInPlural;
 }

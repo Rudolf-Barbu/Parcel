@@ -18,7 +18,7 @@ import java.util.Objects;
  * ConnectionUtility class provides various connection operations
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 1.0.3
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -97,7 +97,7 @@ public final class ConnectionUtility
     }
 
     /**
-     * Enum, with all possible headers
+     * Enum with all possible headers
      */
     private enum Header
     {
