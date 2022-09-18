@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
@@ -126,7 +127,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
             return;
         }
 
-        clearDataAndResetCounters(DataType.SOURCE, DataType.PROXY);
+        clearDataAndResetCounters();
         logViewLog.log(LogLevel.INFO, "Data cleared");
     }
 
@@ -207,7 +208,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
                 FileSystemUtility.saveRestSources();
             }
 
-            clearDataAndResetCounters(DataType.PROXY);
+            clearDataAndResetCounters();
             Platform.runLater(() -> logViewLog.log(LogLevel.INFO, "Work interrupted"));
         }
     }
@@ -215,9 +216,9 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Clears data and resets counters
      */
-    private void clearDataAndResetCounters(final DataType... dataTypes)
+    private void clearDataAndResetCounters()
     {
-        DataContainer.clearData(dataTypes);
+        DataContainer.clearData();
         Platform.runLater(() -> labelSources.setText("0"));
         Platform.runLater(() -> labelProxies.setText("0"));
     }
@@ -225,8 +226,9 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Triggered after all controls are loaded
      */
+    @SneakyThrows
     @FXML
-    public void initialize()
+    private void initialize()
     {
         logViewLog.log(LogLevel.INFO, "Application initialized");
     }

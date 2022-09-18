@@ -8,16 +8,18 @@ import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ValidationUtility;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.9
+ * @version 1.0.10
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -64,6 +66,16 @@ public final class DataContainer
     }
 
     /**
+     * Gets ByteBuffer buffer and fills it with all remaining source strings
+     *
+     * @return filled ByteBuffer
+     */
+    public static ByteBuffer getSourcesByteBuffer()
+    {
+        return ByteBuffer.wrap(SOURCES.stream().map(source -> String.format("%s:%s", source.getCredential(), source.getPassword()).concat(System.lineSeparator())).collect(Collectors.joining()).getBytes());
+    }
+
+    /**
      * Retrieves next element
      *
      * @return next proxy object
@@ -94,29 +106,11 @@ public final class DataContainer
     }
 
     /**
-     * Clears selected data
+     * Clears all data
      */
-    public static void clearData(final DataType... dataTypes)
+    public static void clearData()
     {
-        try
-        {
-            ValidationUtility.validateEnumArguments(dataTypes);
-
-            for (final DataType dataType : dataTypes)
-            {
-                if (dataType == DataType.SOURCE)
-                {
-                    SOURCES.clear();
-                }
-                else if (dataType == DataType.PROXY)
-                {
-                    PROXIES.clear();
-                }
-            }
-        }
-        catch (final EnumArgumentsValidationException enumArgumentsValidationException)
-        {
-            throw new IllegalArgumentException(enumArgumentsValidationException.getMessage());
-        }
+        SOURCES.clear();
+        PROXIES.clear();
     }
 }
