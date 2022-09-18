@@ -3,11 +3,13 @@ package org.bsoftware.parcel.domain.callbacks;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.LogLevel;
 
+import java.io.IOException;
+
 /**
  * BruteForceCallback is an interface that is used for notifying service about actions in BruteForceRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 public interface BruteForceCallback
 {
@@ -28,5 +30,5 @@ public interface BruteForceCallback
     /**
      * Called, on last stage of bruteforce algorithm
      */
-    void handleThreadInterruption();
+    void handleThreadInterruption() throws IOException;
 }

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * DataProcessingRunnable is a class that represent worker, which is used for data processing
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 1.0.9
  */
 @RequiredArgsConstructor
 public class DataLoadingRunnable implements Runnable
@@ -93,7 +93,7 @@ public class DataLoadingRunnable implements Runnable
         }
         catch (final IOException ioException)
         {
-            dataLoadingCallback.handleDataLoadingMessage(LogLevel.ERROR, String.format("IO exception occurred, message: %s", ioException.getMessage()));
+            dataLoadingCallback.handleDataLoadingMessage(LogLevel.ERROR, String.format("I/O exception occurred, message: %s", ioException.getMessage()));
         }
     }
 

@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * ConnectionUtility class provides various connection operations
+ * ConnectionUtility class provides various connection methods
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -23,7 +23,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.9
+ * @version 1.0.10
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -126,7 +126,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
             return;
         }
 
-        clearDataAndResetCounters();
+        clearDataAndResetCounters(DataType.SOURCE, DataType.PROXY);
         logViewLog.log(LogLevel.INFO, "Data cleared");
     }
 
@@ -198,11 +198,16 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
      * Handles thread interruption, and prints log
      */
     @Override
-    public synchronized void handleThreadInterruption()
+    public synchronized void handleThreadInterruption() throws IOException
     {
         if (ThreadContainer.isTheLastBruteForceThreadLeft())
         {
-            clearDataAndResetCounters();
+            if (!DataContainer.isDataEmpty(DataType.SOURCE))
+            {
+                FileSystemUtility.saveRestSources();
+            }
+
+            clearDataAndResetCounters(DataType.PROXY);
             Platform.runLater(() -> logViewLog.log(LogLevel.INFO, "Work interrupted"));
         }
     }
@@ -210,9 +215,9 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Clears data and resets counters
      */
-    private void clearDataAndResetCounters()
+    private void clearDataAndResetCounters(final DataType... dataTypes)
     {
-        DataContainer.clearData();
+        DataContainer.clearData(dataTypes);
         Platform.runLater(() -> labelSources.setText("0"));
         Platform.runLater(() -> labelProxies.setText("0"));
     }

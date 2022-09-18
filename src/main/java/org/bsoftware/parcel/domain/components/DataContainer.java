@@ -2,9 +2,11 @@ package org.bsoftware.parcel.domain.components;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bsoftware.parcel.domain.exceptions.EnumArgumentsValidationException;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
+import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.util.Arrays;
 import java.util.PriorityQueue;
@@ -15,7 +17,7 @@ import java.util.Set;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 1.0.9
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -80,24 +82,41 @@ public final class DataContainer
     @SuppressWarnings("SimplifyStreamApiCallChains")
     public static boolean isDataEmpty(final DataType... dataTypes)
     {
-        if ((dataTypes.length == 0) || (dataTypes.length > 2))
+        try
         {
-            throw new IllegalArgumentException("Data-types length is out on ranges");
+            ValidationUtility.validateEnumArguments(dataTypes);
+            return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
         }
-        else if (Arrays.stream(dataTypes).distinct().count() < dataTypes.length)
+        catch (final EnumArgumentsValidationException enumArgumentsValidationException)
         {
-            throw new IllegalArgumentException("You can't pass the same data-type several times");
+            throw new IllegalArgumentException(enumArgumentsValidationException.getMessage());
         }
-
-        return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
     }
 
     /**
-     * Clears all data
+     * Clears selected data
      */
-    public static void clearData()
+    public static void clearData(final DataType... dataTypes)
     {
-        SOURCES.clear();
-        PROXIES.clear();
+        try
+        {
+            ValidationUtility.validateEnumArguments(dataTypes);
+
+            for (final DataType dataType : dataTypes)
+            {
+                if (dataType == DataType.SOURCE)
+                {
+                    SOURCES.clear();
+                }
+                else if (dataType == DataType.PROXY)
+                {
+                    PROXIES.clear();
+                }
+            }
+        }
+        catch (final EnumArgumentsValidationException enumArgumentsValidationException)
+        {
+            throw new IllegalArgumentException(enumArgumentsValidationException.getMessage());
+        }
     }
 }
