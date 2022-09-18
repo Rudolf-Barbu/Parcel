@@ -7,6 +7,7 @@ import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.ThreadType;
 import org.bsoftware.parcel.domain.runnables.BruteForceRunnable;
 import org.bsoftware.parcel.domain.runnables.DataLoadingRunnable;
+import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.io.File;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadContainer
@@ -73,14 +74,7 @@ public final class ThreadContainer
      */
     public static boolean isWorkStillExecuting(final ThreadType... threadTypes)
     {
-        if ((threadTypes.length == 0) || (threadTypes.length > 2))
-        {
-            throw new IllegalArgumentException("Work-types length is out on ranges");
-        }
-        else if (Arrays.stream(threadTypes).distinct().count() < threadTypes.length)
-        {
-            throw new IllegalArgumentException("You can't pass the same work-type several times");
-        }
+        ValidationUtility.validateEnumArguments(threadTypes);
 
         for (final ThreadType threadType : threadTypes)
         {

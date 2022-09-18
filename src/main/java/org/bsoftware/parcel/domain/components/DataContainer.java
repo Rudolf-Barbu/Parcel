@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
+import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.10
+ * @version 1.0.11
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -92,15 +93,7 @@ public final class DataContainer
     @SuppressWarnings("SimplifyStreamApiCallChains")
     public static boolean isDataEmpty(final DataType... dataTypes)
     {
-        if ((dataTypes.length == 0) || (dataTypes.length > 2))
-        {
-            throw new IllegalArgumentException("Data-types length is out on ranges");
-        }
-        else if (Arrays.stream(dataTypes).distinct().count() < dataTypes.length)
-        {
-            throw new IllegalArgumentException("You can't pass the same data-type several times");
-        }
-
+        ValidationUtility.validateEnumArguments(dataTypes);
         return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
     }
 
