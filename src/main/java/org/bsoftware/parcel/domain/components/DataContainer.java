@@ -2,11 +2,9 @@ package org.bsoftware.parcel.domain.components;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bsoftware.parcel.domain.exceptions.EnumArgumentsValidationException;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
 import org.bsoftware.parcel.domain.model.Source;
-import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -94,15 +92,16 @@ public final class DataContainer
     @SuppressWarnings("SimplifyStreamApiCallChains")
     public static boolean isDataEmpty(final DataType... dataTypes)
     {
-        try
+        if ((dataTypes.length == 0) || (dataTypes.length > 2))
         {
-            ValidationUtility.validateEnumArguments(dataTypes);
-            return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
+            throw new IllegalArgumentException("Data-types length is out on ranges");
         }
-        catch (final EnumArgumentsValidationException enumArgumentsValidationException)
+        else if (Arrays.stream(dataTypes).distinct().count() < dataTypes.length)
         {
-            throw new IllegalArgumentException(enumArgumentsValidationException.getMessage());
+            throw new IllegalArgumentException("You can't pass the same data-type several times");
         }
+
+        return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
     }
 
     /**
