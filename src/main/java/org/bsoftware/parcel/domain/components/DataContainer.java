@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.12
+ * @version 1.0.13
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -47,7 +47,7 @@ public final class DataContainer
             SOURCES.clear();
             SOURCES.addAll((Set<Source>) data);
         }
-        else if (dataType == DataType.PROXY)
+        else
         {
             PROXIES.clear();
             PROXIES.addAll((Set<Proxy>) data);

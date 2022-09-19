@@ -57,7 +57,7 @@ public final class ThreadContainer
      */
     public static void startBruteForceThreads(final BruteForceRunnable bruteForceRunnable)
     {
-        for (int index = 0; index < BRUTE_FORCE_THREAD_ARRAY.length; index++)
+        for (int index = 0; (index < BRUTE_FORCE_THREAD_ARRAY.length); index++)
         {
             final Thread thread = createDaemonThread(bruteForceRunnable, String.format(ThreadType.BRUTEFORCE.getThreadNamePattern(), index));
 

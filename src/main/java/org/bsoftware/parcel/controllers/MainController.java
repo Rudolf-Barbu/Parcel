@@ -24,7 +24,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.10
+ * @version 1.0.11
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -162,7 +162,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
             DataContainer.refreshData(DataType.SOURCE, loadedData);
             Platform.runLater(() -> labelSources.setText(String.valueOf(loadedData.size())));
         }
-        else if (dataType == DataType.PROXY)
+        else
         {
             DataContainer.refreshData(DataType.PROXY, loadedData);
             Platform.runLater(() -> labelProxies.setText(String.valueOf(loadedData.size())));
