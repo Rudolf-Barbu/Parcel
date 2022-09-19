@@ -8,8 +8,8 @@ import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.11
+ * @version 1.0.12
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -26,12 +26,12 @@ public final class DataContainer
     /**
      * Defines sources holder object
      */
-    private static final Queue<Source> SOURCES = new PriorityQueue<>();
+    private static final Queue<Source> SOURCES = new ArrayDeque<>();
 
     /**
      * Defines proxies holder object
      */
-    private static final Queue<Proxy> PROXIES = new PriorityQueue<>();
+    private static final Queue<Proxy> PROXIES = new ArrayDeque<>();
 
     /**
      * Refreshes data holder object, for corresponding data-type
