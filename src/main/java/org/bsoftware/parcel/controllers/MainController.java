@@ -24,7 +24,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.11
+ * @version 1.0.12
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -78,14 +78,14 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     {
         try
         {
-            if (DataContainer.isDataEmpty(DataType.SOURCE) || ThreadContainer.isWorkStillExecuting(ThreadType.LOADING, ThreadType.BRUTEFORCE))
+            if (DataContainer.isDataEmpty(DataType.SOURCE, DataType.PROXY) || ThreadContainer.isWorkStillExecuting(ThreadType.LOADING, ThreadType.BRUTEFORCE))
             {
-                logViewLog.log(LogLevel.WARNING, "Load sources or/and wait, until all work is interrupted");
+                logViewLog.log(LogLevel.WARNING, "Load data or/and wait, until all work is interrupted");
                 return;
             }
 
             FileSystemUtility.createWorkingDirectory();
-            ThreadContainer.startBruteForceThreads(new BruteForceRunnable(!DataContainer.isDataEmpty(DataType.PROXY), this));
+            ThreadContainer.startBruteForceThreads(new BruteForceRunnable(this));
         }
         catch (final URISyntaxException | IOException exception)
         {

