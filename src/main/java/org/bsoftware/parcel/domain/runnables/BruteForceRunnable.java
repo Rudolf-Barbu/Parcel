@@ -31,11 +31,6 @@ public class BruteForceRunnable implements Runnable
     private static final int PROXY_VERSION = 5;
 
     /**
-     * Defines proxy connection timeout
-     */
-    private static final int PROXY_CONNECTION_TIMEOUT = 5;
-
-    /**
      * Defines error pattern, that indicate connection impossibility
      */
     private static final String NO_CONNECTION_TO_IMAP_SERVER_ERROR = "<error>No connection to IMAP server.</error>";
@@ -55,7 +50,6 @@ public class BruteForceRunnable implements Runnable
         final CkImap ckImap = new CkImap();
 
         ckImap.put_SocksVersion(PROXY_VERSION);
-        ckImap.put_ConnectTimeout(PROXY_CONNECTION_TIMEOUT);
 
         try
         {
