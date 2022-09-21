@@ -24,7 +24,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.13
+ * @version 1.0.14
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -103,6 +103,8 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     {
         if (ThreadContainer.isWorkStillExecuting(ThreadType.LOADING, ThreadType.BRUTEFORCE))
         {
+            logViewLog.log(LogLevel.INFO, "Work is being interrupted");
+
             ThreadContainer.interruptBruteforceThreads();
             return;
         }
@@ -172,16 +174,12 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     }
 
     /**
-     * Decrements one of counters, depending on data-type
-     *
-     * @param dataType data-type, to determine right counter object
+     * Decrements source counter
      */
     @Override
-    public void handleDecrementCounter(final DataType dataType)
+    public void handleDecrementSourcesCounter()
     {
-        final Label targetLabel = (dataType == DataType.SOURCE) ? labelSources : labelProxies;
-
-        Platform.runLater(() -> targetLabel.setText(String.valueOf(Integer.parseInt(targetLabel.getText()) - 1)));
+        Platform.runLater(() -> labelSources.setText(String.valueOf(Integer.parseInt(labelSources.getText()) - 1)));
     }
 
     /**

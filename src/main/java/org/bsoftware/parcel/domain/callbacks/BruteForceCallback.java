@@ -1,6 +1,5 @@
 package org.bsoftware.parcel.domain.callbacks;
 
-import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.LogLevel;
 
 import java.io.IOException;
@@ -9,16 +8,14 @@ import java.io.IOException;
  * BruteForceCallback is an interface that is used for notifying service about actions in BruteForceRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 public interface BruteForceCallback
 {
     /**
-     * Used to decrement counters
-     *
-     * @param dataType data-type, to determine right counter object
+     * Used to decrement source counter
      */
-    void handleDecrementCounter(final DataType dataType);
+    void handleDecrementSourcesCounter();
 
     /**
      * Called, then message transmitted

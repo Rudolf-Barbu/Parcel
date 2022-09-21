@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 1.0.6
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadContainer
@@ -32,7 +32,7 @@ public final class ThreadContainer
     /**
      * Defines container for brute-force threads
      */
-    private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[64];
+    private static final Thread[] BRUTE_FORCE_THREAD_ARRAY = new Thread[1_024];
 
     /**
      * Starts corresponding, loading thread
