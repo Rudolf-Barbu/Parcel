@@ -22,18 +22,19 @@ This project can be used only in educational purposes, on your own accounts! The
 ---
 
 ### Installation
-    Create your own jar
+
+    Create your own .jar
 
     • Clone the project
     • Import project in your IDE as Maven project
     • Add Chillkat repository to your .m2 folder
-    • Fill all sensitive data, such as Chillkat license key and IMAP server configuration
+    • Fill all sensitive data, such as Chillkat license key
     • mvn clean package
 
 <br>
 
-    Run jar file
+    Run .jar file
 
-    • Create you own jar as described above
+    • Download latest .jar from releases section
     • Make shure you have Java 8 installed and JAVA_HOME is setted
     • Execute jar on Windows or Linux with administrative rights

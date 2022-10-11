@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import lombok.SneakyThrows;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
@@ -24,7 +23,7 @@ import java.util.Set;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.14
+ * @version 1.0.15
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -224,7 +223,6 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Triggered after all controls are loaded
      */
-    @SneakyThrows
     @FXML
     private void initialize()
     {

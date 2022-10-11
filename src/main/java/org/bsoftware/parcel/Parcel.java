@@ -17,12 +17,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @SuppressWarnings("DanglingJavadoc")
 public final class Parcel extends Application
@@ -33,18 +34,21 @@ public final class Parcel extends Application
     static
     {
         final Path path = Paths.get(System.getProperty("java.io.tmpdir"), String.format("chilkat.%s", OperatingSystemUtility.getBinaryExtension()));
+        final Properties properties = new Properties();
 
         try (final InputStream inputStream = Parcel.class.getResourceAsStream(String.format("/binaries/%s/chilkat.%s", OperatingSystemUtility.getBIT_DEPTH(), OperatingSystemUtility.getBinaryExtension())))
         {
+            properties.load(Parcel.class.getResourceAsStream("/application.properties"));
+
             Files.copy(Objects.requireNonNull(inputStream), path, StandardCopyOption.REPLACE_EXISTING);
             System.load(path.toString());
         }
         catch (final IOException ioException)
         {
-            throw new BinaryFileException("Can't copy binary file in temporary directory, message: %s", ioException.getMessage());
+            throw new BinaryFileException("I/O exception occurred, message: %s", ioException.getMessage());
         }
 
-        unlockBinary();
+        unlockBinary(properties.getProperty("application.key"));
     }
 
     /**
@@ -63,20 +67,15 @@ public final class Parcel extends Application
     private static final String TITLE = String.format("Parcel (%s | %s)", Optional.ofNullable(Parcel.class.getPackage().getImplementationVersion()).orElse("Developer mode"), OperatingSystemUtility.getBIT_DEPTH());
 
     /**
-     * Defines licence key for binary
-     */
-    private static final String UNLOCK_KEY = "3o3UnK.CBX0926_sYR54NwIB0nb";
-
-    /**
      * Unlocks loaded binary, using license key
      *
      * @throws BinaryFileException if license key is invalid or expired
      */
-    private static void unlockBinary() throws BinaryFileException
+    private static void unlockBinary(final String applicationKey) throws BinaryFileException
     {
         final CkGlobal ckGlobal = new CkGlobal();
 
-        if ((ckGlobal.UnlockBundle(UNLOCK_KEY)) && (ckGlobal.get_UnlockStatus() != 2))
+        if ((ckGlobal.UnlockBundle(applicationKey)) && (ckGlobal.get_UnlockStatus() != 2))
         {
             throw new BinaryFileException("Can't unlock binary, reason: %s", ckGlobal.lastErrorText());
         }
