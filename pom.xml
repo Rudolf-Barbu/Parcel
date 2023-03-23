@@ -1,29 +1,30 @@
 <?xml version = "1.0" encoding = "UTF-8" ?>
 
 <!-- headline -->
-<project xmlns = "http://maven.apache.org/POM/4.0.0">
+<project xmlns = "http://maven.apache.org/POM/4.0.0" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- options -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.b-software</groupId>
     <artifactId>parcel</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.9</version>
     <packaging>pom</packaging>
 
     <!-- properties -->
     <properties>
-        <lombok.version>1.18.24</lombok.version>
-        <oshi.version>6.2.2</oshi.version>
-        <tika.version>2.5.0</tika.version>
-        <apache.csv.version>1.9.0</apache.csv.version>
-        <chilkat.version>9.5.0.91</chilkat.version>
+        <lombok.version>1.18.26</lombok.version>
+        <oshi.version>6.4.1</oshi.version>
+        <tika.version>2.7.0</tika.version>
+        <apache.csv.version>1.10.0</apache.csv.version>
+        <slf4j.nop.version>2.0.7</slf4j.nop.version>
+        <chilkat.version>9.5.0.93</chilkat.version>
         <maven.plugin.clean.version>3.2.0</maven.plugin.clean.version>
         <maven.plugin.resources.version>3.3.0</maven.plugin.resources.version>
-        <maven.plugin.compiler.version>3.10.1</maven.plugin.compiler.version>
-        <maven.plugin.assembly.version>3.4.2</maven.plugin.assembly.version>
-        <maven.plugin.install.version>3.0.1</maven.plugin.install.version>
-        <maven.plugin.deploy.version>3.0.0</maven.plugin.deploy.version>
-        <maven.plugin.site.version>3.12.1</maven.plugin.site.version>
+        <maven.plugin.compiler.version>3.11.0</maven.plugin.compiler.version>
+        <maven.plugin.assembly.version>3.5.0</maven.plugin.assembly.version>
+        <maven.plugin.install.version>3.1.0</maven.plugin.install.version>
+        <maven.plugin.deploy.version>3.1.0</maven.plugin.deploy.version>
+        <maven.plugin.site.version>4.0.0-M5</maven.plugin.site.version>
     </properties>
 
     <!-- dependencies -->
@@ -49,6 +50,11 @@
             <version>${apache.csv.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j.nop.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.chilkatsoft</groupId>
             <artifactId>chilkat</artifactId>
             <version>${chilkat.version}</version>
@@ -57,6 +63,8 @@
 
     <!-- build plugins -->
     <build>
+        <outputDirectory>target/classes/production/${project.artifactId}</outputDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

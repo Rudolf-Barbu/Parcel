@@ -4,24 +4,27 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
+import org.bsoftware.parcel.domain.model.ProxyRatingAdjustmentType;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.14
+ * @version 1.0.15
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer
@@ -34,7 +37,7 @@ public final class DataContainer
     /**
      * Defines proxies holder object
      */
-    private static final List<Proxy> PROXIES = new ArrayList<>();
+    private static final Map<Proxy, Integer> PROXIES = new HashMap<>();
 
     /**
      * Defines random generator, to get proxies
@@ -48,17 +51,17 @@ public final class DataContainer
      * @param data data to refresh
      */
     @SuppressWarnings("unchecked")
-    public static void refreshData(final DataType dataType, final Set<?> data)
+    public static void refreshData(final DataType dataType, final Collection<?> data)
     {
         if (dataType == DataType.SOURCE)
         {
             SOURCES.clear();
-            SOURCES.addAll((Set<Source>) data);
+            SOURCES.addAll((Collection<Source>) data);
         }
         else
         {
             PROXIES.clear();
-            PROXIES.addAll((Set<Proxy>) data);
+            PROXIES.putAll(((Collection<Proxy>) data).stream().collect(Collectors.toMap(Function.identity(), initialRating -> 0)));
         }
     }
 
@@ -87,9 +90,28 @@ public final class DataContainer
      *
      * @return next proxy object
      */
-    public static synchronized Proxy getRandomProxy()
+    public static synchronized Proxy getConvectionProxy()
     {
-        return PROXIES.get(RANDOM_GENERATOR.nextInt(PROXIES.size()));
+        if (PROXIES.isEmpty())
+        {
+            throw new IllegalStateException("Proxies should be loaded firstly");
+        }
+
+        final int averageProxyRating = PROXIES.values().stream().mapToInt(Integer::intValue).sum() / PROXIES.size();
+        final List<Proxy> applicableProxies = PROXIES.entrySet().stream().filter(entry -> (entry.getValue() >= averageProxyRating)).map(Map.Entry::getKey).collect(Collectors.toList());
+
+        return applicableProxies.get(RANDOM_GENERATOR.nextInt(applicableProxies.size()));
+    }
+
+    /**
+     * Changes the rating of a specific proxy, by one step
+     *
+     * @param proxy target proxy
+     * @param proxyRatingAdjustmentType rating adjustment value
+     */
+    public static void adjustProxyRating(final Proxy proxy, final ProxyRatingAdjustmentType proxyRatingAdjustmentType)
+    {
+        PROXIES.put(proxy, PROXIES.get(proxy) + proxyRatingAdjustmentType.getProxyRatingAdjustmentValue());
     }
 
     /**

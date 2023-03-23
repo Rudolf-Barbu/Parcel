@@ -18,7 +18,7 @@ import java.util.Objects;
  * ConnectionUtility class provides various connection methods
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 1.0.5
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,7 +45,7 @@ public final class ConnectionUtility
                 }
             }
 
-            CONNECTION_MAP = buffer;
+            CONNECTIONS = buffer;
         }
         catch (final IOException ioException)
         {
@@ -56,7 +56,7 @@ public final class ConnectionUtility
     /**
      * Defines connection map
      */
-    private static final Map<String, Connection> CONNECTION_MAP;
+    private static final Map<String, Connection> CONNECTIONS;
 
     /**
      * Defines email domain symbol
@@ -71,7 +71,7 @@ public final class ConnectionUtility
      */
     public static synchronized boolean isConnectionSupported(final String credential)
     {
-        return CONNECTION_MAP.containsKey(getDomain(credential));
+        return CONNECTIONS.containsKey(getDomain(credential));
     }
 
     /**
@@ -82,7 +82,7 @@ public final class ConnectionUtility
      */
     public static synchronized Connection getConnection(final String credential)
     {
-        return CONNECTION_MAP.get(getDomain(credential));
+        return CONNECTIONS.get(getDomain(credential));
     }
 
     /**

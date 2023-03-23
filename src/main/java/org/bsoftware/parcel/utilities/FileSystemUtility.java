@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system methods
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility
@@ -107,10 +107,7 @@ public final class FileSystemUtility
         final String sourcePrefix = String.format("%s:%s", source.getCredential(), source.getPassword());
         final String sourcePostfix = Arrays.stream(lineParts).map(linePart -> String.format(" | %s", linePart)).collect(Collectors.joining());
 
-        try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
-        {
-            asynchronousFileChannel.write(ByteBuffer.wrap(sourcePrefix.concat(sourcePostfix).concat(System.lineSeparator()).getBytes()), asynchronousFileChannel.size());
-        }
+        asynchronousWrite(ByteBuffer.wrap(sourcePrefix.concat(sourcePostfix).concat(System.lineSeparator()).getBytes()), pathToFile);
     }
 
     /**
@@ -125,11 +122,7 @@ public final class FileSystemUtility
             throw new IOException("Working directory cannot be null");
         }
 
-        final Path pathToFile = workingDirectory.resolve(REST_FILE_NAME);
-        try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
-        {
-            asynchronousFileChannel.write(DataContainer.getSourcesByteBuffer(), asynchronousFileChannel.size());
-        }
+        asynchronousWrite(DataContainer.getSourcesByteBuffer(), workingDirectory.resolve(REST_FILE_NAME));
     }
 
     /**
@@ -147,5 +140,20 @@ public final class FileSystemUtility
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         return Optional.ofNullable(fileChooser.showOpenDialog(node.getScene().getWindow()));
+    }
+
+    /**
+     * Writes byte buffer asynchronously
+     *
+     * @param byteBuffer buffer to save
+     * @param pathToFile path to target file
+     * @throws IOException if method can't save byte buffer
+     */
+    private static void asynchronousWrite(final ByteBuffer byteBuffer, final Path pathToFile) throws IOException
+    {
+        try (final AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(pathToFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE))
+        {
+            asynchronousFileChannel.write(byteBuffer, asynchronousFileChannel.size());
+        }
     }
 }

@@ -13,8 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -81,7 +81,7 @@ public class DataLoadingRunnable implements Runnable
                 return;
             }
 
-            final List<String> buffer = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8).stream().filter(line -> singleEntryCheck(line, DELIMITER)).collect(Collectors.toList());
+            final Collection<String> buffer = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8).stream().filter(line -> singleEntryCheck(line, DELIMITER)).collect(Collectors.toList());
 
             if (buffer.size() > MAX_LINES_ALLOWED)
             {
@@ -115,7 +115,7 @@ public class DataLoadingRunnable implements Runnable
      * @param unprocessedLines list, which contains unprocessed lines
      * @return unique set of loaded sources
      */
-    private Set<Source> loadSources(final List<String> unprocessedLines)
+    private Collection<Source> loadSources(final Collection<String> unprocessedLines)
     {
         final Set<Source> buffer = new HashSet<>();
 
@@ -139,7 +139,7 @@ public class DataLoadingRunnable implements Runnable
      * @param unprocessedLines list, which contains unprocessed lines
      * @return unique set of loaded proxies
      */
-    private Set<Proxy> loadProxies(final List<String> unprocessedLines)
+    private Collection<Proxy> loadProxies(final Collection<String> unprocessedLines)
     {
         final Set<Proxy> buffer = new HashSet<>();
 

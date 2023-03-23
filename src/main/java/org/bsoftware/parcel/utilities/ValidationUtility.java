@@ -9,7 +9,7 @@ import java.util.Arrays;
  * ValidationUtility class provides various validation methods
  *
  * @author Rudolf Barbu
- * @version 1.0.1
+ * @version 1.0.2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationUtility
@@ -30,7 +30,7 @@ public class ValidationUtility
         }
         else if (Arrays.stream(types).distinct().count() < types.length)
         {
-            throw new IllegalArgumentException("You can't pass the same types several times");
+            throw new IllegalArgumentException("You can't pass the same type several times");
         }
     }
 }

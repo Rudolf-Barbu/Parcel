@@ -17,13 +17,13 @@ import org.bsoftware.parcel.utilities.FileSystemUtility;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.15
+ * @version 1.0.16
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -146,11 +146,11 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     /**
      * Saving processed data and updating counters
      *
-     * @param loadedData set with loaded data
+     * @param loadedData collection with loaded data
      * @param dataType data-type, which presented in processed data set
      */
     @Override
-    public synchronized void handleLoadedData(final Set<?> loadedData, final DataType dataType)
+    public synchronized void handleLoadedData(final Collection<?> loadedData, final DataType dataType)
     {
         if (loadedData.isEmpty())
         {

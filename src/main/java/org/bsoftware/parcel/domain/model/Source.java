@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class Source implements Comparable<Source>
+public final class Source implements Comparable<Source>
 {
     /**
      * Container for credential data

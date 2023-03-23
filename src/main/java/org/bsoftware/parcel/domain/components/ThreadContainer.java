@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * ThreadContainer is a class that contains thread-related methods
  *
  * @author Rudolf Barbu
- * @version 1.0.6
+ * @version 1.0.7
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ThreadContainer
@@ -27,7 +27,7 @@ public final class ThreadContainer
     /**
      * Defines container for data processing threads
      */
-    private static final Map<DataType, Thread> DATA_LOADING_THREAD_MAP = new EnumMap<>(DataType.class);
+    private static final Map<DataType, Thread> DATA_LOADING_THREADS = new EnumMap<>(DataType.class);
 
     /**
      * Defines container for brute-force threads
@@ -46,7 +46,7 @@ public final class ThreadContainer
         final DataLoadingRunnable dataLoadingRunnable = new DataLoadingRunnable(file, dataType, dataLoadingCallback);
         final Thread thread = createDaemonThread(dataLoadingRunnable, String.format(ThreadType.LOADING.getThreadNamePattern(), dataType.getDataTypeNameInPlural()));
 
-        DATA_LOADING_THREAD_MAP.put(dataType, thread);
+        DATA_LOADING_THREADS.put(dataType, thread);
         thread.start();
     }
 
@@ -78,7 +78,7 @@ public final class ThreadContainer
 
         for (final ThreadType threadType : threadTypes)
         {
-            final Stream<Thread> threadStream = (threadType == ThreadType.LOADING) ? DATA_LOADING_THREAD_MAP.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
+            final Stream<Thread> threadStream = (threadType == ThreadType.LOADING) ? DATA_LOADING_THREADS.values().stream() : Arrays.stream(BRUTE_FORCE_THREAD_ARRAY);
 
             if (threadStream.anyMatch(ThreadContainer::isThreadStillExecuting))
             {

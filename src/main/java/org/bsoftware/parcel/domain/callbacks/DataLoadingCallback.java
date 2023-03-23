@@ -3,13 +3,13 @@ package org.bsoftware.parcel.domain.callbacks;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.LogLevel;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * DataProcessingCallback is an interface that is used for notifying service about actions in DataLoadingRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 1.0.8
  */
 public interface DataLoadingCallback
 {
@@ -23,8 +23,8 @@ public interface DataLoadingCallback
     /**
      * Called, then data is successfully loaded
      *
-     * @param loadedData set with loaded data
+     * @param loadedData collection with loaded data
      * @param dataType data-type, which presented in loaded data set
      */
-    void handleLoadedData(final Set<?> loadedData, final DataType dataType);
+    void handleLoadedData(final Collection<?> loadedData, final DataType dataType);
 }
