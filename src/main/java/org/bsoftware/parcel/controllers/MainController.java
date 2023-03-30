@@ -23,7 +23,7 @@ import java.util.Collection;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 1.0.16
+ * @version 16
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {

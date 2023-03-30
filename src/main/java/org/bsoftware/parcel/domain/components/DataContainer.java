@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * DataContainer is a class, which holds application data and provides methods to manipulate it
  *
  * @author Rudolf Barbu
- * @version 1.0.15
+ * @version 15
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataContainer

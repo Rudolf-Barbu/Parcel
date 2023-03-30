@@ -4,7 +4,7 @@ package org.bsoftware.parcel.domain.exceptions;
  * BinaryFileException indicates that something went wrong with binary file
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 0
  */
 public final class BinaryFileException extends RuntimeException
 {

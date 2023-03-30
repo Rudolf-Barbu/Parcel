@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * DataType is enum, which indicates allowed data-types for controller and service classes
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 3
  */
 @RequiredArgsConstructor
 public enum DataType

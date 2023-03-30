@@ -18,7 +18,7 @@ import java.util.Objects;
  * ConnectionUtility class provides various connection methods
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 5
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

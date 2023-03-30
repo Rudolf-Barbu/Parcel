@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * Connection is a class that is used for representing connection settings
  *
  * @author Rudolf Barbu
- * @version 1.0.0
+ * @version 1
  */
 @Getter
 @RequiredArgsConstructor

@@ -15,7 +15,7 @@ import java.util.Objects;
  * LogView is a class that is used for representing log section in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.10
+ * @version 10
  */
 @SuppressWarnings("java:S110")
 public class LogView extends ScrollPane
@@ -29,6 +29,11 @@ public class LogView extends ScrollPane
      * Defines max allowed log items
      */
     private static final short MAX_LOG_ITEMS = 256;
+
+    /**
+     * Defines boundary vertical value, used for auto-scroll trigger
+     */
+    public static final double BOUNDARY_VERTICAL_VALUE = 0.9D;
 
     /**
      * Container for log items
@@ -81,7 +86,7 @@ public class LogView extends ScrollPane
      */
     private void updateLayoutAndScroll()
     {
-        if (getVvalue() > 0.9D)
+        if (getVvalue() > BOUNDARY_VERTICAL_VALUE)
         {
             applyCss();
             layout();

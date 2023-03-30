@@ -8,7 +8,7 @@ import java.io.IOException;
  * BruteForceCallback is an interface that is used for notifying service about actions in BruteForceRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 5
  */
 public interface BruteForceCallback
 {

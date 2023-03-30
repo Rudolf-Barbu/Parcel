@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system methods
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 8
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility

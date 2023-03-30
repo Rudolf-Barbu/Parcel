@@ -13,7 +13,7 @@ import java.util.Objects;
  * LogItem is a class that is used for representing log item in UI
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 3
  */
 @Getter
 @SuppressWarnings("java:S110")

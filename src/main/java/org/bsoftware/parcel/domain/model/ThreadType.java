@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * WorkType is an enum with all supported work-types
  *
  * @author Rudolf Barbu
- * @version 1.0.9
+ * @version 9
  */
 @RequiredArgsConstructor
 public enum ThreadType

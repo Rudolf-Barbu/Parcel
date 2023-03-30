@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
  * Source is a class that is used for representing source item
  *
  * @author Rudolf Barbu
- * @version 1.0.3
+ * @version 3
  */
 @Getter
 @EqualsAndHashCode

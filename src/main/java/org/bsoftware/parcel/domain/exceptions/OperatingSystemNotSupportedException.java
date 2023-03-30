@@ -4,7 +4,7 @@ package org.bsoftware.parcel.domain.exceptions;
  * OperatingSystemNotSupportedException indicates that current operating system is unsupported
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 2
  */
 public final class OperatingSystemNotSupportedException extends RuntimeException
 {

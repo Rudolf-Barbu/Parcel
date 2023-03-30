@@ -18,7 +18,7 @@ import java.io.IOException;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 1.0.7
+ * @version 7
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable

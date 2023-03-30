@@ -17,7 +17,7 @@ import java.util.Arrays;
  * OperatingSystemUtilities class is used for recognition of operating system
  *
  * @author Rudolf Barbu
- * @version 1.0.4
+ * @version 4
  */
 @SuppressWarnings("DanglingJavadoc")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

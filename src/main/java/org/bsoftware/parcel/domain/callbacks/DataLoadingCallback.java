@@ -9,7 +9,7 @@ import java.util.Collection;
  * DataProcessingCallback is an interface that is used for notifying service about actions in DataLoadingRunnable
  *
  * @author Rudolf Barbu
- * @version 1.0.8
+ * @version 8
  */
 public interface DataLoadingCallback
 {

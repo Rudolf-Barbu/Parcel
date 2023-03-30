@@ -23,7 +23,7 @@ import java.util.Properties;
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 1.0.5
+ * @version 5
  */
 @SuppressWarnings("DanglingJavadoc")
 public final class Parcel extends Application

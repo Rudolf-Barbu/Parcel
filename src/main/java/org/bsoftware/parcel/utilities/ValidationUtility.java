@@ -9,7 +9,7 @@ import java.util.Arrays;
  * ValidationUtility class provides various validation methods
  *
  * @author Rudolf Barbu
- * @version 1.0.2
+ * @version 2
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationUtility
