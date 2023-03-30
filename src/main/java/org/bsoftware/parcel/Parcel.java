@@ -6,7 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.bsoftware.parcel.domain.components.DataContainer;
+import org.bsoftware.parcel.domain.components.ThreadContainer;
 import org.bsoftware.parcel.domain.exceptions.BinaryFileException;
+import org.bsoftware.parcel.domain.model.DataType;
+import org.bsoftware.parcel.domain.model.ThreadType;
+import org.bsoftware.parcel.utilities.FileSystemUtility;
 import org.bsoftware.parcel.utilities.OperatingSystemUtility;
 
 import java.io.IOException;
@@ -23,7 +28,7 @@ import java.util.Properties;
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 5
+ * @version 6
  */
 @SuppressWarnings("DanglingJavadoc")
 public final class Parcel extends Application
@@ -108,5 +113,19 @@ public final class Parcel extends Application
         stage.setResizable(Boolean.FALSE);
 
         stage.show();
+    }
+
+    /**
+     * Saves rest of sources, if you are closing working application
+     *
+     * @throws IOException if application can't save rest of the sources properly
+     */
+    @Override
+    public void stop() throws IOException
+    {
+        if (!DataContainer.isDataEmpty(DataType.SOURCE) && ThreadContainer.isWorkStillExecuting(ThreadType.BRUTEFORCE))
+        {
+            FileSystemUtility.saveRestSources();
+        }
     }
 }

@@ -18,7 +18,7 @@ import java.io.IOException;
  * BruteForceRunnable is a class that represent worker, which is used for brute-force attack
  *
  * @author Rudolf Barbu
- * @version 7
+ * @version 8
  */
 @RequiredArgsConstructor
 public class BruteForceRunnable implements Runnable
@@ -94,7 +94,7 @@ public class BruteForceRunnable implements Runnable
 
         while (!Thread.currentThread().isInterrupted())
         {
-            final Proxy proxy = DataContainer.getConvectionProxy();
+            final Proxy proxy = DataContainer.getRandomProxy();
 
             ckImap.put_SocksHostname(proxy.getIpAddress());
             ckImap.put_SocksPort(proxy.getPort());
