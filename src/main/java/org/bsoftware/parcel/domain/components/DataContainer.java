@@ -4,20 +4,17 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bsoftware.parcel.domain.model.DataType;
 import org.bsoftware.parcel.domain.model.Proxy;
-import org.bsoftware.parcel.domain.model.ProxyRatingAdjustmentType;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ValidationUtility;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +34,7 @@ public final class DataContainer
     /**
      * Defines proxies holder object
      */
-    private static final Map<Proxy, Integer> PROXIES = new HashMap<>();
+    private static final List<Proxy> PROXIES = new ArrayList<>();
 
     /**
      * Defines random generator, to get proxies
@@ -61,7 +58,7 @@ public final class DataContainer
         else
         {
             PROXIES.clear();
-            PROXIES.putAll(((Collection<Proxy>) data).stream().collect(Collectors.toMap(Function.identity(), initialRating -> 0)));
+            PROXIES.addAll((Collection<Proxy>) data);
         }
     }
 
@@ -97,21 +94,7 @@ public final class DataContainer
             throw new IllegalStateException("Proxies should be loaded firstly");
         }
 
-        final int averageProxyRating = PROXIES.values().stream().mapToInt(Integer::intValue).sum() / PROXIES.size();
-        final List<Proxy> applicableProxies = PROXIES.entrySet().stream().filter(entry -> (entry.getValue() >= averageProxyRating)).map(Map.Entry::getKey).collect(Collectors.toList());
-
-        return applicableProxies.get(RANDOM_GENERATOR.nextInt(applicableProxies.size()));
-    }
-
-    /**
-     * Changes the rating of a specific proxy, by one step
-     *
-     * @param proxy target proxy
-     * @param proxyRatingAdjustmentType rating adjustment value
-     */
-    public static void adjustProxyRating(final Proxy proxy, final ProxyRatingAdjustmentType proxyRatingAdjustmentType)
-    {
-        PROXIES.put(proxy, PROXIES.get(proxy) + proxyRatingAdjustmentType.getProxyRatingAdjustmentValue());
+        return PROXIES.get(RANDOM_GENERATOR.nextInt(PROXIES.size()));
     }
 
     /**
@@ -124,6 +107,7 @@ public final class DataContainer
     public static boolean isDataEmpty(final DataType... dataTypes)
     {
         ValidationUtility.validateEnumArguments(dataTypes);
+
         return Arrays.stream(dataTypes).map(dataType -> (dataType == DataType.SOURCE) ? SOURCES.isEmpty() : PROXIES.isEmpty()).allMatch(Boolean.TRUE::equals);
     }
 

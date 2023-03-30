@@ -8,7 +8,6 @@ import org.bsoftware.parcel.domain.components.DataContainer;
 import org.bsoftware.parcel.domain.model.Connection;
 import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Proxy;
-import org.bsoftware.parcel.domain.model.ProxyRatingAdjustmentType;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.utilities.ConnectionUtility;
 import org.bsoftware.parcel.utilities.FileSystemUtility;
@@ -88,18 +87,9 @@ public class BruteForceRunnable implements Runnable
      */
     private void connectToServer(final CkImap ckImap, final String host)
     {
-        final String ipAddress = ckImap.socksHostname();
-        final int port = ckImap.get_SocksPort();
-
-        if (!ipAddress.isEmpty() && (port != 0))
+        if (!Thread.currentThread().isInterrupted() && (!ckImap.connectedToHost().isEmpty() && ckImap.Connect(host)))
         {
-            if (!Thread.currentThread().isInterrupted() && ckImap.Connect(host))
-            {
-                DataContainer.adjustProxyRating(new Proxy(ipAddress, port), ProxyRatingAdjustmentType.INCREASE);
-                return;
-            }
-
-            DataContainer.adjustProxyRating(new Proxy(ipAddress, port), ProxyRatingAdjustmentType.DECREASE);
+            return;
         }
 
         while (!Thread.currentThread().isInterrupted())
@@ -111,11 +101,8 @@ public class BruteForceRunnable implements Runnable
 
             if (ckImap.Connect(host))
             {
-                DataContainer.adjustProxyRating(proxy, ProxyRatingAdjustmentType.INCREASE);
                 return;
             }
-
-            DataContainer.adjustProxyRating(proxy, ProxyRatingAdjustmentType.DECREASE);
         }
     }
 }
