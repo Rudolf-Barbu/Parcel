@@ -5,3 +5,9 @@ VBox.container
     -fx-border-style: hidden solid solid solid;
     -fx-border-color: #C9C9C9;
 }
+
+/* Makes TitledPane's title irresponsible to hover action */
+.titled-pane > .title:hover
+{
+    -fx-color: -fx-base;
+}
