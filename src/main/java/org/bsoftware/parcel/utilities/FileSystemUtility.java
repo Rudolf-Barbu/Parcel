@@ -12,6 +12,7 @@ import org.bsoftware.parcel.domain.model.LogLevel;
 import org.bsoftware.parcel.domain.model.Source;
 import org.bsoftware.parcel.domain.model.ThreadType;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system methods
  *
  * @author Rudolf Barbu
- * @version 8
+ * @version 9
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility
@@ -82,11 +83,24 @@ public final class FileSystemUtility
     }
 
     /**
+     * Opens application folder
+     *
+     * @throws URISyntaxException if application can't convert URI to Path
+     * @throws IOException if folder can't be opened in explorer
+     */
+    public static void openApplicationFolder() throws URISyntaxException, IOException
+    {
+        final File applicationFilePath = getApplicationPath().toFile();
+
+        Desktop.getDesktop().open(applicationFilePath.isFile() ? applicationFilePath.getParentFile() : applicationFilePath);
+    }
+
+    /**
      * Creates and sets working directory
      */
     public static void createWorkingDirectory() throws URISyntaxException, IOException
     {
-        workingDirectory = Files.createDirectory(Paths.get(FileSystemUtility.class.getProtectionDomain().getCodeSource().getLocation().toURI()).resolve(String.format("../results [%s]", OperatingSystemUtility.getFormattedCurrentTime())));
+        workingDirectory = Files.createDirectory(getApplicationPath()).resolve(String.format("../results [%s]", OperatingSystemUtility.getFormattedCurrentTime()));
     }
 
     /**
@@ -123,6 +137,17 @@ public final class FileSystemUtility
         }
 
         asynchronousWrite(DataContainer.getSourcesByteBuffer(), workingDirectory.resolve(REST_FILE_NAME));
+    }
+
+    /**
+     * Gets application path, based on it's location
+     *
+     * @return application path
+     * @throws URISyntaxException if application can't convert URI to Path
+     */
+    private static Path getApplicationPath() throws URISyntaxException
+    {
+        return Paths.get(FileSystemUtility.class.getProtectionDomain().getCodeSource().getLocation().toURI());
     }
 
     /**

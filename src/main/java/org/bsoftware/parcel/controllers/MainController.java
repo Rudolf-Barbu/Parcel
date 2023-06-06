@@ -23,7 +23,7 @@ import java.util.Collection;
  * MainController class is used for loading UI and communicating with service
  *
  * @author Rudolf Barbu
- * @version 17
+ * @version 18
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
@@ -67,6 +67,22 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     public void loadProxies()
     {
         FileSystemUtility.loadData(hBoxRoot, DataType.PROXY, this);
+    }
+
+    /**
+     * Opens application folder
+     */
+    @FXML
+    public void openApplicationFolder()
+    {
+        try
+        {
+            FileSystemUtility.openApplicationFolder();
+        }
+        catch (final URISyntaxException | IOException exception)
+        {
+            logViewLog.log(LogLevel.ERROR, String.format("Can't open application folder, because: %s", exception.getMessage()));
+        }
     }
 
     /**

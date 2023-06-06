@@ -64,7 +64,7 @@
                   </left>
                   <right>
                      <HBox>
-                        <ImageView pickOnBounds = "true" preserveRatio = "true">
+                        <ImageView pickOnBounds = "true" preserveRatio = "true" onMouseClicked = "#openApplicationFolder">
                            <Image url = "/static/images/controls/folder.png" />
                            <cursor>
                               <Cursor fx:constant = "HAND" />
