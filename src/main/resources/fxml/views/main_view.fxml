@@ -70,17 +70,6 @@
                               <Cursor fx:constant = "HAND" />
                            </cursor>
                         </ImageView>
-                        <Separator orientation = "VERTICAL">
-                           <padding>
-                              <Insets left = "5" />
-                           </padding>
-                        </Separator>
-                        <ImageView pickOnBounds = "true" preserveRatio = "true">
-                           <Image url = "/static/images/controls/settings.png" />
-                           <cursor>
-                              <Cursor fx:constant = "HAND" />
-                           </cursor>
-                        </ImageView>
                      </HBox>
                   </right>
                </BorderPane>
