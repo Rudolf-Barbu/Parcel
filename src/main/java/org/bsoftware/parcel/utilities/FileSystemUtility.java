@@ -1,6 +1,6 @@
 package org.bsoftware.parcel.utilities;
 
-import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * FileSystemUtility class provides various file system methods
  *
  * @author Rudolf Barbu
- * @version 9
+ * @version 10
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileSystemUtility
@@ -58,13 +58,13 @@ public final class FileSystemUtility
     /**
      * Loads data, corresponds data-type
      *
-     * @param node - root element for window retrieving
-     * @param dataType - particular datatype
-     * @param dataLoadingCallback - callback
+     * @param scene scene object for window retrieving
+     * @param dataType particular datatype
+     * @param dataLoadingCallback callback
      */
-    public static void loadData(final Node node, final DataType dataType, final DataLoadingCallback dataLoadingCallback)
+    public static void loadData(final Scene scene, final DataType dataType, final DataLoadingCallback dataLoadingCallback)
     {
-        final Optional<File> optionalFile = loadTextFile(node, dataType);
+        final Optional<File> optionalFile = loadTextFile(scene, dataType);
 
         if (optionalFile.isPresent())
         {
@@ -153,10 +153,10 @@ public final class FileSystemUtility
     /**
      * Allows to user to choose a text file
      *
-     * @param node parent element of current, active window
+     * @param scene scene object for window retrieving
      * @return path to selected file, null if operation cancelled
      */
-    private static Optional<File> loadTextFile(final Node node, final DataType dataType)
+    private static Optional<File> loadTextFile(final Scene scene, final DataType dataType)
     {
         final FileChooser fileChooser = new FileChooser();
 
@@ -164,7 +164,7 @@ public final class FileSystemUtility
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", EXTENSION_PATTERN));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
-        return Optional.ofNullable(fileChooser.showOpenDialog(node.getScene().getWindow()));
+        return Optional.ofNullable(fileChooser.showOpenDialog(scene.getWindow()));
     }
 
     /**

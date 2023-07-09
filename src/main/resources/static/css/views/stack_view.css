@@ -1,0 +1,31 @@
+/* Adds background color to pane */
+.tinted
+{
+    -fx-background: #E9E9E9;
+    -fx-background-color: #E9E9E9;
+}
+
+/* Adds border to pane */
+.container
+{
+    -fx-border-style: hidden solid solid solid;
+    -fx-border-color: #C9C9C9;
+}
+
+/* Defines TitledPane's title with squared borders */
+.squared-titled-pane > .title
+{
+    -fx-background-radius: 0;
+}
+
+/* Adjusts TitledPane's title paddings */
+.titled-pane > .title
+{
+    -fx-padding: 4 0 4 9;
+}
+
+/* Makes TitledPane's title irresponsible to hover action */
+.titled-pane > .title:hover
+{
+    -fx-color: -fx-base;
+}

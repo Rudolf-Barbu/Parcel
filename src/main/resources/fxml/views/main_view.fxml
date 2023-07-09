@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,7 +15,7 @@
 <?import org.bsoftware.parcel.domain.components.LogView?>
 
 <!-- layout -->
-<HBox spacing = "5" stylesheets = "/static/css/views/main_view.css" fx:id = "hBoxRoot" fx:controller = "org.bsoftware.parcel.controllers.MainController" xmlns:fx = "http://javafx.com/fxml">
+<HBox spacing = "5" fx:controller = "org.bsoftware.parcel.controllers.MainController" xmlns:fx = "http://javafx.com/fxml">
    <padding>
       <Insets topRightBottomLeft = "10" />
    </padding>
@@ -27,24 +26,18 @@
                <Font name = "System Bold" />
             </font>
          </TitledPane>
-         <VBox spacing = "5" styleClass = "container">
+         <VBox spacing = "5" styleClass = "tinted, container">
             <padding>
                <Insets topRightBottomLeft = "5" />
             </padding>
             <HBox spacing = "5">
-               <Button focusTraversable = "false" minWidth = "70" prefWidth = "70" text = "Sources" underline = "true" onMouseClicked = "#loadSources">
-                  <cursor>
-                     <Cursor fx:constant = "HAND" />
-                  </cursor>
+               <Button minWidth = "70" prefWidth = "70" focusTraversable = "false"  text = "Sources" underline = "true" onMouseClicked = "#loadSources">
                </Button>
                <Separator orientation = "VERTICAL" />
                <Label prefHeight = "25" text = "0" fx:id = "labelSources" />
             </HBox>
             <HBox spacing = "5">
-               <Button focusTraversable = "false" minWidth = "70" prefWidth = "70" text = "Proxies" underline = "true" onMouseClicked = "#loadProxies">
-                  <cursor>
-                     <Cursor fx:constant = "HAND" />
-                  </cursor>
+               <Button minWidth = "70" prefWidth = "70" focusTraversable = "false" text = "Proxies" underline = "true" onMouseClicked = "#loadProxies">
                </Button>
                <Separator orientation = "VERTICAL" />
                <Label prefHeight = "25" text = "0" fx:id = "labelProxies" />
@@ -66,45 +59,19 @@
                      <HBox>
                         <ImageView pickOnBounds = "true" preserveRatio = "true" onMouseClicked = "#openApplicationFolder">
                            <Image url = "/static/images/controls/folder.png" />
-                           <cursor>
-                              <Cursor fx:constant = "HAND" />
-                           </cursor>
-                        </ImageView>
-                        <Separator orientation = "VERTICAL">
-                           <padding>
-                              <Insets left = "5" />
-                           </padding>
-                        </Separator>
-                        <ImageView pickOnBounds = "true" preserveRatio = "true">
-                           <Image url = "/static/images/controls/settings.png" />
-                           <cursor>
-                              <Cursor fx:constant = "HAND" />
-                           </cursor>
                         </ImageView>
                      </HBox>
                   </right>
                </BorderPane>
             </graphic>
          </TitledPane>
-         <VBox spacing = "5" styleClass = "container">
+         <VBox spacing = "5" styleClass = "tinted, container">
             <padding>
                <Insets topRightBottomLeft = "5" />
             </padding>
-            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Start" underline = "true" onMouseClicked = "#start">
-               <cursor>
-                  <Cursor fx:constant = "HAND" />
-               </cursor>
-            </Button>
-            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Interrupt" underline = "true" onMouseClicked = "#interrupt">
-               <cursor>
-                  <Cursor fx:constant = "HAND" />
-               </cursor>
-            </Button>
-            <Button focusTraversable = "false" maxWidth = "1.7976931348623157E308" text = "Clear" underline = "true" onMouseClicked = "#clear">
-               <cursor>
-                  <Cursor fx:constant = "HAND" />
-               </cursor>
-            </Button>
+            <Button maxWidth = "1.7976931348623157E308" focusTraversable = "false" text = "Start" underline = "true" onMouseClicked = "#start" />
+            <Button maxWidth = "1.7976931348623157E308" focusTraversable = "false" text = "Interrupt" underline = "true" onMouseClicked = "#interrupt" />
+            <Button maxWidth = "1.7976931348623157E308" focusTraversable = "false" text = "Clear" underline = "true" onMouseClicked = "#clear" />
          </VBox>
       </VBox>
    </VBox>

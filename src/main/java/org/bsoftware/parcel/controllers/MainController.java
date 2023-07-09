@@ -3,7 +3,7 @@ package org.bsoftware.parcel.controllers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import org.bsoftware.parcel.Parcel;
 import org.bsoftware.parcel.domain.callbacks.BruteForceCallback;
 import org.bsoftware.parcel.domain.callbacks.DataLoadingCallback;
 import org.bsoftware.parcel.domain.components.DataContainer;
@@ -20,19 +20,13 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 /**
- * MainController class is used for loading UI and communicating with service
+ * MainController class is used for loading menu's UI and communicating with components
  *
  * @author Rudolf Barbu
- * @version 18
+ * @version 19
  */
 public class MainController implements DataLoadingCallback, BruteForceCallback
 {
-    /**
-     * VBox used for opening file dialog
-     */
-    @FXML
-    private HBox hBoxRoot;
-
     /**
      * Sources counter
      */
@@ -57,7 +51,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void loadSources()
     {
-        FileSystemUtility.loadData(hBoxRoot, DataType.SOURCE, this);
+        FileSystemUtility.loadData(Parcel.getSCENE(), DataType.SOURCE, this);
     }
 
     /**
@@ -66,7 +60,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     public void loadProxies()
     {
-        FileSystemUtility.loadData(hBoxRoot, DataType.PROXY, this);
+        FileSystemUtility.loadData(Parcel.getSCENE(), DataType.PROXY, this);
     }
 
     /**
@@ -81,7 +75,7 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
         }
         catch (final URISyntaxException | IOException exception)
         {
-            logViewLog.log(LogLevel.ERROR, String.format("Can't open application folder, because: %s", exception.getMessage()));
+            logViewLog.log(LogLevel.ERROR, String.format("Can't open application folder, message: %s", exception.getMessage()));
         }
     }
 
@@ -243,6 +237,6 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
     @FXML
     private void initialize()
     {
-        logViewLog.log(LogLevel.INFO, "Application initialized");
+        logViewLog.log(LogLevel.INFO, "Main UI initialized");
     }
 }

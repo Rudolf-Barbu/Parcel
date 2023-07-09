@@ -1,12 +1,12 @@
 package org.bsoftware.parcel.domain.exceptions;
 
 /**
- * BinaryFileException indicates that something went wrong with binary file
+ * ApplicationInitializationException indicates that something went wrong application initialization
  *
  * @author Rudolf Barbu
- * @version 0
+ * @version 2
  */
-public final class BinaryFileException extends RuntimeException
+public final class ApplicationInitializationException extends RuntimeException
 {
     /**
      * Call super class with customized exception message
@@ -14,7 +14,7 @@ public final class BinaryFileException extends RuntimeException
      * @param pattern message pattern
      * @param argument argument for message pattern formatting
      */
-    public BinaryFileException(final String pattern, final String argument)
+    public ApplicationInitializationException(final String pattern, final String argument)
     {
         super(String.format(pattern, argument));
     }

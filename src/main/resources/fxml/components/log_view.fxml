@@ -5,6 +5,6 @@
 <?import org.bsoftware.parcel.domain.components.LogView ?>
 
 <!-- layout -->
-<fx:root type = "org.bsoftware.parcel.domain.components.LogView" fitToWidth = "true" styleClass = "container" stylesheets = "/static/css/components/log_view.css" vbarPolicy = "ALWAYS" vvalue = "1.0" VBox.vgrow = "ALWAYS" xmlns:fx = "http://javafx.com/fxml">
+<fx:root type = "org.bsoftware.parcel.domain.components.LogView" fitToWidth = "true" styleClass = "tinted, container" stylesheets = "/static/css/components/log_view.css" vbarPolicy = "ALWAYS" vvalue = "1.0" VBox.vgrow = "ALWAYS" xmlns:fx = "http://javafx.com/fxml">
     <VBox fx:id = "vBoxLogItemContainer" />
 </fx:root>

@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+
+<!-- imports -->
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!-- layout -->
+<VBox stylesheets = "/static/css/views/stack_view.css" fx:controller = "org.bsoftware.parcel.controllers.StackController" xmlns:fx = "http://javafx.com/fxml">
+    <TitledPane collapsible = "false" expanded = "false" styleClass = "squared-titled-pane">
+        <graphic>
+            <HBox>
+                <HBox prefWidth = "598" spacing = "3" onMouseDragged = "#dragApplicationWindow" onMousePressed = "#dragApplicationWindow">
+                    <Label text = "Parcel">
+                        <font>
+                            <Font name = "System Bold" />
+                        </font>
+                    </Label>
+                    <Label fx:id = "labelDescription" />
+                </HBox>
+                <HBox>
+                    <ImageView pickOnBounds = "true" preserveRatio = "true" onMouseClicked = "#closeApplication">
+                        <Image url = "/static/images/controls/close.png" />
+                    </ImageView>
+                </HBox>
+            </HBox>
+        </graphic>
+    </TitledPane>
+    <StackPane styleClass = "container">
+        <fx:include source = "main_view.fxml" />
+    </StackPane>
+</VBox>

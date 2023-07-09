@@ -6,7 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.bsoftware.parcel.domain.exceptions.BinaryFileException;
+import javafx.stage.StageStyle;
+import lombok.Getter;
+import org.bsoftware.parcel.domain.exceptions.ApplicationInitializationException;
 import org.bsoftware.parcel.utilities.OperatingSystemUtility;
 
 import java.io.IOException;
@@ -16,14 +18,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 
 /**
  * Parcel is a class, which load native binary and starts the JavaFX application
  *
  * @author Rudolf Barbu
- * @version 7
+ * @version 8
  */
 @SuppressWarnings("DanglingJavadoc")
 public final class Parcel extends Application
@@ -42,19 +43,22 @@ public final class Parcel extends Application
 
             Files.copy(Objects.requireNonNull(inputStream), path, StandardCopyOption.REPLACE_EXISTING);
             System.load(path.toString());
+
+            SCENE = new Scene(FXMLLoader.load(Objects.requireNonNull(Parcel.class.getResource("/fxml/views/stack_view.fxml"))));
         }
         catch (final IOException ioException)
         {
-            throw new BinaryFileException("I/O exception occurred, message: %s", ioException.getMessage());
+            throw new ApplicationInitializationException("I/O exception occurred, message: %s", ioException.getMessage());
         }
 
         unlockBinary(properties.getProperty("application.key"));
     }
 
     /**
-     * Defines path to main view FXML
+     * Defines application scene
      */
-    private static final String FXML = "/fxml/views/main_view.fxml";
+    @Getter
+    private static final Scene SCENE;
 
     /**
      * Defines application icon
@@ -62,22 +66,17 @@ public final class Parcel extends Application
     private static final Image ICON = new Image(Objects.requireNonNull(Parcel.class.getResourceAsStream("/static/images/icon.png")));
 
     /**
-     * Defines computed application title
-     */
-    private static final String TITLE = String.format("Parcel (%s | %s)", Optional.ofNullable(Parcel.class.getPackage().getImplementationVersion()).orElse("Developer mode"), OperatingSystemUtility.getBIT_DEPTH());
-
-    /**
      * Unlocks loaded binary, using license key
      *
-     * @throws BinaryFileException if license key is invalid or expired
+     * @throws ApplicationInitializationException if license key is invalid or expired
      */
-    private static void unlockBinary(final String applicationKey) throws BinaryFileException
+    private static void unlockBinary(final String applicationKey) throws ApplicationInitializationException
     {
         final CkGlobal ckGlobal = new CkGlobal();
 
         if ((ckGlobal.UnlockBundle(applicationKey)) && (ckGlobal.get_UnlockStatus() != 2))
         {
-            throw new BinaryFileException("Can't unlock binary, reason: %s", ckGlobal.lastErrorText());
+            throw new ApplicationInitializationException("Can't unlock binary, reason: %s", ckGlobal.lastErrorText());
         }
     }
 
@@ -95,17 +94,14 @@ public final class Parcel extends Application
      * Setups the application window
      *
      * @param stage main stage of the application
-     * @throws IOException if application can't load the FXML file
      */
     @Override
-    public void start(final Stage stage) throws IOException
+    public void start(final Stage stage)
     {
-        final Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Parcel.class.getResource(FXML))));
-
         stage.getIcons().add(ICON);
-        stage.setTitle(TITLE);
-        stage.setScene(scene);
         stage.setResizable(Boolean.FALSE);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(SCENE);
 
         stage.show();
     }
