@@ -100,7 +100,7 @@ public final class FileSystemUtility
      */
     public static void createWorkingDirectory() throws URISyntaxException, IOException
     {
-        workingDirectory = Files.createDirectory(getApplicationPath()).resolve(String.format("../results [%s]", OperatingSystemUtility.getFormattedCurrentTime()));
+        workingDirectory = Files.createDirectory(getApplicationPath().resolve(String.format("../results [%s]", OperatingSystemUtility.getFormattedCurrentTime())));
     }
 
     /**

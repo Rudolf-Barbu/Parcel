@@ -95,13 +95,13 @@ public class MainController implements DataLoadingCallback, BruteForceCallback
 
             FileSystemUtility.createWorkingDirectory();
             ThreadContainer.startBruteForceThreads(new BruteForceRunnable(this));
+
+            logViewLog.log(LogLevel.INFO, "Work started");
         }
         catch (final URISyntaxException | IOException exception)
         {
             logViewLog.log(LogLevel.ERROR, "Can't create working directory");
         }
-
-        logViewLog.log(LogLevel.INFO, "Work started");
     }
 
     /**
